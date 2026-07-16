@@ -10,6 +10,11 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'ignore',
   integrations: [mdx()],
+  i18n: {
+    locales: ['it', 'en'],
+    defaultLocale: 'it',
+    routing: { prefixDefaultLocale: false },
+  },
   vite: {
     plugins: [tailwindcss()],
   },
