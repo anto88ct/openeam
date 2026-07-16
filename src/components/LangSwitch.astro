@@ -1,0 +1,44 @@
+---
+import { getLocalizedPath, useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const other: Lang = lang === 'it' ? 'en' : 'it';
+const otherHref = getLocalizedPath(other, Astro.url.pathname);
+const flags: Record<Lang, string> = { it: '🇮🇹', en: '🇬🇧' };
+---
+<div class="lang-switch" role="group" aria-label={t('langSwitchAriaLabel')}>
+  <span class="lang-switch__flag lang-switch__flag--active" aria-current="true">
+    {flags[lang]} {lang.toUpperCase()}
+  </span>
+  <a class="lang-switch__flag" href={otherHref}>
+    {flags[other]} {other.toUpperCase()}
+  </a>
+</div>
+
+<style>
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.5rem 0.3rem;
+  }
+  .lang-switch__flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--color-slate-muted);
+    text-decoration: none;
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+  .lang-switch__flag--active { color: var(--color-ink); }
+  a.lang-switch__flag:hover { color: var(--color-orange); background: var(--color-bg); }
+</style>
