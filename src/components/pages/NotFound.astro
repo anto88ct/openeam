@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../Button.astro';
+import { getLocalizedPath } from '../../i18n/utils';
+
+interface Props {
+  lang: 'it' | 'en';
+}
+const { lang } = Astro.props;
+const l = (href: string) => getLocalizedPath(lang, href);
+
+const COPY = {
+  it: {
+    title: 'Pagina non trovata',
+    description: 'La pagina che cerchi non esiste.',
+    heading: 'Questa pagina si è persa in officina.',
+    sub: 'La pagina che cerchi non esiste o è stata spostata.',
+    home: 'Torna alla home',
+    demo: 'Richiedi una demo',
+  },
+  en: {
+    title: 'Page not found',
+    description: "The page you're looking for doesn't exist.",
+    heading: 'This page got lost in the workshop.',
+    sub: "The page you're looking for doesn't exist or has been moved.",
+    home: 'Back to home',
+    demo: 'Request a demo',
+  },
+} as const;
+const t = COPY[lang];
+---
+<BaseLayout title={t.title} description={t.description}>
+  <section class="nf">
+    <div class="container-page nf__inner dotted-grid">
+      <p class="nf__code">404</p>
+      <h1 class="nf__title">{t.heading}</h1>
+      <p class="nf__sub">{t.sub}</p>
+      <div class="nf__cta">
+        <Button href={l('/')} variant="primary">{t.home}</Button>
+        <Button href={l('/demo')} variant="outline">{t.demo}</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf { background: var(--color-ink); }
+  .nf__inner {
+    text-align: center;
+    display: grid;
+    justify-items: center;
+    gap: 1.1rem;
+    padding-block: clamp(5rem, 14vw, 9rem);
+  }
+  .nf__code {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(4rem, 14vw, 8rem);
+    color: var(--color-orange);
+    line-height: 1;
+  }
+  .nf__title { color: #fff; font-size: clamp(1.6rem, 4vw, 2.4rem); }
+  .nf__sub { color: var(--color-on-dark); }
+  .nf__cta { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
+</style>
