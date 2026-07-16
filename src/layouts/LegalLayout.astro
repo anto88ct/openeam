@@ -1,0 +1,27 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Section from '../components/Section.astro';
+interface Props { title: string; updated?: string; }
+const { title, updated } = Astro.props;
+---
+<BaseLayout title={title} description={`${title} — Open EAM (Seedma SRL).`}>
+  <Section bg="ink" dotted>
+    <h1 class="legal__h1">{title}</h1>
+    {updated && <p class="legal__updated">Ultimo aggiornamento: {updated}</p>}
+  </Section>
+  <Section bg="white">
+    <div class="legal">
+      <slot />
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .legal__h1 { color: #fff; font-size: clamp(2rem, 5vw, 3rem); }
+  .legal__updated { color: var(--color-on-dark); margin-top: 0.5rem; }
+  .legal { max-width: 46rem; margin-inline: auto; }
+  .legal :global(h2) { font-size: 1.35rem; margin: 2rem 0 0.75rem; }
+  .legal :global(p) { margin-bottom: 1rem; color: var(--color-slate); line-height: 1.7; }
+  .legal :global(ul) { margin: 0 0 1rem 1.2rem; display: grid; gap: 0.4rem; color: var(--color-slate); }
+  .legal :global(a) { color: var(--color-orange); text-decoration: underline; }
+</style>

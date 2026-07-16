@@ -1,0 +1,81 @@
+---
+import Button from './Button.astro';
+
+/**
+ * Wide two-tone rounded feature card: media on one half, text on the other.
+ * Put the visual (LottiePlayer / Image / markup) in the default slot.
+ */
+interface Props {
+  heading: string;
+  body: string;
+  reverse?: boolean;          // media on the right instead of the left
+  ctaLabel?: string;
+  ctaHref?: string;
+  ctaVariant?: 'primary' | 'teal' | 'dark';
+  class?: string;
+}
+const {
+  heading,
+  body,
+  reverse = false,
+  ctaLabel = 'Richiedi una demo',
+  ctaHref = '/demo',
+  ctaVariant = 'primary',
+  class: className = '',
+} = Astro.props;
+---
+<article class:list={['split', { 'split--reverse': reverse }, className]}>
+  <div class="split__media">
+    <slot />
+  </div>
+  <div class="split__text">
+    <h3 class="split__title" set:html={heading} />
+    <p class="split__body rich" set:html={body} />
+    {ctaLabel && <Button href={ctaHref} variant={ctaVariant} class="split__cta">{ctaLabel}</Button>}
+  </div>
+</article>
+
+<style>
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    min-height: 380px;
+  }
+  .split__media {
+    background: var(--color-panel-050);
+    display: grid;
+    place-items: center;
+    padding: clamp(1.5rem, 4vw, 3rem);
+  }
+  .split__media > :global(*) { width: 100%; max-width: 420px; }
+  .split__text {
+    background: var(--color-panel);
+    padding: clamp(2rem, 4vw, 3.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.25rem;
+    text-align: center;
+    align-items: center;
+  }
+  .split__title { font-size: clamp(1.5rem, 2.6vw, 2rem); max-width: 18ch; }
+  .split__title :global(.hl) { color: var(--color-orange); }
+  .split__body {
+    color: var(--color-slate);
+    text-align: left;
+    max-width: 46ch;
+    font-size: 1.02rem;
+  }
+  .split__cta { align-self: center; }
+
+  .split--reverse .split__media { order: 2; }
+
+  @media (max-width: 820px) {
+    .split { grid-template-columns: 1fr; min-height: 0; }
+    .split--reverse .split__media { order: 0; }
+    .split__media { min-height: 260px; }
+  }
+</style>

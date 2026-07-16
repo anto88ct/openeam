@@ -1,0 +1,33 @@
+---
+/** Open EAM logotype mark. */
+import { Image } from 'astro:assets';
+import logoSrc from '../assets/img/openeam-logo.svg';
+
+interface Props {
+  /** 'dark' mark for light backgrounds, 'light' (inverted) mark for dark backgrounds */
+  tone?: 'dark' | 'light';
+  href?: string | null;
+  class?: string;
+}
+const { tone = 'dark', href = '/', class: className = '' } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+<Tag
+  class:list={['logo', `logo--${tone}`, className]}
+  {...(href ? { href, 'aria-label': 'Open EAM — home' } : {})}
+>
+  <Image class="logo__mark" src={logoSrc} alt="Open EAM" loading="eager" />
+</Tag>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+  }
+  .logo__mark {
+    height: 2.6rem;
+    width: auto;
+    display: block;
+  }
+  .logo--light .logo__mark { filter: brightness(0) invert(1); }
+</style>

@@ -1,0 +1,68 @@
+---
+import '@fontsource-variable/funnel-display';
+import '../styles/global.css';
+
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { company } from '../config/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** relative or absolute OG image path */
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = 'Open EAM — la piattaforma modulare di asset management e manutenzione che prende la forma dei tuoi processi. Un prodotto di Seedma SRL.',
+  ogImage = '/webclip.png',
+} = Astro.props;
+
+const fullTitle = title === company.name ? title : `${title} — ${company.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? company.url).href;
+---
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/webclip.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={company.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="it_IT" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#233038" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Salta al contenuto</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <style>
+      .skip-link {
+        position: absolute;
+        left: -999px;
+        top: 0;
+        z-index: 100;
+        background: var(--color-ink);
+        color: #fff;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0 0 10px 0;
+      }
+      .skip-link:focus { left: 0; }
+    </style>
+  </body>
+</html>

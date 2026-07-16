@@ -1,0 +1,51 @@
+---
+/** Full-width section band with a background variant + vertical rhythm. */
+interface Props {
+  bg?: 'white' | 'light' | 'panel' | 'ink' | 'teal';
+  dotted?: boolean;
+  class?: string;
+  id?: string;
+}
+const { bg = 'white', dotted = false, class: className = '', id } = Astro.props;
+---
+<section
+  {id}
+  class:list={['section', `section--${bg}`, { 'section--dotted': dotted }, className]}
+>
+  <div class="container-page">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    position: relative;
+    padding-block: clamp(3.5rem, 7vw, 6.5rem);
+  }
+  .section--white { background: #fff; }
+  .section--light { background: var(--color-bg); }
+  .section--panel { background: var(--color-panel); }
+  .section--ink { background: var(--color-ink); color: var(--color-on-dark); }
+  .section--teal { background: var(--color-teal); color: #fff; }
+  .section--ink :global(h1),
+  .section--ink :global(h2),
+  .section--ink :global(h3),
+  .section--teal :global(h1),
+  .section--teal :global(h2),
+  .section--teal :global(h3) { color: #fff; }
+
+  .section--dotted::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(currentColor 1px, transparent 1.4px);
+    background-size: 26px 26px;
+    pointer-events: none;
+  }
+  .section--light.section--dotted::before,
+  .section--panel.section--dotted::before,
+  .section--white.section--dotted::before { color: rgb(35 48 56 / 0.05); }
+  .section--ink.section--dotted::before,
+  .section--teal.section--dotted::before { color: rgb(255 255 255 / 0.06); }
+  .section--dotted > .container-page { position: relative; }
+</style>

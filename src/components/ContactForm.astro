@@ -1,0 +1,188 @@
+---
+import Button from './Button.astro';
+
+const roles = [
+  'Direzione / C-Level',
+  'Responsabile Manutenzione',
+  'Responsabile Operations / Produzione',
+  'Facility / Asset Manager',
+  'IT / Sistemi Informativi',
+  'Altro',
+];
+---
+<form class="demo-form" data-demo-form novalidate>
+  <div class="demo-form__row">
+    <div class="field">
+      <label for="nome">Nome</label>
+      <input id="nome" name="nome" type="text" autocomplete="given-name" required />
+      <small class="field__err" data-err></small>
+    </div>
+    <div class="field">
+      <label for="cognome">Cognome</label>
+      <input id="cognome" name="cognome" type="text" autocomplete="family-name" required />
+      <small class="field__err" data-err></small>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="azienda">Azienda</label>
+    <input id="azienda" name="azienda" type="text" autocomplete="organization" required />
+    <small class="field__err" data-err></small>
+  </div>
+
+  <div class="field">
+    <label for="ruolo">Ruolo</label>
+    <select id="ruolo" name="ruolo" required>
+      <option value="" disabled selected>Seleziona...</option>
+      {roles.map((r) => <option value={r}>{r}</option>)}
+    </select>
+    <small class="field__err" data-err></small>
+  </div>
+
+  <div class="field">
+    <label for="email">Email aziendale</label>
+    <input id="email" name="email" type="email" autocomplete="email" required />
+    <small class="field__err" data-err></small>
+  </div>
+
+  <label class="consent">
+    <input type="checkbox" name="consenso" required />
+    <span>Acconsento al trattamento dei miei dati personali in conformità con l'<a href="/privacy-policy">Informativa sulla Privacy</a>.</span>
+  </label>
+
+  <Button type="submit" variant="primary" class="demo-form__submit">Richiedi la demo</Button>
+
+  <p class="demo-form__status" data-status role="status" aria-live="polite" hidden></p>
+</form>
+
+<style>
+  .demo-form { display: grid; gap: 1.25rem; }
+  .demo-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .field { display: grid; gap: 0.4rem; }
+  .field label { font-weight: 700; color: var(--color-ink); font-size: 0.95rem; }
+  .field input,
+  .field select {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid #c9d0d6;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--color-ink);
+    background: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .field input:focus,
+  .field select:focus {
+    outline: none;
+    border-color: var(--color-orange);
+    box-shadow: 0 0 0 3px rgb(255 91 4 / 0.15);
+  }
+  .field[data-invalid] input,
+  .field[data-invalid] select { border-color: #d64545; }
+  .field__err { color: #d64545; font-size: 0.8rem; min-height: 0; }
+
+  .consent {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    font-size: 0.85rem;
+    color: var(--color-slate-muted);
+  }
+  .consent input { margin-top: 0.2rem; width: 1.05rem; height: 1.05rem; accent-color: var(--color-orange); }
+  .consent a { color: var(--color-orange); text-decoration: underline; }
+
+  .demo-form__submit { width: 100%; margin-top: 0.25rem; }
+  .demo-form__status { font-size: 0.95rem; padding: 0.85rem 1rem; border-radius: 12px; }
+  .demo-form__status[data-tone='ok'] { background: #e7f4ee; color: #1c6b46; }
+  .demo-form__status[data-tone='err'] { background: #fbe9e9; color: #a3272b; }
+
+  @media (max-width: 560px) {
+    .demo-form__row { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import emailjs from '@emailjs/browser';
+
+  const SERVICE_ID = import.meta.env.PUBLIC_EMAILJS_SERVICE_ID;
+  const TEMPLATE_ID = import.meta.env.PUBLIC_EMAILJS_TEMPLATE_ID;
+  const PUBLIC_KEY = import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY;
+
+  const form = document.querySelector<HTMLFormElement>('[data-demo-form]');
+  const statusEl = form?.querySelector<HTMLElement>('[data-status]');
+
+  function setError(field: Element | null, msg: string) {
+    if (!field) return;
+    const wrap = field.closest('.field');
+    wrap?.toggleAttribute('data-invalid', !!msg);
+    const err = wrap?.querySelector('[data-err]');
+    if (err) err.textContent = msg;
+  }
+
+  function validate(): boolean {
+    if (!form) return false;
+    let ok = true;
+    const required: [string, string][] = [
+      ['nome', 'Inserisci il nome'],
+      ['cognome', 'Inserisci il cognome'],
+      ['azienda', "Inserisci l'azienda"],
+      ['ruolo', 'Seleziona un ruolo'],
+    ];
+    for (const [name, msg] of required) {
+      const el = form.elements.namedItem(name) as HTMLInputElement | null;
+      const bad = !el?.value.trim();
+      setError(el, bad ? msg : '');
+      if (bad) ok = false;
+    }
+    const email = form.elements.namedItem('email') as HTMLInputElement | null;
+    const emailOk = !!email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+    setError(email, emailOk ? '' : 'Inserisci un indirizzo email valido');
+    if (!emailOk) ok = false;
+
+    const consent = form.elements.namedItem('consenso') as HTMLInputElement | null;
+    if (!consent?.checked) {
+      showStatus('Devi accettare il trattamento dei dati per proseguire.', 'err');
+      ok = false;
+    }
+    return ok;
+  }
+
+  function showStatus(msg: string, tone: 'ok' | 'err') {
+    if (!statusEl) return;
+    statusEl.hidden = false;
+    statusEl.textContent = msg;
+    statusEl.setAttribute('data-tone', tone);
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (statusEl) statusEl.hidden = true;
+    if (!validate()) return;
+
+    const submit = form.querySelector<HTMLButtonElement>('[type="submit"]');
+    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
+      showStatus(
+        'Configurazione email non completata. Imposta le variabili PUBLIC_EMAILJS_* (vedi README).',
+        'err',
+      );
+      return;
+    }
+
+    submit?.setAttribute('disabled', 'true');
+    const original = submit?.textContent;
+    if (submit) submit.textContent = 'Invio in corso...';
+
+    try {
+      await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form, { publicKey: PUBLIC_KEY });
+      form.reset();
+      showStatus('Grazie! Ti contatteremo a breve per fissare la demo.', 'ok');
+    } catch (err) {
+      console.error('[EmailJS]', err);
+      showStatus("Si è verificato un errore nell'invio. Riprova più tardi.", 'err');
+    } finally {
+      submit?.removeAttribute('disabled');
+      if (submit && original) submit.textContent = original;
+    }
+  });
+</script>

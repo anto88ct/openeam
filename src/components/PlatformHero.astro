@@ -1,0 +1,106 @@
+---
+import Button from './Button.astro';
+import { Image } from 'astro:assets';
+import { getIcon } from '../lib/icons';
+
+/**
+ * Two-column hero for Platform pages: icon + two-tone heading + sub + CTA on
+ * the left, a visual (default slot) on the right. Dotted-grid texture.
+ */
+interface Props {
+  icon?: string;
+  headingLead: string;      // white/plain part
+  headingAccent: string;    // coloured second part
+  sub: string;
+  tone?: 'ink' | 'teal' | 'orange' | 'light';
+  /** colour of the accent heading word + CTA style */
+  accent?: 'orange' | 'dark' | 'white';
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+const {
+  icon,
+  headingLead,
+  headingAccent,
+  sub,
+  tone = 'ink',
+  accent = 'orange',
+  ctaLabel = 'Richiedi una demo',
+  ctaHref = '/demo',
+} = Astro.props;
+
+const iconAsset = icon ? getIcon(icon) : undefined;
+const ctaVariant = accent === 'dark' ? 'dark' : 'primary';
+---
+<section class:list={['phero', `phero--${tone}`]}>
+  <div class="phero__grid dotted-grid container-page">
+    <div class="phero__text">
+      {iconAsset && (
+        <span class="phero__icon"><Image src={iconAsset} alt="" width={48} height={48} /></span>
+      )}
+      <h1 class="phero__title">
+        <span class="phero__lead">{headingLead}</span>{' '}
+        <span class:list={['phero__accent', `is-${accent}`]}>{headingAccent}</span>
+      </h1>
+      <p class="phero__sub">{sub}</p>
+      <Button href={ctaHref} variant={ctaVariant} class="phero__cta">{ctaLabel}</Button>
+    </div>
+    <div class="phero__media">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .phero { position: relative; overflow: hidden; }
+  .phero--ink { background: var(--color-ink); }
+  .phero--teal { background: var(--color-teal); }
+  .phero--orange { background: var(--color-orange); }
+  .phero--light { background: var(--color-bg); }
+  .phero--light .phero__text { color: var(--color-ink); }
+  .phero--light .phero__title { color: var(--color-ink); }
+  .phero--light .phero__sub { color: var(--color-slate-muted); }
+  .phero--light .dotted-grid { color: rgb(35 48 56 / 0.05); }
+  .phero__grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    padding-block: clamp(3.5rem, 8vw, 6rem);
+    background-position: center;
+  }
+  .phero__text { display: grid; gap: 1.5rem; justify-items: start; color: #fff; }
+  /* Icons ship already coloured orange (#FF5B04) — no tint needed. */
+  .phero__icon :global(img) { width: 48px; height: 48px; }
+  /* On the orange hero, render the icon white for contrast. */
+  .phero--orange .phero__icon :global(img) { filter: brightness(0) invert(1); }
+  .phero__title {
+    font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+    color: #fff;
+    line-height: 1.05;
+  }
+  .phero__accent.is-orange { color: var(--color-orange); }
+  .phero--orange .phero__accent.is-orange { color: #fff; }
+  .phero__accent.is-dark { color: var(--color-ink); }
+  .phero__accent.is-white { color: #fff; }
+  .phero__sub {
+    color: rgb(255 255 255 / 0.9);
+    font-size: 1.15rem;
+    max-width: 52ch;
+    line-height: 1.6;
+  }
+  .phero--orange .phero__sub { color: rgb(255 255 255 / 0.95); }
+
+  .phero__media { position: relative; }
+  .phero__media:empty { display: none; }
+  .phero__media :global(img) {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: var(--shadow-card);
+  }
+
+  @media (max-width: 860px) {
+    .phero__grid { grid-template-columns: 1fr; }
+    .phero__media:empty { display: none; }
+  }
+</style>

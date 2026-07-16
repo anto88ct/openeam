@@ -1,0 +1,39 @@
+---
+/** Eyebrow + heading + optional subheading. Heading/sub accept HTML (set:html). */
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  sub?: string;
+  align?: 'center' | 'left';
+  class?: string;
+}
+const { eyebrow, heading, sub, align = 'center', class: className = '' } = Astro.props;
+---
+<div class:list={['sh', `sh--${align}`, className]}>
+  {eyebrow && <p class="eyebrow sh__eyebrow">{eyebrow}</p>}
+  <h2 class="sh__title" set:html={heading} />
+  {sub && <p class="sh__sub" set:html={sub} />}
+</div>
+
+<style>
+  .sh { display: grid; gap: 1rem; }
+  .sh--center { text-align: center; justify-items: center; }
+  .sh--left { text-align: left; }
+  .sh__title {
+    font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+    max-width: 24ch;
+  }
+  .sh--center .sh__title { margin-inline: auto; }
+  .sh__sub {
+    font-size: 1.1rem;
+    color: var(--color-slate-muted);
+    max-width: 60ch;
+    line-height: 1.6;
+  }
+  .sh--center .sh__sub { margin-inline: auto; }
+  :global(.section--ink) .sh__sub,
+  :global(.section--teal) .sh__sub { color: var(--color-on-dark); }
+  .sh__title :global(strong),
+  .sh__title :global(.hl) { color: var(--color-orange); font-weight: inherit; }
+  .sh__sub :global(strong) { color: inherit; font-weight: 700; }
+</style>

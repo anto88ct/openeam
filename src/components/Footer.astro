@@ -1,0 +1,112 @@
+---
+import Logo from './Logo.astro';
+import {
+  company,
+  platformLinks,
+  industryLinks,
+  sitemapLinks,
+  legalLinks,
+} from '../config/site';
+
+const columns = [
+  { title: 'Sitemap', links: sitemapLinks },
+  { title: 'Platform', links: platformLinks },
+  { title: 'By Industry', links: industryLinks },
+];
+---
+<footer class="footer">
+  <div class="container-page footer__top">
+    <div class="footer__brand">
+      <Logo tone="dark" href={null} />
+      <p class="footer__tagline">{company.tagline}</p>
+    </div>
+
+    <div class="footer__cols">
+      {columns.map((col) => (
+        <nav class="footer__col" aria-label={col.title}>
+          <h3 class="footer__col-title">{col.title}</h3>
+          <ul>
+            {col.links.map((l) => (
+              <li><a href={l.href}>{l.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      ))}
+    </div>
+  </div>
+
+  <div class="container-page footer__legal">
+    <p>
+      <strong>{company.legal}</strong> — {company.copyright}
+      <span class="footer__addr">{company.address}</span>
+    </p>
+    <ul class="footer__policies">
+      {legalLinks.map((l) => (
+        <li><a href={l.href}>{l.label}</a></li>
+      ))}
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: #fff;
+    border-top: 1px solid rgb(35 48 56 / 0.08);
+    padding-top: 3.5rem;
+  }
+  .footer__top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    justify-content: space-between;
+    padding-bottom: 2.5rem;
+  }
+  .footer__brand { max-width: 22rem; }
+  .footer__tagline {
+    margin-top: 1rem;
+    color: var(--color-slate-muted);
+    font-size: 0.95rem;
+  }
+  .footer__cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(140px, auto));
+    gap: 2.5rem;
+  }
+  .footer__col-title {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    margin-bottom: 0.9rem;
+  }
+  .footer__col ul { list-style: none; display: grid; gap: 0.55rem; }
+  .footer__col a {
+    color: var(--color-slate-muted);
+    font-size: 0.95rem;
+    transition: color 0.15s ease;
+  }
+  .footer__col a:hover { color: var(--color-orange); }
+
+  .footer__legal {
+    border-top: 1px solid rgb(35 48 56 / 0.08);
+    padding: 1.5rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    color: var(--color-slate-muted);
+  }
+  .footer__legal strong { color: var(--color-ink); }
+  .footer__addr { display: block; opacity: 0.85; }
+  .footer__policies { list-style: none; display: flex; gap: 1.5rem; }
+  .footer__policies a { text-decoration: underline; }
+  .footer__policies a:hover { color: var(--color-orange); }
+
+  @media (max-width: 640px) {
+    .footer__cols { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 2rem; }
+  }
+</style>

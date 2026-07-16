@@ -1,0 +1,69 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import PlatformHero from '../../components/PlatformHero.astro';
+import FeatureSplit from '../../components/FeatureSplit.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import LottiePlayer from '../../components/LottiePlayer.astro';
+
+import heroPhoto from '../../assets/img/engineers-laptop.avif';
+import closingPhoto from '../../assets/img/worker-industry.avif';
+
+const features = [
+  {
+    heading: 'Organizza e struttura tutta la documentazione tecnica',
+    body: 'Classificazione, versioning, ricerca avanzata e controllo delle revisioni: Open EAM assicura che ogni documento sia aggiornato, tracciato e conforme alle normative, evitando errori e duplicazioni.',
+    anim: 'three_manuale_Schema_certificazioni',
+    reverse: false,
+  },
+  {
+    heading: 'Integrazione con AutoCAD e BIM',
+    body: 'Visualizza e gestisci file CAD e modelli BIM direttamente dalla piattaforma, mantenendo la coerenza tra progettazione, documentazione e operatività. I dati tecnici sono sempre sincronizzati con le modifiche di progetto.',
+    anim: 'file_cad_open_EAM_modello_BIM',
+    reverse: true,
+  },
+];
+---
+<BaseLayout title="Technical Documentation Management — OpenEAM Platform" description="Open EAM collega disegni, manuali e procedure agli asset, rendendoli accessibili ovunque in modo sicuro e immediato, riducendo tempi e rischi.">
+
+  <PlatformHero
+    tone="orange"
+    accent="dark"
+    icon="document"
+    headingLead="Technical documentation"
+    headingAccent="management"
+    sub="Open EAM collega disegni, manuali e procedure agli asset, rendendoli accessibili ovunque in modo sicuro e immediato, riducendo tempi e rischi."
+  >
+    <Image src={heroPhoto} alt="Due colleghi consultano documentazione su laptop" width={720} height={540} />
+  </PlatformHero>
+
+  <Section bg="white">
+    <div class="stack">
+      {features.map((f) => (
+        <FeatureSplit heading={f.heading} body={f.body} reverse={f.reverse}>
+          <div class="lottie-box">
+            <LottiePlayer animationName={f.anim} ariaLabel={f.heading} />
+          </div>
+        </FeatureSplit>
+      ))}
+    </div>
+  </Section>
+
+  <Section bg="white">
+    <CtaBand
+      tone="orange"
+      ctaVariant="dark"
+      image={closingPhoto}
+      imageAlt="Operatore in impianto"
+      heading="Documentazione connessa, operatività continua"
+      body="Con Open EAM la documentazione tecnica diventa parte attiva dei tuoi processi, integrata con asset e operazioni per garantire precisione, rapidità e conformità."
+    />
+  </Section>
+
+</BaseLayout>
+
+<style>
+  .stack { display: grid; gap: 2rem; }
+  .lottie-box { width: 100%; min-height: 300px; display: grid; place-items: center; }
+</style>

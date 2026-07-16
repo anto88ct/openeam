@@ -1,0 +1,139 @@
+---
+/**
+ * LottiePlayer — renders a Lottie animation from src/assets/animations/.
+ *
+ * The JSON is loaded lazily (fetched only when the element nears the viewport),
+ * the animation is built on first intersection, paused when scrolled away, and
+ * fully skipped for users who prefer reduced motion — so it never blocks the
+ * main thread on load.
+ *
+ * Usage:
+ *   <LottiePlayer animationName="dashboard_MTBF_tempi_intervento_costi_fermo" />
+ *   <LottiePlayer animationName="albero_P01_S08_A15_L30" loop={false} ariaLabel="Rete di asset" />
+ */
+interface Props {
+  /** Filename (without .json) of an animation in src/assets/animations/ */
+  animationName: string;
+  loop?: boolean;
+  autoplay?: boolean;
+  class?: string;
+  /** Accessible label; defaults to a humanised version of animationName */
+  ariaLabel?: string;
+}
+
+const {
+  animationName,
+  loop = true,
+  autoplay = true,
+  class: className = '',
+  ariaLabel,
+} = Astro.props;
+
+// Resolve the hashed asset URL at build time so the JSON is emitted as a
+// separate file and fetched on demand (never inlined into the initial payload).
+const loaders = import.meta.glob('../assets/animations/*.json', {
+  query: '?url',
+  import: 'default',
+});
+const entry = Object.entries(loaders).find(([p]) => p.endsWith(`/${animationName}.json`));
+if (!entry) {
+  throw new Error(
+    `[LottiePlayer] animation "${animationName}" not found. ` +
+      `Expected src/assets/animations/${animationName}.json`,
+  );
+}
+const src = (await entry[1]()) as string;
+const label = ariaLabel ?? animationName.replace(/[_-]+/g, ' ').trim();
+---
+
+<eam-lottie
+  class:list={['eam-lottie', className]}
+  data-src={src}
+  data-loop={loop ? 'true' : 'false'}
+  data-autoplay={autoplay ? 'true' : 'false'}
+  role="img"
+  aria-label={label}
+></eam-lottie>
+
+<style>
+  .eam-lottie {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* GPU-promote so painting the SVG stays off the main compositor path */
+    transform: translateZ(0);
+  }
+  .eam-lottie :global(svg) {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+  }
+</style>
+
+<script>
+  // svg-only light build keeps the bundle small
+  import lottie from 'lottie-web/build/player/lottie_light';
+
+  class EamLottie extends HTMLElement {
+    anim: ReturnType<typeof lottie.loadAnimation> | null = null;
+    io: IntersectionObserver | null = null;
+    built = false;
+
+    connectedCallback() {
+      const reduce =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      this.io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              this.build(reduce);
+              this.anim?.play();
+            } else {
+              this.anim?.pause();
+            }
+          }
+        },
+        { rootMargin: '200px 0px', threshold: 0.15 },
+      );
+      this.io.observe(this);
+    }
+
+    build(reduce: boolean) {
+      if (this.built) return;
+      this.built = true;
+
+      const path = this.dataset.src as string;
+      const loop = this.dataset.loop === 'true';
+      const autoplay = this.dataset.autoplay === 'true' && !reduce;
+
+      this.anim = lottie.loadAnimation({
+        container: this,
+        renderer: 'svg',
+        loop,
+        autoplay,
+        path,
+        rendererSettings: {
+          progressiveLoad: true,
+          preserveAspectRatio: 'xMidYMid meet',
+        },
+      });
+
+      // Reduced motion: freeze on the first frame, never animate.
+      if (reduce && this.anim) {
+        this.anim.addEventListener('DOMLoaded', () => this.anim?.goToAndStop(0, true));
+      }
+    }
+
+    disconnectedCallback() {
+      this.io?.disconnect();
+      this.anim?.destroy();
+      this.anim = null;
+    }
+  }
+
+  if (!customElements.get('eam-lottie')) {
+    customElements.define('eam-lottie', EamLottie);
+  }
+</script>

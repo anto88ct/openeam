@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+
+/** Icon + title (may contain <span class="hl">orange</span>) + body copy. */
+interface Props {
+  title: string;
+  body: string;
+  icon?: ImageMetadata;
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+const { title, body, icon, tone = 'light', class: className = '' } = Astro.props;
+---
+<article class:list={['fcard', `fcard--${tone}`, className]}>
+  {icon && (
+    <div class="fcard__icon">
+      <Image src={icon} alt="" width={40} height={40} loading="lazy" />
+    </div>
+  )}
+  <h3 class="fcard__title" set:html={title} />
+  <p class="fcard__body rich" set:html={body} />
+</article>
+
+<style>
+  .fcard {
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+    padding: 2rem;
+    border-radius: var(--radius-card);
+    height: 100%;
+  }
+  .fcard--light {
+    background: rgb(255 255 255 / 0.55);
+    border: 1px solid rgb(35 48 56 / 0.06);
+  }
+  .fcard--dark {
+    background: rgb(255 255 255 / 0.04);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    color: var(--color-on-dark);
+  }
+  .fcard__icon {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+  }
+  .fcard__icon :global(img) { width: 40px; height: 40px; object-fit: contain; }
+  .fcard__title { font-size: 1.28rem; }
+  .fcard--dark .fcard__title { color: #fff; }
+  .fcard__title :global(.hl) { color: var(--color-orange); }
+  .fcard__body { font-size: 1rem; line-height: 1.65; }
+  .fcard--light .fcard__body { color: var(--color-slate); }
+</style>

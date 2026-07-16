@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   OpenEAM design tokens — canonicalised from the brand logo + screenshots.
+   Consumed by Tailwind v4 as utilities (e.g. bg-orange, text-ink, font-display).
+--------------------------------------------------------------------------- */
+@theme {
+  /* Brand */
+  --color-orange: #ff5b04;
+  --color-orange-deep: #cc500e;
+  --color-orange-soft: #f58b54;
+
+  --color-ink: #233038;      /* dark navy — heroes, dark panels, headings */
+  --color-ink-700: #2c3a48;
+
+  --color-teal: #075056;     /* deep teal — trust band, teal pills, sections */
+  --color-teal-600: #12868a;
+  --color-cyan: #0fafbc;     /* bright decorative cyan */
+  --color-mint: #8fceb5;
+
+  /* Surfaces */
+  --color-bg: #ebeff0;       /* page light grey */
+  --color-panel: #f0f3f4;    /* split-card text half */
+  --color-panel-050: #f7f9f9;/* split-card media half / near white */
+  --color-surface: #ffffff;
+
+  /* Text */
+  --color-slate: #3a4b5a;         /* body on light */
+  --color-slate-muted: #5a6f79;   /* secondary body */
+  --color-on-dark: #dde7e8;       /* body on dark */
+
+  /* Type */
+  --font-display: "Funnel Display Variable", "Funnel Display", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Funnel Display Variable", "Funnel Display", ui-sans-serif, system-ui, sans-serif;
+
+  /* Radius */
+  --radius-pill: 999px;
+  --radius-card: 24px;
+
+  /* Shadow */
+  --shadow-card: 0 18px 40px -20px rgb(35 48 56 / 0.25);
+  --shadow-soft: 0 8px 24px -12px rgb(35 48 56 / 0.18);
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  font-family: var(--font-sans);
+  color: var(--color-slate);
+  background: var(--color-surface);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--color-orange); color: #fff; }
+
+:focus-visible {
+  outline: 3px solid var(--color-orange);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect reduced-motion globally */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Layout helpers
+--------------------------------------------------------------------------- */
+@utility container-page {
+  width: 100%;
+  max-width: 78rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* Faint dotted-grid texture used on heroes and light sections */
+@utility dotted-grid {
+  background-image: radial-gradient(currentColor 1px, transparent 1.4px);
+  background-size: 26px 26px;
+  color: rgb(255 255 255 / 0.06);
+}
+@utility dotted-grid-dark {
+  background-image: radial-gradient(currentColor 1px, transparent 1.4px);
+  background-size: 26px 26px;
+  color: rgb(35 48 56 / 0.06);
+}
+
+/* ---------------------------------------------------------------------------
+   Buttons (pill). Reusable across .astro and .mdx.
+--------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1;
+  cursor: pointer;
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 0 rgb(35 48 56 / 0);
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  will-change: transform;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+.btn:active { transform: translateY(0) scale(0.97); transition-duration: 0.12s; }
+
+.btn-primary { background: var(--color-orange); color: #fff; }
+.btn-primary:hover { background: var(--color-orange-deep); }
+
+.btn-teal { background: var(--color-teal); color: #fff; }
+.btn-teal:hover { background: var(--color-teal-600); }
+
+.btn-dark { background: var(--color-ink); color: #fff; }
+.btn-dark:hover { background: #16232b; }
+
+.btn-outline { background: transparent; color: #fff; border-color: rgb(255 255 255 / 0.65); }
+.btn-outline:hover { background: rgb(255 255 255 / 0.1); border-color: #fff; }
+
+.btn-outline-ink { background: transparent; color: var(--color-ink); border-color: rgb(35 48 56 / 0.25); }
+.btn-outline-ink:hover { background: rgb(35 48 56 / 0.05); border-color: var(--color-ink); }
+
+/* ---------------------------------------------------------------------------
+   Bits
+--------------------------------------------------------------------------- */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-orange);
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* Teal quarter-circle arc overlay for feature photos */
+.arc-overlay { position: relative; overflow: hidden; }
+.arc-overlay::after {
+  content: "";
+  position: absolute;
+  width: 62%;
+  aspect-ratio: 1;
+  right: -14%;
+  bottom: -22%;
+  background: var(--color-teal);
+  border-radius: 50%;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* Prose emphasis inside body copy */
+.rich strong { color: var(--color-ink); font-weight: 700; }

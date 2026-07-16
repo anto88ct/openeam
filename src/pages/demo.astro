@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import heroRings from '../assets/img/hero-rings.svg';
+---
+<BaseLayout
+  title="Prenota una Demo"
+  description="Prenota un tour gratuito e senza impegno della piattaforma Open EAM con un consulente specializzato."
+>
+  <section class="demo">
+    <Image src={heroRings} alt="" class="demo__arcs" aria-hidden="true" />
+    <div class="container-page demo__inner">
+      <div class="demo__card card">
+        <div class="demo__head">
+          <h1 class="demo__title">Scopri Open EAM</h1>
+          <p class="demo__sub">
+            Prenota un tour della piattaforma gratuito e senza impegno con un consulente
+            specializzato. Scopri gli strumenti, le funzioni e come potrebbe funzionare per
+            la tua azienda.
+          </p>
+        </div>
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .demo { position: relative; background: var(--color-ink); overflow: hidden; }
+  .demo__arcs {
+    position: absolute;
+    right: -8%;
+    bottom: -18%;
+    width: min(45%, 560px);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .demo__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    padding-block: clamp(3rem, 8vw, 6rem);
+  }
+  .demo__card { width: 100%; max-width: 42rem; padding: clamp(1.75rem, 4vw, 3rem); }
+  .demo__head { text-align: center; margin-bottom: 2rem; display: grid; gap: 1rem; }
+  .demo__title { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+  .demo__sub { color: var(--color-slate-muted); max-width: 42ch; margin-inline: auto; }
+</style>

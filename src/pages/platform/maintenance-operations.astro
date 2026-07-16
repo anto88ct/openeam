@@ -1,0 +1,76 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import PlatformHero from '../../components/PlatformHero.astro';
+import FeatureSplit from '../../components/FeatureSplit.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import LottiePlayer from '../../components/LottiePlayer.astro';
+
+import heroPhoto from '../../assets/img/feat-maintenance.avif';
+import closingPhoto from '../../assets/img/engineer-robot.avif';
+
+const features = [
+  {
+    heading: 'Gestione completa delle attività manutentive e ispettive',
+    body: 'Dalla manutenzione preventiva, a quella predittiva, alle ispezioni: ogni attività è pianificata e monitorata in base alle logiche e priorità del tuo flusso di lavoro. Check-list, schede tecniche e autorizzazioni vengono integrate nel sistema senza snaturare le procedure che già funzionano in azienda.',
+    anim: 'list_controllo_pressione_e_filtri',
+  },
+  {
+    heading: 'Visualizza e gestisci reti di asset',
+    body: 'Mappe interattive e viste gerarchiche ti permettono di monitorare asset collegati fra loro, come impianti, linee di produzione o infrastrutture di servizio. Il sistema rispecchia le relazioni operative esistenti, così la gestione in rete avviene secondo la tua logica e non secondo uno schema rigido.',
+    anim: 'albero_P01_S08_A15_L30',
+  },
+  {
+    heading: 'Ricambi e listini sempre sotto controllo',
+    body: 'Monitora disponibilità, movimenti e costi di magazzino. Associa ricambi e materiali agli asset e agli interventi, garantendo approvvigionamenti puntuali e una gestione economica ottimizzata.',
+    anim: 'list_with_pz_150pz_110_pz_80pz',
+  },
+  {
+    heading: 'Passaggi di consegna efficaci',
+    body: 'OpenEAM gestisce il passaggio di informazioni tra turni e squadre secondo le procedure interne, garantendo tracciabilità completa e riducendo il rischio di errori. La trasmissione delle conoscenze operative avviene direttamente nella piattaforma, integrandosi nei tuoi flussi standard.',
+    anim: 'Turno_Docs_arrows',
+  },
+];
+---
+<BaseLayout title="Maintenance & Operations — OpenEAM Platform" description="Con Open EAM pianifichi, esegui e tracci ogni attività manutentiva e operativa in un'unica piattaforma che si plasma sui tuoi processi esistenti.">
+
+  <PlatformHero
+    tone="teal"
+    accent="orange"
+    icon="wrench"
+    headingLead="Maintenance &"
+    headingAccent="operations"
+    sub="Con Open EAM pianifichi, esegui e tracci ogni attività manutentiva e operativa in un'unica piattaforma. La differenza è che non devi adattare le tue procedure al software: la piattaforma si plasma sui tuoi processi esistenti, potenziandoli."
+  >
+    <Image src={heroPhoto} alt="Operatrice con tablet in officina" width={720} height={540} />
+  </PlatformHero>
+
+  <Section bg="white">
+    <div class="stack">
+      {features.map((f) => (
+        <FeatureSplit heading={f.heading} body={f.body}>
+          <div class="lottie-box">
+            <LottiePlayer animationName={f.anim} ariaLabel={f.heading} />
+          </div>
+        </FeatureSplit>
+      ))}
+    </div>
+  </Section>
+
+  <Section bg="white">
+    <CtaBand
+      tone="teal"
+      image={closingPhoto}
+      imageAlt="Operatore su macchinario industriale"
+      heading="Operazioni fluide, manutenzione intelligente"
+      body="Con Open EAM hai il pieno controllo di processi, asset e risorse, in un'unica piattaforma che si adatta ai tuoi flussi di lavoro e migliora le performance operative."
+    />
+  </Section>
+
+</BaseLayout>
+
+<style>
+  .stack { display: grid; gap: 2rem; }
+  .lottie-box { width: 100%; min-height: 300px; display: grid; place-items: center; }
+</style>

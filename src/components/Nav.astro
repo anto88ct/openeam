@@ -1,0 +1,208 @@
+---
+import Logo from './Logo.astro';
+import { platformLinks, industryLinks } from '../config/site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+const groupActive = (links: { href: string }[]) => links.some((l) => isActive(l.href));
+---
+<header class="nav" data-nav>
+  <div class="container-page nav__inner">
+    <Logo tone="dark" />
+
+    <button class="nav__burger" data-nav-toggle aria-label="Apri menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="nav__menu" data-nav-menu aria-label="Navigazione principale">
+      <a href="/" class:list={['nav__link', { 'is-active': isActive('/') }]}>Home</a>
+
+      <div class="nav__item" data-dropdown>
+        <button
+          class:list={['nav__link nav__trigger', { 'is-active': groupActive(platformLinks) }]}
+          aria-expanded="false"
+        >
+          Platform
+          <svg width="12" height="8" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <div class="nav__panel nav__panel--mega">
+          {platformLinks.map((l) => (
+            <a href={l.href} class="nav__mega-link">
+              <span class="nav__arrow">→</span>{l.label}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="nav__item" data-dropdown>
+        <button
+          class:list={['nav__link nav__trigger', { 'is-active': groupActive(industryLinks) }]}
+          aria-expanded="false"
+        >
+          By Industry
+          <svg width="12" height="8" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <div class="nav__panel">
+          {industryLinks.map((l) => (
+            <a href={l.href} class="nav__mega-link">
+              <span class="nav__arrow">→</span>{l.label}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <a href="/pricing" class:list={['nav__link', { 'is-active': isActive('/pricing') }]}>Pricing</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--color-bg);
+    border-bottom: 1px solid rgb(35 48 56 / 0.07);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 84px;
+  }
+  .nav__menu {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 1.05rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--color-ink);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+  .nav__link:hover { color: var(--color-orange); }
+  .nav__link.is-active { color: var(--color-orange); }
+  .nav__trigger svg { transition: transform 0.2s ease; }
+
+  .nav__item { position: relative; }
+  .nav__panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 260px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgb(35 48 56 / 0.06);
+    padding: 0.5rem;
+    display: grid;
+    gap: 0.15rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
+  }
+  .nav__item:hover .nav__panel,
+  .nav__item:focus-within .nav__panel,
+  .nav__panel.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .nav__item:hover .nav__trigger svg,
+  .nav__item:focus-within .nav__trigger svg { transform: rotate(180deg); }
+
+  .nav__mega-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: 10px;
+    font-weight: 600;
+    color: var(--color-ink);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .nav__mega-link:hover { background: var(--color-bg); color: var(--color-orange); }
+  .nav__arrow { color: var(--color-orange); font-weight: 700; }
+
+  .nav__burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 8px;
+  }
+  .nav__burger span {
+    width: 24px;
+    height: 2px;
+    background: var(--color-ink);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  @media (max-width: 900px) {
+    .nav__burger { display: flex; }
+    .nav__menu {
+      position: fixed;
+      inset: 74px 0 auto 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.25rem;
+      background: #fff;
+      padding: 1rem 1.5rem 1.5rem;
+      border-bottom: 1px solid rgb(35 48 56 / 0.08);
+      box-shadow: var(--shadow-soft);
+      transform: translateY(-120%);
+      transition: transform 0.25s ease;
+      max-height: calc(100dvh - 74px);
+      overflow-y: auto;
+    }
+    .nav[data-open] .nav__menu { transform: translateY(0); }
+    .nav__panel {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      box-shadow: none;
+      border: 0;
+      padding: 0 0 0.5rem 1rem;
+      display: none;
+    }
+    .nav__panel.is-open { display: grid; }
+  }
+</style>
+
+<script>
+  const header = document.querySelector('[data-nav]');
+  const toggle = document.querySelector('[data-nav-toggle]');
+  toggle?.addEventListener('click', () => {
+    const open = header?.toggleAttribute('data-open');
+    toggle.setAttribute('aria-expanded', String(!!open));
+  });
+
+  // Mobile: tap a dropdown trigger to expand its panel in place.
+  const mq = window.matchMedia('(max-width: 900px)');
+  document.querySelectorAll('[data-dropdown]').forEach((item) => {
+    const trigger = item.querySelector('.nav__trigger');
+    const panel = item.querySelector('.nav__panel');
+    trigger?.addEventListener('click', (e) => {
+      if (!mq.matches) return; // desktop uses hover
+      e.preventDefault();
+      const open = panel?.classList.toggle('is-open');
+      trigger.setAttribute('aria-expanded', String(!!open));
+    });
+  });
+</script>

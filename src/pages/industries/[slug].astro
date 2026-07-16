@@ -1,0 +1,111 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import PhotoHero from '../../components/PhotoHero.astro';
+import FeatureCard from '../../components/FeatureCard.astro';
+import CaseStudyCard from '../../components/CaseStudyCard.astro';
+import { getIcon } from '../../lib/icons';
+
+export async function getStaticPaths() {
+  const items = await getCollection('industries');
+  return items.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const data = entry.data;
+const { Content } = await render(entry);
+
+// Resolve referenced case studies (in listed order, skipping missing/draft).
+const featured = (
+  await Promise.all(
+    data.caseStudies.map((slug) => getEntry('caseStudies', slug)),
+  )
+).filter((c): c is NonNullable<typeof c> => !!c && !c.data.draft);
+
+const introBg = data.introTone; // 'light' | 'teal' | 'ink'
+const cardBg = data.cardTone;
+const cardFace = cardBg === 'light' ? 'light' : 'dark';
+const overlay = introBg === 'teal' ? 'teal' : 'ink';
+---
+<BaseLayout
+  title={`${data.title} — OpenEAM Industries`}
+  description={data.seoDescription ?? data.intro.slice(0, 155)}
+>
+  <PhotoHero image={data.heroImage} heading={data.title} sub={data.subtitle} overlay={overlay} />
+
+  <!-- Intro -->
+  <Section bg={introBg} dotted={introBg !== 'light'}>
+    <div class="intro">
+      {data.eyebrow && <p class="eyebrow intro__eyebrow">{data.eyebrow}</p>}
+      <p class="intro__body rich" set:html={data.intro} />
+    </div>
+    {/* Optional extra prose from the MDX body */}
+    <div class="intro__prose"><Content /></div>
+  </Section>
+
+  <!-- Feature cards -->
+  <Section bg={cardBg} dotted={cardBg !== 'light'}>
+    <div class="feat-grid">
+      {data.cards.map((c) => (
+        <FeatureCard title={c.title} body={c.body} icon={getIcon(c.icon)} tone={cardFace} />
+      ))}
+    </div>
+  </Section>
+
+  <!-- Case studies -->
+  {featured.length > 0 && (
+    <section class="cs-band">
+      <div class="container-page">
+        <SectionHeading heading="Case studies" align="center" class="cs-band__head" />
+        <div class:list={['cs-grid', { 'cs-grid--single': featured.length === 1 }]}>
+          {featured.map((c) => (
+            <CaseStudyCard
+              title={c.data.title}
+              href={`/case-studies/${c.id}`}
+              image={c.data.heroImage}
+              imageAlt={c.data.title}
+              body={c.data.excerpt}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .intro { max-width: 60rem; margin-inline: auto; text-align: center; display: grid; gap: 1.25rem; }
+  .intro__body { font-size: 1.2rem; line-height: 1.7; }
+  :global(.section--teal) .intro__body,
+  :global(.section--ink) .intro__body { color: rgb(255 255 255 / 0.92); }
+  :global(.section--teal) .intro__body strong,
+  :global(.section--ink) .intro__body strong { color: #fff; }
+  .intro__prose { max-width: 60rem; margin: 1.5rem auto 0; }
+  .intro__prose:empty { display: none; }
+
+  .feat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  @media (max-width: 720px) { .feat-grid { grid-template-columns: 1fr; } }
+
+  .cs-band {
+    padding-block: clamp(3.5rem, 7vw, 6rem);
+    background: linear-gradient(120deg, var(--color-ink) 0%, #3a2a20 45%, var(--color-orange) 100%);
+  }
+  .cs-band__head :global(.sh__title) { color: #fff; }
+  .cs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  .cs-grid--single { max-width: 34rem; margin-inline: auto; grid-template-columns: 1fr; }
+  @media (max-width: 720px) { .cs-grid { grid-template-columns: 1fr; } }
+</style>
