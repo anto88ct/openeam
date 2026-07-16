@@ -1,0 +1,123 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../Section.astro';
+import PhotoHero from '../PhotoHero.astro';
+import Button from '../Button.astro';
+import { getLocalizedPath } from '../../i18n/utils';
+
+interface Props {
+  lang: 'it' | 'en';
+  entry: any;
+}
+const { lang, entry } = Astro.props;
+const l = (href: string) => getLocalizedPath(lang, href);
+const data = entry.data;
+const { Content } = await render(entry);
+
+const COPY = {
+  it: {
+    titleSuffix: 'Case Study',
+    modulesHeading: 'Moduli Open EAM utilizzati',
+    demoCta: 'Richiedi una demo',
+    backCta: '← Tutti i case studies',
+  },
+  en: {
+    titleSuffix: 'Case Study',
+    modulesHeading: 'Open EAM modules used',
+    demoCta: 'Request a demo',
+    backCta: '← All case studies',
+  },
+} as const;
+const t = COPY[lang];
+---
+<BaseLayout title={`${data.title} — ${t.titleSuffix}`} description={data.seoDescription ?? data.excerpt}>
+  <PhotoHero image={data.heroImage} heading={data.title} sub={data.industry} ctaLabel="" />
+
+  {data.metrics.length > 0 && (
+    <Section bg="ink">
+      <ul class="metrics">
+        {data.metrics.map((m: any) => (
+          <li class="metric">
+            <span class="metric__value">{m.value}</span>
+            <span class="metric__label">{m.label}</span>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+  <Section bg="white">
+    <div class="cs-layout">
+      <article class="cs-prose">
+        <Content />
+      </article>
+      <aside class="cs-aside">
+        {data.modules.length > 0 && (
+          <div class="cs-modules">
+            <h3>{t.modulesHeading}</h3>
+            <ul>
+              {data.modules.map((m: string) => <li>{m}</li>)}
+            </ul>
+          </div>
+        )}
+        <Button href={l('/demo')} variant="primary">{t.demoCta}</Button>
+      </aside>
+    </div>
+  </Section>
+
+  <Section bg="light">
+    <div class="cs-back">
+      <Button href={l('/case-studies')} variant="outline-ink">{t.backCta}</Button>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .metrics {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2rem;
+    text-align: center;
+  }
+  .metric { display: grid; gap: 0.4rem; }
+  .metric__value {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    color: var(--color-orange);
+    line-height: 1;
+  }
+  .metric__label { color: var(--color-on-dark); font-size: 0.98rem; }
+
+  .cs-layout { display: grid; grid-template-columns: 1fr 300px; gap: 3rem; align-items: start; }
+  .cs-prose :global(h2) { font-size: 1.5rem; margin: 2rem 0 0.75rem; }
+  .cs-prose :global(h2:first-child) { margin-top: 0; }
+  .cs-prose :global(p) { margin-bottom: 1.1rem; color: var(--color-slate); line-height: 1.7; }
+  .cs-prose :global(ul) { margin: 0 0 1.1rem 1.2rem; display: grid; gap: 0.4rem; color: var(--color-slate); }
+  .cs-prose :global(strong) { color: var(--color-ink); }
+
+  .cs-aside { position: sticky; top: 100px; display: grid; gap: 1.5rem; }
+  .cs-modules {
+    background: var(--color-bg);
+    border-radius: var(--radius-card);
+    padding: 1.5rem;
+  }
+  .cs-modules h3 { font-size: 1rem; margin-bottom: 0.75rem; }
+  .cs-modules ul { list-style: none; display: grid; gap: 0.5rem; }
+  .cs-modules li {
+    font-size: 0.9rem;
+    color: var(--color-slate-muted);
+    padding-left: 1.1rem;
+    position: relative;
+  }
+  .cs-modules li::before { content: '→'; position: absolute; left: 0; color: var(--color-orange); }
+
+  .cs-back { display: flex; justify-content: center; }
+
+  @media (max-width: 820px) {
+    .cs-layout { grid-template-columns: 1fr; }
+    .cs-aside { position: static; }
+  }
+</style>
