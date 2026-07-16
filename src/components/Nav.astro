@@ -1,22 +1,30 @@
 ---
 import Logo from './Logo.astro';
+import LangSwitch from './LangSwitch.astro';
 import { platformLinks, industryLinks } from '../config/site';
+import { getLangFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const l = (href: string) => getLocalizedPath(lang, href);
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const isActive = (href: string) =>
-  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
-const groupActive = (links: { href: string }[]) => links.some((l) => isActive(l.href));
+const isActive = (href: string) => {
+  const target = l(href);
+  return href === '/' ? path === target : path === target || path.startsWith(target + '/');
+};
+const groupActive = (links: { href: string }[]) => links.some((link) => isActive(link.href));
 ---
 <header class="nav" data-nav>
   <div class="container-page nav__inner">
-    <Logo tone="dark" />
+    <Logo tone="dark" href={l('/')} />
 
-    <button class="nav__burger" data-nav-toggle aria-label="Apri menu" aria-expanded="false">
+    <button class="nav__burger" data-nav-toggle aria-label={t('burgerAriaLabel')} aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
 
-    <nav class="nav__menu" data-nav-menu aria-label="Navigazione principale">
-      <a href="/" class:list={['nav__link', { 'is-active': isActive('/') }]}>Home</a>
+    <nav class="nav__menu" data-nav-menu aria-label={t('navAriaLabel')}>
+      <a href={l('/')} class:list={['nav__link', { 'is-active': isActive('/') }]}>Home</a>
 
       <div class="nav__item" data-dropdown>
         <button
@@ -27,9 +35,9 @@ const groupActive = (links: { href: string }[]) => links.some((l) => isActive(l.
           <svg width="12" height="8" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
         </button>
         <div class="nav__panel nav__panel--mega">
-          {platformLinks.map((l) => (
-            <a href={l.href} class="nav__mega-link">
-              <span class="nav__arrow">→</span>{l.label}
+          {platformLinks.map((link) => (
+            <a href={l(link.href)} class="nav__mega-link">
+              <span class="nav__arrow">→</span>{link.label}
             </a>
           ))}
         </div>
@@ -44,15 +52,17 @@ const groupActive = (links: { href: string }[]) => links.some((l) => isActive(l.
           <svg width="12" height="8" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
         </button>
         <div class="nav__panel">
-          {industryLinks.map((l) => (
-            <a href={l.href} class="nav__mega-link">
-              <span class="nav__arrow">→</span>{l.label}
+          {industryLinks.map((link) => (
+            <a href={l(link.href)} class="nav__mega-link">
+              <span class="nav__arrow">→</span>{link.label}
             </a>
           ))}
         </div>
       </div>
 
-      <a href="/pricing" class:list={['nav__link', { 'is-active': isActive('/pricing') }]}>Pricing</a>
+      <a href={l('/pricing')} class:list={['nav__link', { 'is-active': isActive('/pricing') }]}>Pricing</a>
+
+      <LangSwitch lang={lang} />
     </nav>
   </div>
 </header>
