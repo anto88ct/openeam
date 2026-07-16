@@ -5,6 +5,7 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { company } from '../config/site';
+import { getLangFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
 
 interface Props {
   title: string;
@@ -13,23 +14,37 @@ interface Props {
   ogImage?: string;
 }
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const DEFAULT_DESCRIPTION = {
+  it: "Open EAM — la piattaforma modulare di asset management e manutenzione che prende la forma dei tuoi processi. Un prodotto di Seedma SRL.",
+  en: 'Open EAM — the modular asset management and maintenance platform that takes the shape of your processes. A product of Seedma SRL.',
+} as const;
+
 const {
   title,
-  description = 'Open EAM — la piattaforma modulare di asset management e manutenzione che prende la forma dei tuoi processi. Un prodotto di Seedma SRL.',
+  description = DEFAULT_DESCRIPTION[lang],
   ogImage = '/webclip.png',
 } = Astro.props;
 
 const fullTitle = title === company.name ? title : `${title} — ${company.name}`;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? company.url).href;
+const siteOrigin = Astro.site ?? new URL(company.url);
+const canonical = new URL(Astro.url.pathname, siteOrigin).href;
+const alternateIt = new URL(getLocalizedPath('it', Astro.url.pathname), siteOrigin).href;
+const alternateEn = new URL(getLocalizedPath('en', Astro.url.pathname), siteOrigin).href;
 ---
 <!doctype html>
-<html lang="it">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="it" href={alternateIt} />
+    <link rel="alternate" hreflang="en" href={alternateEn} />
+    <link rel="alternate" hreflang="x-default" href={alternateIt} />
     <link rel="icon" type="image/png" href="/webclip.png" />
 
     <meta property="og:type" content="website" />
@@ -38,13 +53,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? company.url).href;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:locale" content="it_IT" />
+    <meta property="og:locale" content={t('ogLocale')} />
     <meta name="twitter:card" content="summary_large_image" />
 
     <meta name="theme-color" content="#233038" />
   </head>
   <body>
-    <a href="#main" class="skip-link">Salta al contenuto</a>
+    <a href="#main" class="skip-link">{t('skipLink')}</a>
     <Nav />
     <main id="main">
       <slot />
