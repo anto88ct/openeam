@@ -29,5 +29,3 @@ export const legalLinks = [
   { label: 'Privacy Policy', href: '/privacy-policy' },
   { label: 'Cookies Policy', href: '/cookies-policy' },
 ];
-
-export const primaryCta = { label: 'Richiedi una demo', href: '/demo' };
