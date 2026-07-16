@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../Section.astro';
+import PlatformHero from '../PlatformHero.astro';
+import FeatureSplit from '../FeatureSplit.astro';
+import CtaBand from '../CtaBand.astro';
+import LottiePlayer from '../LottiePlayer.astro';
+import { getLocalizedPath } from '../../i18n/utils';
+
+import heroPhoto from '../../assets/img/feat-maintenance.avif';
+import closingPhoto from '../../assets/img/engineer-robot.avif';
+
+interface Props {
+  lang: 'it' | 'en';
+}
+const { lang } = Astro.props;
+const l = (href: string) => getLocalizedPath(lang, href);
+
+const COPY = {
+  it: {
+    description: "Con Open EAM pianifichi, esegui e tracci ogni attività manutentiva e operativa in un'unica piattaforma che si plasma sui tuoi processi esistenti.",
+    heroSub: "Con Open EAM pianifichi, esegui e tracci ogni attività manutentiva e operativa in un'unica piattaforma. La differenza è che non devi adattare le tue procedure al software: la piattaforma si plasma sui tuoi processi esistenti, potenziandoli.",
+    heroImgAlt: 'Operatrice con tablet in officina',
+    features: [
+      { heading: 'Gestione completa delle attività manutentive e ispettive', body: 'Dalla manutenzione preventiva, a quella predittiva, alle ispezioni: ogni attività è pianificata e monitorata in base alle logiche e priorità del tuo flusso di lavoro. Check-list, schede tecniche e autorizzazioni vengono integrate nel sistema senza snaturare le procedure che già funzionano in azienda.', anim: 'list_controllo_pressione_e_filtri' },
+      { heading: 'Visualizza e gestisci reti di asset', body: 'Mappe interattive e viste gerarchiche ti permettono di monitorare asset collegati fra loro, come impianti, linee di produzione o infrastrutture di servizio. Il sistema rispecchia le relazioni operative esistenti, così la gestione in rete avviene secondo la tua logica e non secondo uno schema rigido.', anim: 'albero_P01_S08_A15_L30' },
+      { heading: 'Ricambi e listini sempre sotto controllo', body: 'Monitora disponibilità, movimenti e costi di magazzino. Associa ricambi e materiali agli asset e agli interventi, garantendo approvvigionamenti puntuali e una gestione economica ottimizzata.', anim: 'list_with_pz_150pz_110_pz_80pz' },
+      { heading: 'Passaggi di consegna efficaci', body: 'OpenEAM gestisce il passaggio di informazioni tra turni e squadre secondo le procedure interne, garantendo tracciabilità completa e riducendo il rischio di errori. La trasmissione delle conoscenze operative avviene direttamente nella piattaforma, integrandosi nei tuoi flussi standard.', anim: 'Turno_Docs_arrows' },
+    ],
+    ctaHeading: 'Operazioni fluide, manutenzione intelligente',
+    ctaBody: 'Con Open EAM hai il pieno controllo di processi, asset e risorse, in un\'unica piattaforma che si adatta ai tuoi flussi di lavoro e migliora le performance operative.',
+    ctaImgAlt: 'Operatore su macchinario industriale',
+    ctaLabel: 'Richiedi una demo',
+  },
+  en: {
+    description: 'With Open EAM you plan, execute, and track every maintenance and operational activity on a single platform that shapes itself around your existing processes.',
+    heroSub: "With Open EAM you plan, execute, and track every maintenance and operational activity on a single platform. The difference is you don't adapt your procedures to the software — the platform shapes itself around your existing processes and strengthens them.",
+    heroImgAlt: 'Operator with a tablet in the workshop',
+    features: [
+      { heading: 'Complete management of maintenance and inspection activities', body: "From preventive to predictive maintenance to inspections: every activity is planned and monitored according to your workflow's own logic and priorities. Checklists, technical sheets, and authorizations are integrated into the system without disrupting the procedures that already work for your company.", anim: 'list_controllo_pressione_e_filtri' },
+      { heading: 'View and manage asset networks', body: 'Interactive maps and hierarchical views let you monitor assets that are connected to one another, such as plants, production lines, or service infrastructure. The system mirrors your existing operational relationships, so network management follows your own logic instead of a rigid schema.', anim: 'albero_P01_S08_A15_L30' },
+      { heading: 'Spare parts and price lists always under control', body: 'Monitor stock availability, movements, and warehouse costs. Link spare parts and materials to assets and work orders, ensuring timely procurement and optimized cost management.', anim: 'list_with_pz_150pz_110_pz_80pz' },
+      { heading: 'Effective shift handovers', body: 'OpenEAM manages the handover of information between shifts and teams according to your internal procedures, ensuring full traceability and reducing the risk of errors. Operational knowledge is passed on directly within the platform, integrating with your standard workflows.', anim: 'Turno_Docs_arrows' },
+    ],
+    ctaHeading: 'Smooth operations, smart maintenance',
+    ctaBody: 'With Open EAM you have full control over processes, assets, and resources, on a single platform that adapts to your workflows and improves operational performance.',
+    ctaImgAlt: 'Operator working on industrial machinery',
+    ctaLabel: 'Request a demo',
+  },
+} as const;
+const t = COPY[lang];
+---
+<BaseLayout title="Maintenance & Operations — OpenEAM Platform" description={t.description}>
+
+  <PlatformHero tone="teal" accent="orange" icon="wrench" headingLead="Maintenance &" headingAccent="operations" sub={t.heroSub}>
+    <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />
+  </PlatformHero>
+
+  <Section bg="white">
+    <div class="stack">
+      {t.features.map((f) => (
+        <FeatureSplit heading={f.heading} body={f.body}>
+          <div class="lottie-box">
+            <LottiePlayer animationName={f.anim} ariaLabel={f.heading} />
+          </div>
+        </FeatureSplit>
+      ))}
+    </div>
+  </Section>
+
+  <Section bg="white">
+    <CtaBand tone="teal" image={closingPhoto} imageAlt={t.ctaImgAlt} heading={t.ctaHeading} body={t.ctaBody} ctaLabel={t.ctaLabel} ctaHref={l('/demo')} />
+  </Section>
+
+</BaseLayout>
+
+<style>
+  .stack { display: grid; gap: 2rem; }
+  .lottie-box { width: 100%; min-height: 300px; display: grid; place-items: center; }
+</style>
