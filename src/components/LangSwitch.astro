@@ -1,5 +1,6 @@
 ---
 import { getLocalizedPath, useTranslations, type Lang } from '../i18n/utils';
+import FlagIcon from './FlagIcon.astro';
 
 interface Props {
   lang: Lang;
@@ -8,14 +9,13 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const other: Lang = lang === 'it' ? 'en' : 'it';
 const otherHref = getLocalizedPath(other, Astro.url.pathname);
-const flags: Record<Lang, string> = { it: '🇮🇹', en: '🇬🇧' };
 ---
 <div class="lang-switch" role="group" aria-label={t('langSwitchAriaLabel')}>
   <span class="lang-switch__flag lang-switch__flag--active" aria-current="true">
-    {flags[lang]} {lang.toUpperCase()}
+    <FlagIcon lang={lang} /> {lang.toUpperCase()}
   </span>
   <a class="lang-switch__flag" href={otherHref}>
-    {flags[other]} {other.toUpperCase()}
+    <FlagIcon lang={other} /> {other.toUpperCase()}
   </a>
 </div>
 
