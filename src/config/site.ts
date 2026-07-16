@@ -3,9 +3,7 @@
 export const company = {
   name: 'Open EAM',
   legal: 'Seedma SRL',
-  tagline: "L'EAM su misura per i tuoi processi.",
   address: 'Seedma SRL - Via Barletta 9 - 95125 Catania - P.IVA 05728230870',
-  copyright: 'Open EAM è un prodotto di Seedma SRL. Tutti i diritti sono riservati.',
   url: 'https://www.openeam.it',
 };
 

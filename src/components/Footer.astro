@@ -7,6 +7,11 @@ import {
   sitemapLinks,
   legalLinks,
 } from '../config/site';
+import { getLangFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const l = (href: string) => getLocalizedPath(lang, href);
 
 const columns = [
   { title: 'Sitemap', links: sitemapLinks },
@@ -18,7 +23,7 @@ const columns = [
   <div class="container-page footer__top">
     <div class="footer__brand">
       <Logo tone="dark" href={null} />
-      <p class="footer__tagline">{company.tagline}</p>
+      <p class="footer__tagline">{t('footerTagline')}</p>
     </div>
 
     <div class="footer__cols">
@@ -26,8 +31,8 @@ const columns = [
         <nav class="footer__col" aria-label={col.title}>
           <h3 class="footer__col-title">{col.title}</h3>
           <ul>
-            {col.links.map((l) => (
-              <li><a href={l.href}>{l.label}</a></li>
+            {col.links.map((link) => (
+              <li><a href={l(link.href)}>{link.label}</a></li>
             ))}
           </ul>
         </nav>
@@ -37,12 +42,12 @@ const columns = [
 
   <div class="container-page footer__legal">
     <p>
-      <strong>{company.legal}</strong> — {company.copyright}
+      <strong>{company.legal}</strong> — {t('footerCopyright')}
       <span class="footer__addr">{company.address}</span>
     </p>
     <ul class="footer__policies">
-      {legalLinks.map((l) => (
-        <li><a href={l.href}>{l.label}</a></li>
+      {legalLinks.map((link) => (
+        <li><a href={l(link.href)}>{link.label}</a></li>
       ))}
     </ul>
   </div>
