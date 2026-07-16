@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../Section.astro';
+import PlatformHero from '../PlatformHero.astro';
+import FeatureSplit from '../FeatureSplit.astro';
+import CtaBand from '../CtaBand.astro';
+import LottiePlayer from '../LottiePlayer.astro';
+import { getLocalizedPath } from '../../i18n/utils';
+
+import heroPhoto from '../../assets/img/bar-chart-presentation.avif';
+import closingPhoto from '../../assets/img/worker-industry.avif';
+
+interface Props {
+  lang: 'it' | 'en';
+}
+const { lang } = Astro.props;
+const l = (href: string) => getLocalizedPath(lang, href);
+
+const COPY = {
+  it: {
+    description: 'Open EAM trasforma flussi di dati IoT, sensori e sistemi esterni in analisi chiare e centralizzate, con dashboard e KPI sempre aggiornati.',
+    heroSub: 'Open EAM trasforma flussi di dati IoT, sensori e sistemi esterni in analisi chiare e centralizzate. Con dashboard e KPI sempre aggiornati, puoi monitorare asset, anticipare problemi e ottimizzare performance in tempo reale.',
+    heroImgAlt: 'Analisi dati e dashboard su schermo',
+    features: [
+      { heading: 'Dati in tempo reale connessi via IoT', body: 'Integra Open EAM con sensori, PLC e sistemi SCADA per avere una visione costante e aggiornata delle condizioni operative degli asset. I dati arrivano in tempo reale e vengono automaticamente associati a ciascun asset.', anim: 'dashboar_with_sensore_allarme' },
+      { heading: 'Business Intelligence integrata', body: 'Con gli strumenti di Business Intelligence nativi, Open EAM trasforma dati complessi in visualizzazioni intuitive e report personalizzati. Puoi analizzare prestazioni, costi, frequenza degli interventi e trend di utilizzo, identificando aree di inefficienza o di miglioramento.', anim: 'dashboard_insight_immediati' },
+      { heading: 'Analisi geospaziale e digital twin', body: 'La piattaforma integra funzionalità GIS e digital twin per dare un contesto visivo e operativo ai tuoi asset. Puoi visualizzare la distribuzione geografica, simulare scenari di utilizzo e pianificare interventi considerando vincoli e opportunità legati alla posizione fisica.', anim: 'house_with_dots' },
+      { heading: 'KPI sempre sotto controllo', body: "Definisci i KPI più rilevanti per il tuo business e monitora le performance con aggiornamenti automatici e costanti. Che si tratti di MTBF (Mean Time Between Failures), tempi di intervento o costi di fermo macchina, Open EAM ti fornisce un quadro chiaro e confrontabile nel tempo, così puoi misurare l'efficacia delle azioni intraprese e adattare rapidamente le strategie operative.", anim: 'dashboard_MTBF_tempi_intervento_costi_fermo' },
+    ],
+    ctaHeading: 'Dai dati al valore, in tempo reale',
+    ctaBody: 'Con Open EAM, ogni informazione è connessa, analizzata e tradotta in insight operativi e strategici. Non solo vedi cosa sta accadendo: capisci perché e sai come agire.',
+    ctaImgAlt: 'Operatore in impianto',
+    ctaLabel: 'Richiedi una demo',
+  },
+  en: {
+    description: 'Open EAM turns IoT data streams, sensors, and external systems into clear, centralized analytics, with dashboards and KPIs that are always up to date.',
+    heroSub: 'Open EAM turns IoT data streams, sensors, and external systems into clear, centralized analytics. With dashboards and KPIs that are always up to date, you can monitor assets, anticipate problems, and optimize performance in real time.',
+    heroImgAlt: 'Data analysis and dashboard on screen',
+    features: [
+      { heading: 'Real-time data connected via IoT', body: "Integrate Open EAM with sensors, PLCs, and SCADA systems for a constant, up-to-date view of your assets' operating conditions. Data arrives in real time and is automatically linked to each asset.", anim: 'dashboar_with_sensore_allarme' },
+      { heading: 'Built-in Business Intelligence', body: 'With native Business Intelligence tools, Open EAM turns complex data into intuitive visualizations and custom reports. You can analyze performance, costs, work-order frequency, and usage trends, identifying areas of inefficiency or improvement.', anim: 'dashboard_insight_immediati' },
+      { heading: 'Geospatial analysis and digital twin', body: 'The platform integrates GIS and digital twin capabilities to give your assets visual and operational context. You can view geographic distribution, simulate usage scenarios, and plan work orders while factoring in constraints and opportunities tied to physical location.', anim: 'house_with_dots' },
+      { heading: 'KPIs always under control', body: "Define the KPIs that matter most for your business and monitor performance with constant, automatic updates. Whether it's MTBF (Mean Time Between Failures), response times, or downtime costs, Open EAM gives you a clear picture you can compare over time, so you can measure the effectiveness of your actions and quickly adjust operational strategies.", anim: 'dashboard_MTBF_tempi_intervento_costi_fermo' },
+    ],
+    ctaHeading: 'From data to value, in real time',
+    ctaBody: "With Open EAM, every piece of information is connected, analyzed, and turned into operational and strategic insight. You don't just see what's happening — you understand why and know how to act.",
+    ctaImgAlt: 'Operator at a plant',
+    ctaLabel: 'Request a demo',
+  },
+} as const;
+const t = COPY[lang];
+---
+<BaseLayout title="Asset Analytics — OpenEAM Platform" description={t.description}>
+
+  <PlatformHero tone="light" accent="orange" icon="chart" headingLead="Asset" headingAccent="analytics" sub={t.heroSub}>
+    <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />
+  </PlatformHero>
+
+  <Section bg="white">
+    <div class="stack">
+      {t.features.map((f) => (
+        <FeatureSplit heading={f.heading} body={f.body}>
+          <div class="lottie-box">
+            <LottiePlayer animationName={f.anim} ariaLabel={f.heading} />
+          </div>
+        </FeatureSplit>
+      ))}
+    </div>
+  </Section>
+
+  <Section bg="white">
+    <CtaBand tone="sage" image={closingPhoto} imageAlt={t.ctaImgAlt} heading={t.ctaHeading} body={t.ctaBody} ctaLabel={t.ctaLabel} ctaHref={l('/demo')} />
+  </Section>
+
+</BaseLayout>
+
+<style>
+  .stack { display: grid; gap: 2rem; }
+  .lottie-box { width: 100%; min-height: 300px; display: grid; place-items: center; }
+</style>
