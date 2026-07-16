@@ -15,8 +15,8 @@ interface Props {
   tone?: 'ink' | 'teal' | 'orange' | 'light';
   /** colour of the accent heading word + CTA style */
   accent?: 'orange' | 'dark' | 'white';
-  ctaLabel?: string;
-  ctaHref?: string;
+  ctaLabel: string;
+  ctaHref: string;
 }
 const {
   icon,
@@ -25,8 +25,8 @@ const {
   sub,
   tone = 'ink',
   accent = 'orange',
-  ctaLabel = 'Richiedi una demo',
-  ctaHref = '/demo',
+  ctaLabel,
+  ctaHref,
 } = Astro.props;
 
 const iconAsset = icon ? getIcon(icon) : undefined;

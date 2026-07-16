@@ -9,8 +9,8 @@ interface Props {
   heading: string;
   body: string;
   reverse?: boolean;          // media on the right instead of the left
-  ctaLabel?: string;
-  ctaHref?: string;
+  ctaLabel: string;
+  ctaHref: string;
   ctaVariant?: 'primary' | 'teal' | 'dark';
   class?: string;
 }
@@ -18,8 +18,8 @@ const {
   heading,
   body,
   reverse = false,
-  ctaLabel = 'Richiedi una demo',
-  ctaHref = '/demo',
+  ctaLabel,
+  ctaHref,
   ctaVariant = 'primary',
   class: className = '',
 } = Astro.props;

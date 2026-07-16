@@ -10,9 +10,9 @@ interface Props {
   href: string;
   image: ImageMetadata;
   reverse?: boolean;    // photo on the left
-  ctaLabel?: string;
+  ctaLabel: string;
 }
-const { icon, title, body, href, image, reverse = false, ctaLabel = 'Scopri di più' } = Astro.props;
+const { icon, title, body, href, image, reverse = false, ctaLabel } = Astro.props;
 ---
 <article class:list={['mc', { 'mc--reverse': reverse }]}>
   <div class="mc__text">
