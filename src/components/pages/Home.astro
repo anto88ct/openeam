@@ -9,7 +9,7 @@ import LogoMarquee from '../LogoMarquee.astro';
 import CtaBand from '../CtaBand.astro';
 import CaseStudyCard from '../CaseStudyCard.astro';
 import Button from '../Button.astro';
-import { getLocalizedPath } from '../../i18n/utils';
+import { getLocalizedPath, useTranslations } from '../../i18n/utils';
 
 import heroRings from '../../assets/img/hero-rings.svg';
 import featAsset from '../../assets/img/feat-asset-management.avif';
@@ -31,6 +31,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const l = (href: string) => getLocalizedPath(lang, href);
+const tUi = useTranslations(lang);
 
 const COPY = {
   it: {
@@ -139,7 +140,7 @@ const cases = [
 
   <!-- Trust band -->
   <Section bg="teal">
-    <LogoMarquee />
+    <LogoMarquee heading={tUi('trustHeading')} />
   </Section>
 
   <!-- Modules -->
@@ -154,6 +155,7 @@ const cases = [
           href={m.href}
           image={m.image}
           reverse={i % 2 === 1}
+          ctaLabel={t.caseCtaLabel}
         />
       ))}
     </div>

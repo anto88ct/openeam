@@ -49,14 +49,14 @@ const t = COPY[lang];
 ---
 <BaseLayout title="Technical Documentation Management — OpenEAM Platform" description={t.description}>
 
-  <PlatformHero tone="orange" accent="dark" icon="document" headingLead="Technical documentation" headingAccent="management" sub={t.heroSub}>
+  <PlatformHero tone="orange" accent="dark" icon="document" headingLead="Technical documentation" headingAccent="management" sub={t.heroSub} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
     <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />
   </PlatformHero>
 
   <Section bg="white">
     <div class="stack">
       {t.features.map((f) => (
-        <FeatureSplit heading={f.heading} body={f.body} reverse={f.reverse}>
+        <FeatureSplit heading={f.heading} body={f.body} reverse={f.reverse} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
           <div class="lottie-box">
             <LottiePlayer animationName={f.anim} ariaLabel={f.heading} />
           </div>

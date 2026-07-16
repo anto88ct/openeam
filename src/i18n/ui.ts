@@ -9,6 +9,7 @@ export const ui = {
     footerCopyright: 'Open EAM è un prodotto di Seedma SRL. Tutti i diritti sono riservati.',
     legalUpdatedLabel: 'Ultimo aggiornamento:',
     ogLocale: 'it_IT',
+    trustHeading: 'Il software di manutenzione e asset management scelto da',
   },
   en: {
     skipLink: 'Skip to content',
@@ -19,6 +20,7 @@ export const ui = {
     footerCopyright: 'Open EAM is a product of Seedma SRL. All rights reserved.',
     legalUpdatedLabel: 'Last updated:',
     ogLocale: 'en_US',
+    trustHeading: 'The maintenance and asset management software chosen by',
   },
 } as const;
 

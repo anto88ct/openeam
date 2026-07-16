@@ -10,15 +10,16 @@ interface Props {
   href: string;
   image: ImageMetadata;
   reverse?: boolean;    // photo on the left
+  ctaLabel?: string;
 }
-const { icon, title, body, href, image, reverse = false } = Astro.props;
+const { icon, title, body, href, image, reverse = false, ctaLabel = 'Scopri di più' } = Astro.props;
 ---
 <article class:list={['mc', { 'mc--reverse': reverse }]}>
   <div class="mc__text">
     <span class="mc__icon"><Image src={icon} alt="" width={40} height={40} /></span>
     <h3 class="mc__title">{title}</h3>
     <p class="mc__body rich" set:html={body} />
-    <Button href={href} variant="primary" class="mc__cta">Scopri di più</Button>
+    <Button href={href} variant="primary" class="mc__cta">{ctaLabel}</Button>
   </div>
   <div class="mc__media">
     <Image src={image} alt={title} width={640} height={520} loading="lazy" />

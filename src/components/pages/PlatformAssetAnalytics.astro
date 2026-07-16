@@ -53,14 +53,14 @@ const t = COPY[lang];
 ---
 <BaseLayout title="Asset Analytics — OpenEAM Platform" description={t.description}>
 
-  <PlatformHero tone="light" accent="orange" icon="chart" headingLead="Asset" headingAccent="analytics" sub={t.heroSub}>
+  <PlatformHero tone="light" accent="orange" icon="chart" headingLead="Asset" headingAccent="analytics" sub={t.heroSub} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
     <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />
   </PlatformHero>
 
   <Section bg="white">
     <div class="stack">
       {t.features.map((f) => (
-        <FeatureSplit heading={f.heading} body={f.body}>
+        <FeatureSplit heading={f.heading} body={f.body} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
           <div class="lottie-box">
             <LottiePlayer animationName={f.anim} ariaLabel={f.heading} />
           </div>

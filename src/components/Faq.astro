@@ -1,7 +1,7 @@
 ---
 /** Accessible accordion built on <details>/<summary>. */
 interface Item { q: string; a: string; }
-interface Props { items: Item[]; }
+interface Props { items: readonly Item[]; }
 const { items } = Astro.props;
 ---
 <div class="faq">

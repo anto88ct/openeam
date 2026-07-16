@@ -6,7 +6,7 @@ import SectionHeading from '../SectionHeading.astro';
 import LogoMarquee from '../LogoMarquee.astro';
 import Faq from '../Faq.astro';
 import Button from '../Button.astro';
-import { getLocalizedPath } from '../../i18n/utils';
+import { getLocalizedPath, useTranslations } from '../../i18n/utils';
 
 import imgStart from '../../assets/img/pricing/start.png';
 import imgMid from '../../assets/img/pricing/mid.png';
@@ -18,6 +18,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const l = (href: string) => getLocalizedPath(lang, href);
+const tUi = useTranslations(lang);
 
 const COPY = {
   it: {
@@ -176,7 +177,7 @@ const t = COPY[lang];
 
   <!-- Trust -->
   <Section bg="teal">
-    <LogoMarquee />
+    <LogoMarquee heading={tUi('trustHeading')} />
   </Section>
 
   <!-- FAQ -->

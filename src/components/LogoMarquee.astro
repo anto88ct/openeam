@@ -3,9 +3,9 @@ import { Image } from 'astro:assets';
 
 /** Teal trust band: heading + row of client logos (rendered white/monochrome). */
 interface Props {
-  heading?: string;
+  heading: string;
 }
-const { heading = 'Il software di manutenzione e asset management scelto da' } = Astro.props;
+const { heading } = Astro.props;
 
 const files = import.meta.glob<{ default: ImageMetadata }>(
   '../assets/img/logos/*.{png,svg}',
