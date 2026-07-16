@@ -61,6 +61,7 @@ const COPY = {
     architectureBody: "Non piegare i tuoi processi alle regole di un software preconfezionato. Scopri l'EAM modulare costruito a misura della tua azienda.",
     architectureCta: 'Vai al video tour della piattaforma',
     architectureAlt: 'Operatore al lavoro in impianto industriale',
+    caseCtaLabel: 'Scopri di più',
     casesHeading: 'Casi studio',
     casesSub: "Scopri come altre aziende utilizzano Open EAM per migliorare l'efficienza e le performance della manutenzione nei loro impianti produttivi.",
     casesExploreAll: 'Esplora tutti i case studies',
@@ -93,6 +94,7 @@ const COPY = {
     architectureBody: "Don't bend your processes to fit an off-the-shelf software's rules. Discover the modular EAM built to your company's exact measure.",
     architectureCta: 'Watch the platform video tour',
     architectureAlt: 'Operator at work in an industrial plant',
+    caseCtaLabel: 'Learn more',
     casesHeading: 'Case studies',
     casesSub: 'See how other companies use Open EAM to improve efficiency and maintenance performance at their production plants.',
     casesExploreAll: 'Explore all case studies',
@@ -183,7 +185,7 @@ const cases = [
     <SectionHeading heading={t.casesHeading} sub={t.casesSub} />
     <div class="cases-grid">
       {cases.map((c) => (
-        <CaseStudyCard title={c.title} href={c.href} image={c.image} imageAlt={c.title} body={c.body} />
+        <CaseStudyCard title={c.title} href={c.href} image={c.image} imageAlt={c.title} body={c.body} ctaLabel={t.caseCtaLabel} />
       ))}
     </div>
     <div class="modules__cta">

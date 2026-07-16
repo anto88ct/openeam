@@ -17,6 +17,7 @@ const { lang, entry } = Astro.props;
 const l = (href: string) => getLocalizedPath(lang, href);
 const caseStudiesCollection = lang === 'en' ? 'caseStudiesEn' : 'caseStudiesIt';
 const demoCta = lang === 'en' ? 'Request a demo' : 'Richiedi una demo';
+const caseCtaLabel = lang === 'en' ? 'Learn more' : 'Scopri di più';
 
 const data = entry.data;
 const { Content } = await render(entry);
@@ -78,6 +79,7 @@ const overlay = introBg === 'teal' ? 'teal' : 'ink';
               image={c.data.heroImage}
               imageAlt={c.data.title}
               body={c.data.excerpt}
+              ctaLabel={caseCtaLabel}
             />
           ))}
         </div>
