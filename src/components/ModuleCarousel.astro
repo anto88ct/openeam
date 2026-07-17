@@ -1,0 +1,240 @@
+---
+import { Image } from 'astro:assets';
+import Button from './Button.astro';
+
+/** Autoplaying carousel: photo + teal swoosh on one side, heading/body/CTA on a light panel, dot pagination below. */
+interface Slide {
+  image: ImageMetadata;
+  imageAlt: string;
+  heading: string;
+  body: string;
+  ctaLabel: string;
+  ctaHref: string;
+}
+interface Props {
+  slides: Slide[];
+  intervalMs?: number;
+}
+const { slides, intervalMs = 6000 } = Astro.props;
+---
+
+<div class="carousel" data-carousel data-interval={intervalMs}>
+  <div class="carousel__row">
+    <div class="carousel__media">
+      <div class="carousel__swoosh" aria-hidden="true"></div>
+      {
+        slides.map((s, i) => (
+          <Image
+            src={s.image}
+            alt={s.imageAlt}
+            width={720}
+            height={560}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            class:list={['carousel__img', { 'is-active': i === 0 }]}
+            data-slide={i}
+          />
+        ))
+      }
+    </div>
+    <div class="carousel__text">
+      {
+        slides.map((s, i) => (
+          <div class:list={['carousel__panel', { 'is-active': i === 0 }]} data-panel={i}>
+            <h3 class="carousel__heading" set:html={s.heading} />
+            <p class="carousel__body" set:html={s.body} />
+            <Button href={s.ctaHref} variant="primary">
+              {s.ctaLabel}
+            </Button>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <div class="carousel__dots" role="tablist" aria-label="Slide della piattaforma">
+    {
+      slides.map((_, i) => (
+        <button
+          type="button"
+          class:list={['carousel__dot', { 'is-active': i === 0 }]}
+          data-dot={i}
+          role="tab"
+          aria-selected={i === 0}
+          aria-label={`Vai alla slide ${i + 1}`}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  function initCarousels() {
+    document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+      if (root.dataset.inited) return;
+      root.dataset.inited = 'true';
+
+      const images = Array.from(root.querySelectorAll<HTMLElement>('.carousel__img'));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>('.carousel__panel'));
+      const dots = Array.from(root.querySelectorAll<HTMLElement>('.carousel__dot'));
+      const total = images.length;
+      if (total < 2) return;
+
+      const interval = Number(root.dataset.interval) || 6000;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let index = 0;
+      let timer: ReturnType<typeof setInterval> | null = null;
+
+      const show = (next: number) => {
+        images[index]?.classList.remove('is-active');
+        panels[index]?.classList.remove('is-active');
+        dots[index]?.classList.remove('is-active');
+        dots[index]?.setAttribute('aria-selected', 'false');
+        index = next;
+        images[index]?.classList.add('is-active');
+        panels[index]?.classList.add('is-active');
+        dots[index]?.classList.add('is-active');
+        dots[index]?.setAttribute('aria-selected', 'true');
+      };
+
+      const advance = () => show((index + 1) % total);
+
+      const start = () => {
+        if (timer || reduceMotion) return;
+        timer = setInterval(advance, interval);
+      };
+      const stop = () => {
+        if (timer) clearInterval(timer);
+        timer = null;
+      };
+
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          if (i === index) return;
+          show(i);
+          stop();
+          start();
+        });
+      });
+
+      start();
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      root.addEventListener('focusin', stop);
+      root.addEventListener('focusout', start);
+    });
+  }
+
+  document.addEventListener('astro:page-load', initCarousels);
+  initCarousels();
+</script>
+
+<style>
+  .carousel {
+    margin-top: 3.5rem;
+  }
+  .carousel__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+
+  .carousel__media {
+    position: relative;
+    aspect-ratio: 6 / 5;
+  }
+  .carousel__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .carousel__img.is-active {
+    opacity: 1;
+    position: relative;
+  }
+  .carousel__swoosh {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(
+      120% 90% at 78% 55%,
+      rgb(7 80 86 / 0.85) 0%,
+      rgb(7 80 86 / 0.55) 38%,
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+
+  .carousel__text {
+    position: relative;
+    display: grid;
+    background: var(--color-panel);
+    padding: clamp(2rem, 5vw, 3.5rem);
+  }
+  .carousel__panel {
+    grid-area: 1 / 1;
+    display: grid;
+    gap: 1.25rem;
+    align-content: center;
+    justify-items: start;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .carousel__panel.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .carousel__heading {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--color-ink);
+    max-width: 22ch;
+  }
+  .carousel__body {
+    color: var(--color-slate-muted);
+    max-width: 46ch;
+    line-height: 1.6;
+    font-size: 1.05rem;
+  }
+  .carousel__body :global(strong) { color: var(--color-ink); font-weight: 700; }
+
+  .carousel__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1.75rem;
+  }
+  .carousel__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: rgb(35 48 56 / 0.18);
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .carousel__dot:hover { background: rgb(35 48 56 / 0.32); }
+  .carousel__dot.is-active {
+    background: var(--color-ink);
+    transform: scale(1.15);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel__img,
+    .carousel__panel,
+    .carousel__dot { transition: none; }
+  }
+
+  @media (max-width: 820px) {
+    .carousel__row { grid-template-columns: 1fr; }
+    .carousel__media { aspect-ratio: 16 / 11; }
+  }
+</style>

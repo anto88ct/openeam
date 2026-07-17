@@ -34,11 +34,10 @@ const logos = order
 <style>
   .marquee { text-align: center; display: grid; gap: 2rem; }
   .marquee__heading {
-    color: #fff;
+    color: var(--color-slate-muted);
     font-family: var(--font-display);
     font-weight: 600;
     font-size: clamp(1.05rem, 2vw, 1.35rem);
-    opacity: 0.95;
   }
   .marquee__row {
     list-style: none;
@@ -52,10 +51,10 @@ const logos = order
     height: 44px;
     width: auto;
     object-fit: contain;
-    /* Render logos as flat white marks on the teal band */
-    filter: brightness(0) invert(1);
-    opacity: 0.85;
+    /* Flatten every logo to a uniform gray mark, regardless of source color */
+    filter: brightness(0);
+    opacity: 0.45;
     transition: opacity 0.2s ease;
   }
-  .marquee__item:hover :global(img) { opacity: 1; }
+  .marquee__item:hover :global(img) { opacity: 0.7; }
 </style>

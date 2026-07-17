@@ -1,0 +1,181 @@
+---
+/** Dark stat grid: big orange outline numbers that count up into view, plus-sign divider at the center. */
+interface Stat {
+  numbers: number[];
+  sep?: string;
+  prefix?: string;
+  suffix?: string;
+  label: string;
+}
+interface Props {
+  stats: Stat[];
+}
+const { stats } = Astro.props;
+---
+
+<div class="stats">
+  {
+    stats.map((s) => (
+      <div class="stats__item">
+        <p
+          class="stats__number"
+          data-counter
+          data-numbers={s.numbers.join(",")}
+          data-sep={s.sep ?? ""}
+          data-prefix={s.prefix ?? ""}
+          data-suffix={s.suffix ?? ""}
+        >
+          {s.prefix}
+          {s.numbers.map((n) => "0").join(s.sep ?? "")}
+          {s.suffix}
+        </p>
+        <p class="stats__label">{s.label}</p>
+      </div>
+    ))
+  }
+  <div class="stats__cross" aria-hidden="true"></div>
+</div>
+
+<script>
+  function initCounters() {
+    const counters = document.querySelectorAll<HTMLElement>('[data-counter]:not([data-inited])');
+    if (!counters.length) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const duration = 1400;
+    const easeOutExpo = (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+
+    const render = (el: HTMLElement, values: number[]) => {
+      const sep = el.dataset.sep || '';
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      el.textContent = `${prefix}${values.join(sep)}${suffix}`;
+    };
+
+    const animate = (el: HTMLElement) => {
+      el.dataset.inited = 'true';
+      const targets = (el.dataset.numbers || '').split(',').map(Number);
+
+      if (reduceMotion) {
+        render(el, targets);
+        return;
+      }
+
+      const start = performance.now();
+      const tick = (now: number) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = easeOutExpo(progress);
+        const values = targets.map((n) => Math.round(n * eased));
+        render(el, values);
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animate(entry.target as HTMLElement);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.4 },
+    );
+
+    counters.forEach((el) => observer.observe(el));
+  }
+
+  document.addEventListener('astro:page-load', initCounters);
+  initCounters();
+</script>
+
+<style>
+  .stats {
+    position: relative;
+    display: grid;
+    grid-template-columns: clamp(18rem, 26vw, 23rem) clamp(3rem, 9vw, 6rem) clamp(18rem, 26vw, 23rem);
+    grid-template-rows: repeat(2, auto);
+    justify-content: center;
+    row-gap: clamp(2.5rem, 5vw, 4rem);
+    width: fit-content;
+    margin-inline: auto;
+  }
+  .stats__item {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+    grid-row: var(--row);
+  }
+  .stats__item:nth-child(1) { grid-column: 1; --row: 1; }
+  .stats__item:nth-child(2) { grid-column: 3; --row: 1; }
+  .stats__item:nth-child(3) { grid-column: 1; --row: 2; }
+  .stats__item:nth-child(4) { grid-column: 3; --row: 2; }
+  .stats__number {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(4.25rem, 11vw, 9rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--color-orange);
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+  .stats__label {
+    color: rgb(255 255 255 / 0.85);
+    font-size: 1.05rem;
+  }
+  .stats__cross {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 32px;
+    height: 32px;
+    pointer-events: none;
+    display: none;
+  }
+  .stats__cross::before,
+  .stats__cross::after {
+    content: '';
+    position: absolute;
+    background: rgb(255 255 255 / 0.35);
+  }
+  .stats__cross::before {
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    transform: translateX(-50%);
+  }
+  .stats__cross::after {
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    transform: translateY(-50%);
+  }
+
+  @media (min-width: 640px) {
+    .stats__cross { display: block; }
+  }
+
+  @media (max-width: 560px) {
+    .stats {
+      grid-template-columns: max-content;
+      row-gap: 2.5rem;
+    }
+    .stats__item:nth-child(1),
+    .stats__item:nth-child(2),
+    .stats__item:nth-child(3),
+    .stats__item:nth-child(4) {
+      grid-column: 1;
+    }
+    .stats__item:nth-child(1) { --row: 1; }
+    .stats__item:nth-child(2) { --row: 2; }
+    .stats__item:nth-child(3) { --row: 3; }
+    .stats__item:nth-child(4) { --row: 4; }
+    .stats__cross { display: none; }
+  }
+</style>

@@ -1,0 +1,101 @@
+---
+import { Image } from 'astro:assets';
+import Button from './Button.astro';
+
+/** Photo card with a teal arc accent and a frosted glass panel overlapping the bottom, holding icon/heading/tagline/body/CTA. */
+interface Props {
+  icon: ImageMetadata;
+  image: ImageMetadata;
+  imageAlt: string;
+  heading: string;
+  tagline: string;
+  body: string;
+  ctaLabel: string;
+  ctaHref: string;
+}
+const { icon, image, imageAlt, heading, tagline, body, ctaLabel, ctaHref } = Astro.props;
+---
+
+<article class="psc">
+  <div class="psc__media">
+    <Image src={image} alt={imageAlt} width={640} height={520} loading="lazy" />
+    <div class="psc__arc" aria-hidden="true"></div>
+  </div>
+  <div class="psc__panel">
+    <div class="psc__head">
+      <span class="psc__icon"><Image src={icon} alt="" width={28} height={28} /></span>
+      <h3 class="psc__heading">{heading}</h3>
+    </div>
+    <p class="psc__tagline">{tagline}</p>
+    <p class="psc__body">{body}</p>
+    <Button href={ctaHref} variant="primary">{ctaLabel}</Button>
+  </div>
+</article>
+
+<style>
+  .psc {
+    position: relative;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    background: #fff;
+  }
+  .psc__media {
+    position: relative;
+    aspect-ratio: 4 / 3.1;
+    overflow: hidden;
+  }
+  .psc__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  /* .psc__arc {
+    position: absolute;
+    z-index: 1;
+    width: 68%;
+    aspect-ratio: 1;
+    left: -16%;
+    bottom: -28%;
+    background: var(--color-teal);
+    border-radius: 50%;
+    opacity: 0.9;
+  } */
+  .psc__panel {
+    position: relative;
+    z-index: 2;
+    margin-top: -34%;
+    background: rgb(255 255 255 / 0.78);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border-radius: 20px 20px 0 0;
+    padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.5rem, 3vw, 2rem) clamp(1.75rem, 3vw, 2.25rem);
+    display: grid;
+    gap: 0.65rem;
+    justify-items: start;
+  }
+  .psc__head {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  .psc__icon :global(img) { width: 26px; height: 26px; object-fit: contain; }
+  .psc__heading { font-size: clamp(1.15rem, 1.8vw, 1.4rem); color: var(--color-ink); }
+  .psc__tagline {
+    color: var(--color-ink);
+    font-weight: 600;
+    font-size: 0.98rem;
+  }
+  .psc__body {
+    color: var(--color-slate-muted);
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+  .psc__panel :global(.btn) { margin-top: 0.5rem; }
+
+  @media (max-width: 480px) {
+    .psc__media { aspect-ratio: 16 / 11; }
+    .psc__panel { margin-top: -22%; }
+  }
+</style>

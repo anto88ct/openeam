@@ -1,33 +1,29 @@
 ---
-import { Image } from 'astro:assets';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Section from '../Section.astro';
-import SectionHeading from '../SectionHeading.astro';
-import ModuleCard from '../ModuleCard.astro';
-import Testimonial from '../Testimonial.astro';
-import LogoMarquee from '../LogoMarquee.astro';
-import CtaBand from '../CtaBand.astro';
-import CaseStudyCard from '../CaseStudyCard.astro';
-import Button from '../Button.astro';
-import { getLocalizedPath, useTranslations } from '../../i18n/utils';
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Section from "../Section.astro";
+import SectionHeading from "../SectionHeading.astro";
+import ModuleCarousel from "../ModuleCarousel.astro";
+import StatsBand from "../StatsBand.astro";
+import LogoMarquee from "../LogoMarquee.astro";
+import PlatformShowcaseCard from "../PlatformShowcaseCard.astro";
+import Button from "../Button.astro";
+import { getLocalizedPath, useTranslations } from "../../i18n/utils";
 
-import heroRings from '../../assets/img/hero-rings.svg';
-import featAsset from '../../assets/img/feat-asset-management.avif';
-import featMaint from '../../assets/img/feat-maintenance.avif';
-import featDoc from '../../assets/img/feat-documentation.avif';
-import featAnalytics from '../../assets/img/feat-analytics.avif';
-import workerIndustry from '../../assets/img/worker-industry.avif';
-import iconGear from '../../assets/icons/gear.svg';
-import iconWrench from '../../assets/icons/wrench.svg';
-import iconDocument from '../../assets/icons/document.svg';
-import iconChart from '../../assets/icons/chart.svg';
-import caseSt from '../../assets/img/cases/st.png';
-import caseSonatrach from '../../assets/img/cases/sonatrach.avif';
-import caseSasol from '../../assets/img/cases/sasol.avif';
-import caseSac from '../../assets/img/cases/sac.avif';
+import heroRings from "../../assets/img/hero-rings.svg";
+import platformBg from "../../assets/img/pricing/blob-bg.svg";
+import featAsset from "../../assets/img/feat-asset-management.avif";
+import featMaint from "../../assets/img/feat-maintenance.avif";
+import featDoc from "../../assets/img/feat-documentation.avif";
+import featAnalytics from "../../assets/img/feat-analytics.avif";
+import workerIndustry from "../../assets/img/worker-industry.avif";
+import iconGear from "../../assets/icons/gear.svg";
+import iconWrench from "../../assets/icons/wrench.svg";
+import iconDocument from "../../assets/icons/document.svg";
+import iconChart from "../../assets/icons/chart.svg";
 
 interface Props {
-  lang: 'it' | 'en';
+  lang: "it" | "en";
 }
 const { lang } = Astro.props;
 const l = (href: string) => getLocalizedPath(lang, href);
@@ -35,103 +31,177 @@ const tUi = useTranslations(lang);
 
 const COPY = {
   it: {
-    title: 'OpenEAM, la Piattaforma Modulare che Prende la Forma dei Tuoi Processi',
-    description: "Open EAM unisce manutenzione, asset management e controllo operativo in un'unica piattaforma flessibile che si adatta ai tuoi processi. E non viceversa.",
-    heroTitleLead: 'Mantieni i tuoi asset industriali ',
-    heroTitleHl: "al massimo dell'efficienza.",
-    heroSub: "Open EAM è la piattaforma che unisce manutenzione, asset management e controllo operativo in un unico sistema flessibile, che si adatta ai tuoi processi.",
-    heroSubStrong: 'E non viceversa.',
-    ctaDemo: 'Richiedi una demo',
-    ctaVideoTour: 'Video tour della piattaforma',
-    modulesHeading: "Manutenzione, asset management, documenti e analytics in una piattaforma che prende la forma dei tuoi processi",
-    modulesSub: "Open EAM racchiude in un unico sistema <strong>modulare</strong> e <strong>personalizzabile</strong> tutte le funzioni necessarie a mantenere impianti produttivi organizzati e performanti, a ridurre i fermi impianto e a migliorare l'efficienza.",
-    modules: [
-      { heading: 'Asset Management', body: 'Ottimizza il ciclo di vita degli asset con <strong>gestione centralizzata</strong>, <strong>visibilità completa</strong> e <strong>integrazione dei dati</strong>, anche in organizzazioni multisito con strutture complesse.' },
-      { heading: 'Maintenance & Operations', body: 'Pianifica, traccia e ottimizza attività manutentive <strong>programmate</strong>, <strong>predittive</strong> e <strong>correttive</strong> con flussi personalizzati sulle tue procedure e sui tuoi impianti, riducendo downtime e sprechi di risorse.' },
-      { heading: 'Technical Documentation', body: 'Centralizza e collega la documentazione tecnica agli asset, integrandola nei flussi operativi per un <strong>accesso immediato</strong> e <strong>sicuro</strong>, ovunque ti trovi.' },
-      { heading: 'Asset Analytics', body: 'Trasforma dati IoT, geospaziali e digital twin in <strong>insight</strong> immediatamente azionabili, con <strong>KPI</strong> e <strong>dashboard</strong> sempre disponibili per essere utilizzati nei processi decisionali.' },
+    title:
+      "OpenEAM, la Piattaforma Modulare che Prende la Forma dei Tuoi Processi",
+    description:
+      "Open EAM unisce manutenzione, asset management e controllo operativo in un'unica piattaforma flessibile che si adatta ai tuoi processi. E non viceversa.",
+    heroTitleLead: "Un solo sistema ",
+    heroTitleHl: "per gestire tutti i tuoi sistemi",
+    heroSub:
+      "Manutenzione, asset management, documentazione e analytics in un'unica piattaforma EAM modulare con AI integrata. Costruita attorno ai tuoi processi, operativa in 5 mesi.",
+    ctaDemo: "Richiedi una demo",
+    platformCta: "Vai al video tour della piattaforma",
+    platformSlides: [
+      {
+        heading: "Un unico punto di accesso per gestire dati, attività e processi",
+        body: "ERP, MES, SCADA, IoT, BIM, PLC, sistemi legacy: Open EAM si integra con le tecnologie già presenti e diventa il punto di connessione tra piattaforme, flussi operativi e fonti informative. Così riduce frammentazioni, duplicazioni e informazioni disperse.",
+      },
+      {
+        heading: "Anticipa le criticità e semplifica il lavoro con l'AI",
+        body: "Open EAM integra funzionalità AI per supportare modelli predittivi, automatizzare flussi operativi e semplificare il lavoro su dati, documenti e ordini di lavoro. Dalla manutenzione predittiva alla generazione di checklist e dashboard, l'AI aiuta a prevenire anomalie, velocizzare le attività e mantenere il controllo sui processi.",
+      },
+      {
+        heading: "Per realtà complesse, che non possono permettersi di fermarsi",
+        body: "Open EAM nasce per contesti industriali e operativi complessi, dove continuità delle attività e controllo sono fondamentali. Una piattaforma modulare e configurabile, pensata per ridurre criticità e interruzioni, semplificare la gestione quotidiana e rendere ogni informazione accessibile quando serve.",
+      },
+      {
+        heading: "Non adattarti al software. Fai adattare il software a te.",
+        body: "Ogni organizzazione ha flussi, priorità e modalità operative diverse. Per questo Open EAM non impone modelli standard, ma si configura intorno al tuo modo di lavorare: la flessibilità di una soluzione su misura, con la rapidità di una piattaforma già pronta.",
+      },
     ],
-    cases: [
-      { title: 'ST Microelectronics', body: "Oltre 40.000 interventi gestiti ogni anno e più dell'80% di attività pianificate: con Open EAM, STMicroelectronics ha trasformato la gestione della manutenzione." },
-      { title: 'Sonatrach', body: "Nei depositi di Augusta, Napoli e Palermo, Sonatrach usa Open EAM per gestire manutenzione, ispezioni e controlli navi in un'unica piattaforma." },
-      { title: 'Sasol', body: "Sasol usa Open EAM per gestire 60.000 documenti tecnici, revisioni, manuali operativi e ispezioni antincendio in un'unica piattaforma integrata." },
-      { title: 'SAC', body: "SAC adotta Open EAM per gestire asset, ispezioni, ticket e documentazione tecnica in un'unica piattaforma di manutenzione integrata." },
+    stats: [
+      { numbers: [40], prefix: "-", suffix: "%", label: "sui costi di urgenza" },
+      { numbers: [15, 20], sep: "/", suffix: "%", label: "riduzione dei costi diretti" },
+      { numbers: [25], prefix: "+", label: "vita degli asset" },
+      { numbers: [12], label: "mesi per il ROI" },
     ],
-    testimonialQuote: "Open EAM ha reso semplice ciò che prima era frammentato: oggi gestiamo manutenzione, ispezioni e asset su un'unica piattaforma, che sembra cucita addosso a noi.",
-    architectureHeading: "Un'architettura modulare, costruita attorno ai tuoi processi",
-    architectureBody: "Non piegare i tuoi processi alle regole di un software preconfezionato. Scopri l'EAM modulare costruito a misura della tua azienda.",
-    architectureCta: 'Vai al video tour della piattaforma',
-    architectureAlt: 'Operatore al lavoro in impianto industriale',
-    caseCtaLabel: 'Scopri di più',
-    casesHeading: 'Casi studio',
-    casesSub: "Scopri come altre aziende utilizzano Open EAM per migliorare l'efficienza e le performance della manutenzione nei loro impianti produttivi.",
-    casesExploreAll: 'Esplora tutti i case studies',
+    discoverCta: "Scopri di più",
+    platformHeading:
+      "Manutenzione, asset management, documenti e analytics in una piattaforma che prende la forma dei tuoi processi",
+    platformGrid: [
+      {
+        heading: "Asset Management",
+        tagline: "Basta informazioni sparse su asset, spazi e infrastrutture",
+        body: "Open EAM centralizza tutto ciò che gestisci lungo il ciclo di vita, collega dati e attività operative e offre una visione sempre aggiornata anche in contesti multisito o strutture complesse.",
+      },
+      {
+        heading: "Maintenance & Operations",
+        tagline: "Meno telefonate, Excel e interventi fuori controllo",
+        body: "Open EAM porta richieste, ordini di lavoro, attività ordinarie, preventive, predittive e correttive in flussi configurati sulle procedure della tua organizzazione. Ogni intervento diventa più semplice da pianificare, monitorare e rendicontare.",
+      },
+      {
+        heading: "Technical Documentation",
+        tagline: "Il documento giusto, nel punto giusto",
+        body: "Schede, manuali, fascicoli, revisioni e documenti tecnici vengono raccolti in un archivio digitale collegato ad asset, attività e processi operativi. Ogni informazione resta accessibile, tracciabile e facile da trovare quando serve.",
+      },
+      {
+        heading: "Asset Analytics",
+        tagline: "Dati leggibili, decisioni più rapide",
+        body: "Open EAM trasforma dati IoT, geospaziali, sensori e digital twin in KPI, dashboard e viste personalizzate. Le informazioni diventano più chiare, utili e pronte per supportare decisioni operative.",
+      },
+    ],
   },
   en: {
-    title: 'OpenEAM, the Modular Platform That Takes the Shape of Your Processes',
-    description: "Open EAM brings maintenance, asset management, and operational control together in one flexible platform that adapts to your processes. Not the other way around.",
-    heroTitleLead: 'Keep your industrial assets ',
-    heroTitleHl: 'running at peak efficiency.',
-    heroSub: 'Open EAM is the platform that brings maintenance, asset management, and operational control together in one flexible system that adapts to your processes.',
-    heroSubStrong: 'Not the other way around.',
-    ctaDemo: 'Request a demo',
-    ctaVideoTour: 'Platform video tour',
-    modulesHeading: 'Maintenance, asset management, documents, and analytics in one platform that takes the shape of your processes',
-    modulesSub: 'Open EAM brings together, in one <strong>modular</strong> and <strong>customizable</strong> system, all the functions needed to keep production plants organized and high-performing, reduce downtime, and improve efficiency.',
-    modules: [
-      { heading: 'Asset Management', body: 'Optimize the asset lifecycle with <strong>centralized management</strong>, <strong>complete visibility</strong>, and <strong>data integration</strong>, even across multi-site organizations with complex structures.' },
-      { heading: 'Maintenance & Operations', body: 'Plan, track, and optimize <strong>scheduled</strong>, <strong>predictive</strong>, and <strong>corrective</strong> maintenance activities with workflows tailored to your procedures and plants, reducing downtime and wasted resources.' },
-      { heading: 'Technical Documentation', body: 'Centralize technical documentation and link it to your assets, integrating it into operational workflows for <strong>immediate</strong> and <strong>secure access</strong>, wherever you are.' },
-      { heading: 'Asset Analytics', body: 'Turn IoT, geospatial, and digital twin data into <strong>immediately actionable insights</strong>, with <strong>KPIs</strong> and <strong>dashboards</strong> always available to support decision-making.' },
+    title:
+      "OpenEAM, the Modular Platform That Takes the Shape of Your Processes",
+    description:
+      "Open EAM brings maintenance, asset management, and operational control together in one flexible platform that adapts to your processes. Not the other way around.",
+    heroTitleLead: "One platform ",
+    heroTitleHl: "to manage all your systems",
+    heroSub:
+      "Maintenance, asset management, documentation, and analytics in one modular EAM platform with built-in AI. Built around your processes, live in 5 months.",
+    ctaDemo: "Request a demo",
+    platformCta: "Watch the platform video tour",
+    platformSlides: [
+      {
+        heading: "One single access point to manage data, activities, and processes",
+        body: "ERP, MES, SCADA, IoT, BIM, PLC, legacy systems: Open EAM integrates with the technologies already in place and becomes the connection point between platforms, operational workflows, and information sources. This reduces fragmentation, duplication, and scattered information.",
+      },
+      {
+        heading: "Anticipate issues and simplify work with AI",
+        body: "Open EAM integrates AI features to support predictive models, automate operational workflows, and simplify work on data, documents, and work orders. From predictive maintenance to generating checklists and dashboards, AI helps prevent anomalies, speed up activities, and keep control over processes.",
+      },
+      {
+        heading: "For complex organizations that can't afford downtime",
+        body: "Open EAM was built for complex industrial and operational environments, where business continuity and control are essential. A modular, configurable platform designed to reduce disruption, simplify day-to-day management, and make every piece of information accessible when needed.",
+      },
+      {
+        heading: "Don't adapt to the software. Make the software adapt to you.",
+        body: "Every organization has different workflows, priorities, and ways of operating. That's why Open EAM doesn't impose standard models, but configures itself around the way you work: the flexibility of a tailor-made solution, with the speed of a platform that's already built.",
+      },
     ],
-    cases: [
-      { title: 'ST Microelectronics', body: 'Over 40,000 work orders handled every year and more than 80% of planned activity: with Open EAM, STMicroelectronics transformed its maintenance management.' },
-      { title: 'Sonatrach', body: 'At its Augusta, Naples, and Palermo depots, Sonatrach uses Open EAM to manage maintenance, inspections, and vessel checks on a single platform.' },
-      { title: 'Sasol', body: 'Sasol uses Open EAM to manage 60,000 technical documents, revisions, operating manuals, and fire-safety inspections on a single integrated platform.' },
-      { title: 'SAC', body: 'SAC adopted Open EAM to manage assets, inspections, tickets, and technical documentation on a single integrated maintenance platform.' },
+    stats: [
+      { numbers: [40], prefix: "-", suffix: "%", label: "on emergency costs" },
+      { numbers: [15, 20], sep: "/", suffix: "%", label: "reduction in direct costs" },
+      { numbers: [25], prefix: "+", label: "asset lifespan" },
+      { numbers: [12], label: "months to ROI" },
     ],
-    testimonialQuote: 'Open EAM made simple what used to be fragmented: today we manage maintenance, inspections, and assets on a single platform that feels tailor-made for us.',
-    architectureHeading: 'A modular architecture, built around your processes',
-    architectureBody: "Don't bend your processes to fit an off-the-shelf software's rules. Discover the modular EAM built to your company's exact measure.",
-    architectureCta: 'Watch the platform video tour',
-    architectureAlt: 'Operator at work in an industrial plant',
-    caseCtaLabel: 'Learn more',
-    casesHeading: 'Case studies',
-    casesSub: 'See how other companies use Open EAM to improve efficiency and maintenance performance at their production plants.',
-    casesExploreAll: 'Explore all case studies',
+    discoverCta: "Learn more",
+    platformHeading:
+      "Maintenance, asset management, documents, and analytics in one platform that takes the shape of your processes",
+    platformGrid: [
+      {
+        heading: "Asset Management",
+        tagline: "No more scattered information on assets, spaces, and infrastructure",
+        body: "Open EAM centralizes everything you manage across the asset lifecycle, links data and operational activity, and gives you an always up-to-date view even across multi-site organizations or complex structures.",
+      },
+      {
+        heading: "Maintenance & Operations",
+        tagline: "Fewer phone calls, spreadsheets, and out-of-control work orders",
+        body: "Open EAM brings requests, work orders, and routine, preventive, predictive, and corrective activities into workflows configured around your organization's procedures. Every job becomes easier to plan, track, and report on.",
+      },
+      {
+        heading: "Technical Documentation",
+        tagline: "The right document, in the right place",
+        body: "Sheets, manuals, files, revisions, and technical documents are collected in a digital archive linked to assets, activities, and operational processes. Every piece of information stays accessible, traceable, and easy to find when needed.",
+      },
+      {
+        heading: "Asset Analytics",
+        tagline: "Readable data, faster decisions",
+        body: "Open EAM turns IoT, geospatial, sensor, and digital twin data into KPIs, dashboards, and personalized views. Information becomes clearer, more useful, and ready to support operational decisions.",
+      },
+    ],
   },
 } as const;
 const t = COPY[lang];
 
-const modules = [
-  { href: l('/platform/asset-management'), icon: iconGear, image: featAsset, ...t.modules[0] },
-  { href: l('/platform/maintenance-operations'), icon: iconWrench, image: featMaint, ...t.modules[1] },
-  { href: l('/platform/technical-documentation'), icon: iconDocument, image: featDoc, ...t.modules[2] },
-  { href: l('/platform/asset-analytics'), icon: iconChart, image: featAnalytics, ...t.modules[3] },
+const moduleSlides = [
+  { image: workerIndustry, ...t.platformSlides[0] },
+  { image: featMaint, ...t.platformSlides[1] },
+  { image: featDoc, ...t.platformSlides[2] },
+  { image: featAnalytics, ...t.platformSlides[3] },
 ];
 
-const cases = [
-  { ...t.cases[0], href: l('/case-studies/st-microelectronics'), image: caseSt },
-  { ...t.cases[1], href: l('/case-studies/sonatrach'), image: caseSonatrach },
-  { ...t.cases[2], href: l('/case-studies/sasol'), image: caseSasol },
-  { ...t.cases[3], href: l('/case-studies/sac'), image: caseSac },
+const platformGridItems = [
+  {
+    icon: iconGear,
+    image: featAsset,
+    href: l("/platform/asset-management"),
+    ...t.platformGrid[0],
+  },
+  {
+    icon: iconWrench,
+    image: workerIndustry,
+    href: l("/platform/maintenance-operations"),
+    ...t.platformGrid[1],
+  },
+  {
+    icon: iconDocument,
+    image: featDoc,
+    href: l("/platform/technical-documentation"),
+    ...t.platformGrid[2],
+  },
+  {
+    icon: iconChart,
+    image: featAnalytics,
+    href: l("/platform/asset-analytics"),
+    ...t.platformGrid[3],
+  },
 ];
 ---
-<BaseLayout title={t.title} description={t.description}>
 
+<BaseLayout title={t.title} description={t.description}>
   <!-- Hero -->
   <section class="hero">
     <div class="hero__grid dotted-grid container-page">
       <div class="hero__text">
         <h1 class="hero__title">
+          Open EAM.<br />
           {t.heroTitleLead}<span class="hero__hl">{t.heroTitleHl}</span>
         </h1>
-        <p class="hero__sub">
-          {t.heroSub} <strong>{t.heroSubStrong}</strong>
-        </p>
+        <p class="hero__sub">{t.heroSub}</p>
         <div class="hero__cta">
-          <Button href={l('/demo')} variant="primary">{t.ctaDemo}</Button>
-          <Button href={l('/demo')} variant="outline">{t.ctaVideoTour}</Button>
+          <Button href={l("/demo")} variant="primary">{t.ctaDemo}</Button>
         </div>
       </div>
     </div>
@@ -139,86 +209,119 @@ const cases = [
   </section>
 
   <!-- Trust band -->
-  <Section bg="teal">
-    <LogoMarquee heading={tUi('trustHeading')} />
+  <Section bg="light" class="trust-band">
+    <LogoMarquee heading={tUi("trustHeading")} />
   </Section>
 
   <!-- Modules -->
   <Section bg="light" dotted>
-    <SectionHeading heading={t.modulesHeading} sub={t.modulesSub} />
-    <div class="modules">
-      {modules.map((m, i) => (
-        <ModuleCard
-          icon={m.icon}
-          title={m.heading}
-          body={m.body}
-          href={m.href}
-          image={m.image}
-          reverse={i % 2 === 1}
-          ctaLabel={t.caseCtaLabel}
-        />
-      ))}
-    </div>
-    <div class="modules__cta">
-      <Button href={l('/demo')} variant="teal">{t.ctaDemo}</Button>
-    </div>
-  </Section>
-
-  <!-- Testimonial -->
-  <Section bg="light">
-    <Testimonial quote={t.testimonialQuote} author="Francesco Vassallo" company="Sonatrach" />
-  </Section>
-
-  <!-- Modular architecture band -->
-  <Section bg="light">
-    <CtaBand
-      tone="ink"
-      image={workerIndustry}
-      imageAlt={t.architectureAlt}
-      heading={t.architectureHeading}
-      body={t.architectureBody}
-      ctaLabel={t.architectureCta}
-      ctaHref={l('/demo')}
+    <ModuleCarousel
+      slides={moduleSlides.map((m) => ({
+        image: m.image,
+        imageAlt: m.heading,
+        heading: m.heading,
+        body: m.body,
+        ctaLabel: t.platformCta,
+        ctaHref: l("/demo"),
+      }))}
     />
   </Section>
 
-  <!-- Case studies -->
-  <Section bg="light">
-    <SectionHeading heading={t.casesHeading} sub={t.casesSub} />
-    <div class="cases-grid">
-      {cases.map((c) => (
-        <CaseStudyCard title={c.title} href={c.href} image={c.image} imageAlt={c.title} body={c.body} ctaLabel={t.caseCtaLabel} />
-      ))}
-    </div>
-    <div class="modules__cta">
-      <Button href={l('/case-studies')} variant="outline-ink">{t.casesExploreAll}</Button>
-    </div>
+  <!-- Stats -->
+  <Section bg="ink" dotted>
+    <StatsBand stats={t.stats} />
   </Section>
 
+  <!-- Platform showcase -->
+  <Section bg="light" dotted class="platform-section">
+    <Image src={platformBg} alt="" class="platform-section__bg" aria-hidden="true" loading="eager" />
+    <SectionHeading heading={t.platformHeading} />
+    <div class="platform-grid">
+      {
+        platformGridItems.map((m) => (
+          <PlatformShowcaseCard
+            icon={m.icon}
+            image={m.image}
+            imageAlt={m.heading}
+            heading={m.heading}
+            tagline={m.tagline}
+            body={m.body}
+            ctaLabel={t.discoverCta}
+            ctaHref={m.href}
+          />
+        ))
+      }
+    </div>
+  </Section>
 </BaseLayout>
 
 <style>
-  .hero { position: relative; background: var(--color-ink); overflow: hidden; }
-  .hero__grid { padding-block: clamp(4rem, 10vw, 8rem); position: relative; z-index: 1; }
-  .hero__text { max-width: 42rem; display: grid; gap: 2rem; }
-  .hero__title { color: #fff; font-size: clamp(2.6rem, 6.5vw, 4.6rem); line-height: 1.03; }
-  .hero__hl { color: var(--color-orange); }
-  .hero__sub { color: rgb(255 255 255 / 0.9); font-size: 1.25rem; max-width: 46ch; line-height: 1.6; }
-  .hero__sub strong { color: #fff; }
-  .hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
+  :global(.trust-band) {
+    padding-block: clamp(5rem, 9vw, 8rem) !important;
+  }
+
+  .hero {
+    position: relative;
+    background: var(--color-ink);
+    overflow: hidden;
+  }
+  .hero__grid {
+    padding-block: clamp(4rem, 9vw, 8.5rem);
+    position: relative;
+    z-index: 1;
+  }
+  .hero__text {
+    max-width: 37rem;
+    display: grid;
+    gap: 2.25rem;
+  }
+  .hero__title {
+    color: #fff;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+  .hero__hl {
+    color: var(--color-orange);
+  }
+  .hero__sub {
+    color: rgb(255 255 255 / 0.9);
+    font-size: 1.2rem;
+    max-width: 36rem;
+    line-height: 1.6;
+    margin-top: 0.25rem;
+  }
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.25rem;
+  }
 
   @keyframes hero-rise {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   .hero__title,
   .hero__sub,
   .hero__cta {
     animation: hero-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-  .hero__title { animation-delay: 0.05s; }
-  .hero__sub { animation-delay: 0.16s; }
-  .hero__cta { animation-delay: 0.27s; }
+  .hero__title {
+    animation-delay: 0.05s;
+  }
+  .hero__sub {
+    animation-delay: 0.16s;
+  }
+  .hero__cta {
+    animation-delay: 0.27s;
+  }
   .hero__rings {
     position: absolute;
     right: -5%;
@@ -230,17 +333,43 @@ const cases = [
     z-index: 0;
   }
   @media (max-width: 860px) {
-    .hero__rings { opacity: 0.22; right: -25%; bottom: -6%; width: 90%; }
+    .hero__rings {
+      opacity: 0.22;
+      right: -25%;
+      bottom: -6%;
+      width: 90%;
+    }
   }
 
-  .modules { display: grid; gap: 2rem; margin-top: 3.5rem; }
-  .modules__cta { display: flex; justify-content: center; margin-top: 3rem; }
+  :global(.platform-section) {
+    position: relative;
+    overflow: hidden;
+  }
+  :global(.platform-section .container-page) {
+    position: relative;
+    z-index: 1;
+  }
+  .platform-section__bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(120%, 1400px);
+    height: auto;
+    transform: translate(-50%, -50%) scale(1.4);
+    opacity: 1;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-  .cases-grid {
+  .platform-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    gap: clamp(1.75rem, 4vw, 2.5rem);
     margin-top: 3.5rem;
   }
-  @media (max-width: 720px) { .cases-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) {
+    .platform-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
