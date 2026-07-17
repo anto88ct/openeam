@@ -1,12 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
-import CaseStudyDetail from '../../components/pages/CaseStudyDetail.astro';
+import CaseStudyDetail from '../../../components/pages/CaseStudyDetail.astro';
 
 export async function getStaticPaths() {
-  const items = (await getCollection('caseStudiesIt')).filter((c) => !c.data.draft);
+  const items = (await getCollection('caseStudiesEn')).filter((c) => !c.data.draft);
   return items.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
 }
 
 const { entry } = Astro.props;
 ---
-<CaseStudyDetail lang="it" entry={entry} />
+<CaseStudyDetail lang="en" entry={entry} />

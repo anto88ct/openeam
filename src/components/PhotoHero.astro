@@ -7,16 +7,17 @@ interface Props {
   image: ImageMetadata;
   heading: string;
   sub?: string;
-  ctaLabel?: string;
-  ctaHref?: string;
+  /** pass ctaLabel='' to suppress the CTA entirely (ctaHref is then unused) */
+  ctaLabel: string;
+  ctaHref: string;
   overlay?: 'ink' | 'teal';
 }
 const {
   image,
   heading,
   sub,
-  ctaLabel = 'Richiedi una demo',
-  ctaHref = '/demo',
+  ctaLabel,
+  ctaHref,
   overlay = 'ink',
 } = Astro.props;
 ---

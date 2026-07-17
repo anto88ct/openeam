@@ -9,8 +9,8 @@ interface Props {
   image?: ImageMetadata;
   imageAlt?: string;
   tone?: 'teal' | 'ink' | 'orange' | 'sage';
-  ctaLabel?: string;
-  ctaHref?: string;
+  ctaLabel: string;
+  ctaHref: string;
   ctaVariant?: 'primary' | 'teal' | 'dark';
   reverse?: boolean;
 }
@@ -20,8 +20,8 @@ const {
   image,
   imageAlt = '',
   tone = 'teal',
-  ctaLabel = 'Richiedi una demo',
-  ctaHref = '/demo',
+  ctaLabel,
+  ctaHref,
   ctaVariant = 'primary',
   reverse = false,
 } = Astro.props;

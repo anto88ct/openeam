@@ -10,29 +10,45 @@ const featureCard = z.object({
     .default('gear'),
 });
 
-const industries = defineCollection({
-  loader: glob({ pattern: '**/*.mdx', base: './src/content/industries' }),
+const industriesIt = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/industries/it' }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
       subtitle: z.string(),
       order: z.number().default(0),
       heroImage: image(),
-      /** background of the intro band under the hero */
       introTone: z.enum(['light', 'teal', 'ink']).default('light'),
       eyebrow: z.string().optional(),
       intro: z.string(),
-      /** background/lens for the feature-card grid */
       cardTone: z.enum(['light', 'teal', 'ink']).default('light'),
       cards: z.array(featureCard),
-      /** slugs from the case-studies collection to feature in the closing band */
+      /** slugs from the matching-locale case-studies collection to feature in the closing band */
       caseStudies: z.array(z.string()).default([]),
       seoDescription: z.string().optional(),
     }),
 });
 
-const caseStudies = defineCollection({
-  loader: glob({ pattern: '**/*.mdx', base: './src/content/case-studies' }),
+const industriesEn = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/industries/en' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      subtitle: z.string(),
+      order: z.number().default(0),
+      heroImage: image(),
+      introTone: z.enum(['light', 'teal', 'ink']).default('light'),
+      eyebrow: z.string().optional(),
+      intro: z.string(),
+      cardTone: z.enum(['light', 'teal', 'ink']).default('light'),
+      cards: z.array(featureCard),
+      caseStudies: z.array(z.string()).default([]),
+      seoDescription: z.string().optional(),
+    }),
+});
+
+const caseStudiesIt = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/case-studies/it' }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -40,16 +56,31 @@ const caseStudies = defineCollection({
       industry: z.string(),
       order: z.number().default(0),
       heroImage: image(),
-      /** short blurb used on cards/grids */
       excerpt: z.string(),
       sector: z.enum(['manufacturing', 'oil-and-gas', 'large-scale-facilities']).optional(),
-      metrics: z
-        .array(z.object({ value: z.string(), label: z.string() }))
-        .default([]),
+      metrics: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
       modules: z.array(z.string()).default([]),
       draft: z.boolean().default(false),
       seoDescription: z.string().optional(),
     }),
 });
 
-export const collections = { industries, caseStudies };
+const caseStudiesEn = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/case-studies/en' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      client: z.string(),
+      industry: z.string(),
+      order: z.number().default(0),
+      heroImage: image(),
+      excerpt: z.string(),
+      sector: z.enum(['manufacturing', 'oil-and-gas', 'large-scale-facilities']).optional(),
+      metrics: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
+      modules: z.array(z.string()).default([]),
+      draft: z.boolean().default(false),
+      seoDescription: z.string().optional(),
+    }),
+});
+
+export const collections = { industriesIt, industriesEn, caseStudiesIt, caseStudiesEn };

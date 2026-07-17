@@ -1,0 +1,77 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../Section.astro';
+import PlatformHero from '../PlatformHero.astro';
+import FeatureSplit from '../FeatureSplit.astro';
+import CtaBand from '../CtaBand.astro';
+import LottiePlayer from '../LottiePlayer.astro';
+import { getLocalizedPath } from '../../i18n/utils';
+
+import heroPhoto from '../../assets/img/engineers-laptop.avif';
+import closingPhoto from '../../assets/img/worker-industry.avif';
+
+interface Props {
+  lang: 'it' | 'en';
+}
+const { lang } = Astro.props;
+const l = (href: string) => getLocalizedPath(lang, href);
+
+const COPY = {
+  it: {
+    description: 'Open EAM collega disegni, manuali e procedure agli asset, rendendoli accessibili ovunque in modo sicuro e immediato, riducendo tempi e rischi.',
+    heroSub: 'Open EAM collega disegni, manuali e procedure agli asset, rendendoli accessibili ovunque in modo sicuro e immediato, riducendo tempi e rischi.',
+    heroImgAlt: 'Due colleghi consultano documentazione su laptop',
+    features: [
+      { heading: 'Organizza e struttura tutta la documentazione tecnica', body: 'Classificazione, versioning, ricerca avanzata e controllo delle revisioni: Open EAM assicura che ogni documento sia aggiornato, tracciato e conforme alle normative, evitando errori e duplicazioni.', anim: 'three_manuale_Schema_certificazioni', reverse: false },
+      { heading: 'Integrazione con AutoCAD e BIM', body: 'Visualizza e gestisci file CAD e modelli BIM direttamente dalla piattaforma, mantenendo la coerenza tra progettazione, documentazione e operatività. I dati tecnici sono sempre sincronizzati con le modifiche di progetto.', anim: 'file_cad_open_EAM_modello_BIM', reverse: true },
+    ],
+    ctaHeading: 'Documentazione connessa, operatività continua',
+    ctaBody: 'Con Open EAM la documentazione tecnica diventa parte attiva dei tuoi processi, integrata con asset e operazioni per garantire precisione, rapidità e conformità.',
+    ctaImgAlt: 'Operatore in impianto',
+    ctaLabel: 'Richiedi una demo',
+  },
+  en: {
+    description: 'Open EAM links drawings, manuals, and procedures to your assets, making them securely and instantly accessible anywhere, reducing time and risk.',
+    heroSub: 'Open EAM links drawings, manuals, and procedures to your assets, making them securely and instantly accessible anywhere, reducing time and risk.',
+    heroImgAlt: 'Two colleagues reviewing documentation on a laptop',
+    features: [
+      { heading: 'Organize and structure all your technical documentation', body: 'Classification, versioning, advanced search, and revision control: Open EAM ensures every document is up to date, tracked, and compliant with regulations, avoiding errors and duplication.', anim: 'three_manuale_Schema_certificazioni', reverse: false },
+      { heading: 'Integration with AutoCAD and BIM', body: 'View and manage CAD files and BIM models directly from the platform, keeping design, documentation, and operations consistent. Technical data always stays in sync with design changes.', anim: 'file_cad_open_EAM_modello_BIM', reverse: true },
+    ],
+    ctaHeading: 'Connected documentation, continuous operations',
+    ctaBody: 'With Open EAM, technical documentation becomes an active part of your processes, integrated with assets and operations to ensure precision, speed, and compliance.',
+    ctaImgAlt: 'Operator at a plant',
+    ctaLabel: 'Request a demo',
+  },
+} as const;
+const t = COPY[lang];
+---
+<BaseLayout title="Technical Documentation Management — OpenEAM Platform" description={t.description}>
+
+  <PlatformHero tone="orange" accent="dark" icon="document" headingLead="Technical documentation" headingAccent="management" sub={t.heroSub} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
+    <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />
+  </PlatformHero>
+
+  <Section bg="white">
+    <div class="stack">
+      {t.features.map((f) => (
+        <FeatureSplit heading={f.heading} body={f.body} reverse={f.reverse} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
+          <div class="lottie-box">
+            <LottiePlayer animationName={f.anim} ariaLabel={f.heading} />
+          </div>
+        </FeatureSplit>
+      ))}
+    </div>
+  </Section>
+
+  <Section bg="white">
+    <CtaBand tone="orange" ctaVariant="dark" image={closingPhoto} imageAlt={t.ctaImgAlt} heading={t.ctaHeading} body={t.ctaBody} ctaLabel={t.ctaLabel} ctaHref={l('/demo')} />
+  </Section>
+
+</BaseLayout>
+
+<style>
+  .stack { display: grid; gap: 2rem; }
+  .lottie-box { width: 100%; min-height: 300px; display: grid; place-items: center; }
+</style>

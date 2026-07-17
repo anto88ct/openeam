@@ -1,9 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
-import IndustryDetail from '../../components/pages/IndustryDetail.astro';
+import IndustryDetail from '../../../components/pages/IndustryDetail.astro';
 
 export async function getStaticPaths() {
-  const items = await getCollection('industriesIt');
+  const items = await getCollection('industriesEn');
   return items.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },
@@ -12,4 +12,4 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 ---
-<IndustryDetail lang="it" entry={entry} />
+<IndustryDetail lang="en" entry={entry} />

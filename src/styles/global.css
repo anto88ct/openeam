@@ -89,16 +89,15 @@ a { color: inherit; text-decoration: none; }
 --------------------------------------------------------------------------- */
 @utility container-page {
   width: 100%;
-  max-width: 78rem;
   margin-inline: auto;
-  padding-inline: 1.5rem;
+  padding-inline: 5.5rem;
 }
 
 /* Faint dotted-grid texture used on heroes and light sections */
 @utility dotted-grid {
-  background-image: radial-gradient(currentColor 1px, transparent 1.4px);
-  background-size: 26px 26px;
-  color: rgb(255 255 255 / 0.06);
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 30px 30px;
+  color: rgb(255 255 255 / 0.15);
 }
 @utility dotted-grid-dark {
   background-image: radial-gradient(currentColor 1px, transparent 1.4px);
