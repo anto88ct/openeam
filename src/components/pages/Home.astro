@@ -7,6 +7,8 @@ import ModuleCarousel from "../ModuleCarousel.astro";
 import StatsBand from "../StatsBand.astro";
 import LogoMarquee from "../LogoMarquee.astro";
 import PlatformShowcaseCard from "../PlatformShowcaseCard.astro";
+import CaseStudyCarousel from "../CaseStudyCarousel.astro";
+import FeatureMarquee from "../FeatureMarquee.astro";
 import Button from "../Button.astro";
 import { getLocalizedPath, useTranslations } from "../../i18n/utils";
 
@@ -21,6 +23,10 @@ import iconGear from "../../assets/icons/gear.svg";
 import iconWrench from "../../assets/icons/wrench.svg";
 import iconDocument from "../../assets/icons/document.svg";
 import iconChart from "../../assets/icons/chart.svg";
+import caseSasol from "../../assets/img/cases/sasol.avif";
+import caseSonatrach from "../../assets/img/cases/sonatrach.avif";
+import caseSac from "../../assets/img/cases/sac.avif";
+import caseSt from "../../assets/img/cases/st.png";
 
 interface Props {
   lang: "it" | "en";
@@ -90,6 +96,106 @@ const COPY = {
         body: "Open EAM trasforma dati IoT, geospaziali, sensori e digital twin in KPI, dashboard e viste personalizzate. Le informazioni diventano più chiare, utili e pronte per supportare decisioni operative.",
       },
     ],
+    casesHeading: "Case studies",
+    cases: [
+      {
+        title: "Sasol",
+        statValue: "60.000 +",
+        statLabel: "documenti tecnici",
+        body: "Sasol usa Open EAM per gestire 60.000 documenti tecnici, revisioni, manuali operativi e ispezioni antincendio in un'unica piattaforma integrata.",
+      },
+      {
+        title: "Sonatrach",
+        statValue: "3",
+        statLabel: "sistemi legacy consolidati",
+        body: "Nei depositi di Augusta, Napoli e Palermo, Sonatrach usa Open EAM per gestire manutenzione, ispezioni e controlli navi in un'unica piattaforma.",
+      },
+      {
+        title: "SAC",
+        statValue: "0",
+        statLabel: "carta dal giorno 1",
+        body: "SAC adotta Open EAM per gestire asset, ispezioni, ticket e documentazione tecnica in un'unica piattaforma di manutenzione integrata.",
+      },
+      {
+        title: "ST Microelectronics",
+        statValue: "40.000 +",
+        statLabel: "interventi gestiti ogni anno",
+        body: "Oltre 40.000 interventi gestiti ogni anno e più dell'80% di attività pianificate: con Open EAM, STMicroelectronics ha trasformato la gestione della manutenzione.",
+      },
+    ],
+    featuresHeading: "Funzionalità",
+    featuresSub:
+      "Meno strumenti separati, meno passaggi dispersi, più controllo sui tuoi processi. Con Open EAM gestisci interventi, asset, documenti, dati e sistemi in un unico ambiente configurabile in base alle esigenze della tua organizzazione.",
+    features: [
+      {
+        title: "Gestione ordini di lavoro",
+        tagline: "Dalla richiesta all'intervento, tutto tracciato.",
+        bullets: [
+          "Apertura rapida delle richieste",
+          "Assegnazione ai tecnici",
+          "Monitoraggio SLA e avanzamento",
+        ],
+      },
+      {
+        title: "Manutenzione preventiva",
+        tagline: "Meno guasti imprevisti, più attività programmate.",
+        bullets: [
+          "Interventi ciclici e programmati",
+          "Checklist operative",
+          "Riduzione delle urgenze",
+        ],
+      },
+      {
+        title: "Gestione asset",
+        tagline: "Ogni asset sempre aggiornato e tracciabile.",
+        bullets: [
+          "Anagrafiche complete",
+          "Storico degli interventi",
+          "Documenti e allegati collegati",
+        ],
+      },
+      {
+        title: "Gestione documentale avanzata",
+        tagline: "Documenti tecnici organizzati, versionati e sempre accessibili.",
+        bullets: [
+          "Workflow BPM",
+          "Versionamento automatico",
+          "Integrazione con sistemi aziendali",
+        ],
+      },
+      {
+        title: "Manutenzione AI predittiva",
+        tagline: "Anticipa le criticità prima che diventino urgenze.",
+        bullets: [
+          "Algoritmi di autoapprendimento",
+          "Analisi dei pattern di guasto",
+          "Ottimizzazione degli interventi",
+        ],
+      },
+      {
+        title: "Integrazione IoT",
+        tagline: "Dati real-time dentro i processi operativi.",
+        bullets: [
+          "Connessione con sensori industriali",
+          "Monitoraggio real-time",
+          "Integrazione SCADA",
+        ],
+      },
+      {
+        title: "Report e KPI",
+        tagline: "Indicatori chiari per decisioni più rapide.",
+        bullets: ["MTBF e MTTR", "Analisi costi per asset", "Dashboard BI"],
+      },
+      {
+        title: "Integrazioni",
+        tagline: "Open EAM dialoga con il tuo ecosistema digitale.",
+        bullets: [
+          "API REST",
+          "Connessione con ERP",
+          "Sistemi legacy e piattaforme terze",
+        ],
+      },
+    ],
   },
   en: {
     title:
@@ -151,6 +257,106 @@ const COPY = {
         body: "Open EAM turns IoT, geospatial, sensor, and digital twin data into KPIs, dashboards, and personalized views. Information becomes clearer, more useful, and ready to support operational decisions.",
       },
     ],
+    casesHeading: "Case studies",
+    cases: [
+      {
+        title: "Sasol",
+        statValue: "60,000 +",
+        statLabel: "technical documents",
+        body: "Sasol uses Open EAM to manage 60,000 technical documents, revisions, operating manuals, and fire-safety inspections on a single integrated platform.",
+      },
+      {
+        title: "Sonatrach",
+        statValue: "3",
+        statLabel: "legacy systems consolidated",
+        body: "At its Augusta, Naples, and Palermo depots, Sonatrach uses Open EAM to manage maintenance, inspections, and vessel checks on a single platform.",
+      },
+      {
+        title: "SAC",
+        statValue: "0",
+        statLabel: "paper since day one",
+        body: "SAC adopted Open EAM to manage assets, inspections, tickets, and technical documentation on a single integrated maintenance platform.",
+      },
+      {
+        title: "ST Microelectronics",
+        statValue: "40,000 +",
+        statLabel: "work orders handled per year",
+        body: "Over 40,000 work orders handled every year and more than 80% of planned activity: with Open EAM, STMicroelectronics transformed its maintenance management.",
+      },
+    ],
+    featuresHeading: "Features",
+    featuresSub:
+      "Fewer separate tools, fewer scattered steps, more control over your processes. With Open EAM you manage work orders, assets, documents, data, and systems in one configurable environment tailored to your organization.",
+    features: [
+      {
+        title: "Work order management",
+        tagline: "From request to work order, fully tracked.",
+        bullets: [
+          "Fast request creation",
+          "Assignment to technicians",
+          "SLA and progress tracking",
+        ],
+      },
+      {
+        title: "Preventive maintenance",
+        tagline: "Fewer unplanned failures, more scheduled activity.",
+        bullets: [
+          "Cyclical, scheduled work",
+          "Operational checklists",
+          "Fewer emergency callouts",
+        ],
+      },
+      {
+        title: "Asset management",
+        tagline: "Every asset always up to date and traceable.",
+        bullets: [
+          "Complete asset registries",
+          "Full work order history",
+          "Linked documents and attachments",
+        ],
+      },
+      {
+        title: "Advanced document management",
+        tagline: "Technical documents organized, versioned, and always accessible.",
+        bullets: [
+          "BPM workflows",
+          "Automatic versioning",
+          "Integration with company systems",
+        ],
+      },
+      {
+        title: "Predictive AI maintenance",
+        tagline: "Catch issues before they become emergencies.",
+        bullets: [
+          "Self-learning algorithms",
+          "Failure pattern analysis",
+          "Work order optimization",
+        ],
+      },
+      {
+        title: "IoT integration",
+        tagline: "Real-time data inside your operational workflows.",
+        bullets: [
+          "Connection with industrial sensors",
+          "Real-time monitoring",
+          "SCADA integration",
+        ],
+      },
+      {
+        title: "Reports & KPIs",
+        tagline: "Clear indicators for faster decisions.",
+        bullets: ["MTBF and MTTR", "Cost analysis per asset", "BI dashboards"],
+      },
+      {
+        title: "Integrations",
+        tagline: "Open EAM talks to your digital ecosystem.",
+        bullets: [
+          "REST API",
+          "ERP connection",
+          "Legacy systems and third-party platforms",
+        ],
+      },
+    ],
   },
 } as const;
 const t = COPY[lang];
@@ -187,6 +393,13 @@ const platformGridItems = [
     href: l("/platform/asset-analytics"),
     ...t.platformGrid[3],
   },
+];
+
+const caseSlides = [
+  { image: caseSasol, href: l("/case-studies/sasol"), ...t.cases[0] },
+  { image: caseSonatrach, href: l("/case-studies/sonatrach"), ...t.cases[1] },
+  { image: caseSac, href: l("/case-studies/sac"), ...t.cases[2] },
+  { image: caseSt, href: l("/case-studies/st-microelectronics"), ...t.cases[3] },
 ];
 ---
 
@@ -253,11 +466,38 @@ const platformGridItems = [
       }
     </div>
   </Section>
+
+  <!-- Case studies -->
+  <Section bg="light">
+    <SectionHeading heading={t.casesHeading} />
+    <CaseStudyCarousel
+      slides={caseSlides.map((c) => ({
+        image: c.image,
+        imageAlt: c.title,
+        statValue: c.statValue,
+        statLabel: c.statLabel,
+        body: c.body,
+        ctaLabel: t.discoverCta,
+        ctaHref: c.href,
+      }))}
+    />
+  </Section>
+
+  <!-- Features -->
+  <Section bg="light">
+    <SectionHeading heading={t.featuresHeading} sub={t.featuresSub} />
+    <div class="features-marquee-wrap">
+      <FeatureMarquee features={t.features} />
+    </div>
+  </Section>
 </BaseLayout>
 
 <style>
   :global(.trust-band) {
-    padding-block: clamp(5rem, 9vw, 8rem) !important;
+    padding-block: clamp(3rem, 5vw, 4rem) !important;
+    background:
+      linear-gradient(rgb(35 48 56 / 0.07), rgb(35 48 56 / 0.07)),
+      var(--color-bg) !important;
   }
 
   .hero {
@@ -277,7 +517,7 @@ const platformGridItems = [
   }
   .hero__title {
     color: #fff;
-    font-size: clamp(2rem, 3.4vw, 3rem);
+    font-size: clamp(2rem, 5vw, 3rem);
     line-height: 1.12;
     text-wrap: balance;
   }
@@ -371,5 +611,9 @@ const platformGridItems = [
     .platform-grid {
       grid-template-columns: 1fr;
     }
+  }
+
+  .features-marquee-wrap {
+    margin-top: 3.5rem;
   }
 </style>

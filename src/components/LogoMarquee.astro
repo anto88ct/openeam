@@ -11,7 +11,6 @@ const files = import.meta.glob<{ default: ImageMetadata }>(
   '../assets/img/logos/*.{png,svg}',
   { eager: true },
 );
-// NB: no genuine monochrome SIAM logo asset exists — omitted from the strip.
 const order = ['stmicroelectronics', 'sonatrach', 'saras', 'sac', 'sasol'];
 const logos = order
   .map((name) => {
@@ -25,7 +24,7 @@ const logos = order
   <ul class="marquee__row">
     {logos.map((l) => (
       <li class="marquee__item">
-        <Image src={l.src} alt={l.name} height={44} loading="lazy" />
+        <Image src={l.src} alt={l.name} height={90} loading="eager" />
       </li>
     ))}
   </ul>
@@ -45,10 +44,10 @@ const logos = order
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: clamp(1.75rem, 4vw, 3.5rem);
+    gap: clamp(3rem, 7vw, 9rem);
   }
   .marquee__item :global(img) {
-    height: 44px;
+    height: 65px;
     width: auto;
     object-fit: contain;
     /* Flatten every logo to a uniform gray mark, regardless of source color */

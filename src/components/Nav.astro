@@ -81,6 +81,22 @@ const groupActive = (links: { href: string }[]) => links.some((link) => isActive
     justify-content: space-between;
     min-height: 70px;
   }
+  .nav__inner :global(.logo) {
+    border-radius: 12px;
+    padding: 0.4rem 0.6rem;
+    margin: -0.4rem -0.6rem;
+    box-shadow: 0 0 0 0 rgb(255 91 4 / 0);
+    transition: box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav__inner :global(.logo:hover) {
+    box-shadow: 0 14px 32px -12px rgb(255 91 4 / 0.35);
+  }
+  .nav__inner :global(.logo__mark) {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav__inner :global(.logo:hover .logo__mark) {
+    transform: scale(1.05);
+  }
   .nav__menu {
     display: flex;
     align-items: center;
