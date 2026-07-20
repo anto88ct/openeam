@@ -4,8 +4,15 @@
     {
       "name": "openeam-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 4321,
+      "runtimeArgs": ["run", "dev", "--", "--port", "4433"],
+      "port": 4433,
+      "autoPort": false
+    },
+    {
+      "name": "openeam-dev-verify",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "4555"],
+      "port": 4555,
       "autoPort": true
     }
   ]

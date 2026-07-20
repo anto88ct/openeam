@@ -4,8 +4,13 @@ import { getLocalizedPath } from '../i18n/utils';
 
 interface Props {
   lang: 'it' | 'en';
+  variant?: 'demo' | 'videoTour';
+  successRedirect?: string;
+  /** localStorage key to grant on successful submit, e.g. so a returning visitor skips the form for a while. */
+  grantKey?: string;
+  grantTtlMs?: number;
 }
-const { lang } = Astro.props;
+const { lang, variant = 'demo', successRedirect, grantKey, grantTtlMs } = Astro.props;
 const l = (href: string) => getLocalizedPath(lang, href);
 
 const COPY = {
@@ -19,7 +24,7 @@ const COPY = {
     email: 'Email aziendale',
     consentLead: "Acconsento al trattamento dei miei dati personali in conformità con l'",
     consentLinkText: 'Informativa sulla Privacy',
-    submit: 'Richiedi la demo',
+    submit: { demo: 'Richiedi la demo', videoTour: 'Accedi al video tour' },
     messages: {
       firstName: 'Inserisci il nome',
       lastName: 'Inserisci il cognome',
@@ -29,8 +34,11 @@ const COPY = {
       consent: 'Devi accettare il trattamento dei dati per proseguire.',
       configMissing: 'Configurazione email non completata. Imposta le variabili PUBLIC_EMAILJS_* (vedi README).',
       sending: 'Invio in corso...',
-      success: 'Grazie! Ti contatteremo a breve per fissare la demo.',
       error: "Si è verificato un errore nell'invio. Riprova più tardi.",
+    },
+    success: {
+      demo: 'Grazie! Ti contatteremo a breve per fissare la demo.',
+      videoTour: 'Grazie! Riceverai il link al video tour a breve.',
     },
   },
   en: {
@@ -43,7 +51,7 @@ const COPY = {
     email: 'Business email',
     consentLead: 'I consent to the processing of my personal data in accordance with the ',
     consentLinkText: 'Privacy Policy',
-    submit: 'Request the demo',
+    submit: { demo: 'Request the demo', videoTour: 'Access the video tour' },
     messages: {
       firstName: 'Enter your first name',
       lastName: 'Enter your last name',
@@ -53,15 +61,28 @@ const COPY = {
       consent: 'You must accept the data processing terms to continue.',
       configMissing: 'Email configuration incomplete. Set the PUBLIC_EMAILJS_* variables (see README).',
       sending: 'Sending...',
-      success: "Thank you! We'll be in touch shortly to schedule your demo.",
       error: 'Something went wrong while sending. Please try again later.',
+    },
+    success: {
+      demo: "Thank you! We'll be in touch shortly to schedule your demo.",
+      videoTour: "Thank you! We'll send you the video tour link shortly.",
     },
   },
 } as const;
 const t = COPY[lang];
+const submitLabel = t.submit[variant];
+const successMessage = t.success[variant];
 const privacyHref = l('/privacy-policy');
 ---
-<form class="demo-form" data-demo-form data-msgs={JSON.stringify(t.messages)} novalidate>
+<form
+  class="demo-form"
+  data-demo-form
+  data-msgs={JSON.stringify({ ...t.messages, success: successMessage })}
+  data-redirect={successRedirect ?? ''}
+  data-grant-key={grantKey ?? ''}
+  data-grant-ttl={grantTtlMs ?? ''}
+  novalidate
+>
   <div class="demo-form__row">
     <div class="field">
       <label for="nome">{t.firstName}</label>
@@ -101,7 +122,7 @@ const privacyHref = l('/privacy-policy');
     <span>{t.consentLead}<a href={privacyHref}>{t.consentLinkText}</a>.</span>
   </label>
 
-  <Button type="submit" variant="primary" class="demo-form__submit">{t.submit}</Button>
+  <Button type="submit" variant="primary" class="demo-form__submit">{submitLabel}</Button>
 
   <p class="demo-form__status" data-status role="status" aria-live="polite" hidden></p>
 </form>
@@ -237,6 +258,22 @@ const privacyHref = l('/privacy-policy');
 
     try {
       await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form, { publicKey: PUBLIC_KEY });
+
+      const grantKey = form.dataset.grantKey;
+      const grantTtl = Number(form.dataset.grantTtl);
+      if (grantKey && grantTtl > 0) {
+        try {
+          localStorage.setItem(grantKey, JSON.stringify({ expires: Date.now() + grantTtl }));
+        } catch (storageErr) {
+          console.error('[VideoTourAccess]', storageErr);
+        }
+      }
+
+      const redirect = form.dataset.redirect;
+      if (redirect) {
+        window.location.href = redirect;
+        return;
+      }
       form.reset();
       showStatus(msgs.success, 'ok');
     } catch (err) {

@@ -21,7 +21,7 @@ export const industryLinks = [
 ];
 
 export const sitemapLinks = [
-  { label: 'Azienda', href: '/' },
+  { label: 'Azienda', href: '/azienda' },
   { label: 'Pricing', href: '/pricing' },
 ];
 

@@ -1,20 +1,20 @@
 ---
-import { Image } from 'astro:assets';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Section from '../Section.astro';
-import SectionHeading from '../SectionHeading.astro';
-import LogoMarquee from '../LogoMarquee.astro';
-import Faq from '../Faq.astro';
-import Button from '../Button.astro';
-import { getLocalizedPath, useTranslations } from '../../i18n/utils';
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Section from "../Section.astro";
+import SectionHeading from "../SectionHeading.astro";
+import LogoMarquee from "../LogoMarquee.astro";
+import Faq from "../Faq.astro";
+import Button from "../Button.astro";
+import { getLocalizedPath, useTranslations } from "../../i18n/utils";
 
-import imgStart from '../../assets/img/pricing/start.png';
-import imgMid from '../../assets/img/pricing/mid.png';
-import imgPro from '../../assets/img/pricing/pro.png';
-import blobBg from '../../assets/img/pricing/blob-bg.svg';
+import imgStart from "../../assets/img/pricing/start.png";
+import imgMid from "../../assets/img/pricing/mid.png";
+import imgPro from "../../assets/img/pricing/pro.png";
+import blobBg from "../../assets/img/pricing/blob-bg.svg";
 
 interface Props {
-  lang: 'it' | 'en';
+  lang: "it" | "en";
 }
 const { lang } = Astro.props;
 const l = (href: string) => getLocalizedPath(lang, href);
@@ -22,22 +22,48 @@ const tUi = useTranslations(lang);
 
 const COPY = {
   it: {
-    description: "Un investimento calibrato e proporzionale: SaaS o on-premise. OpenEAM è progettato per ripagarsi entro i primi 12 mesi.",
+    description:
+      "Un investimento calibrato e proporzionale: SaaS o on-premise. OpenEAM è progettato per ripagarsi entro i primi 12 mesi.",
     heroLead: "L'investimento iniziale è calibrato per permettere di ",
-    heroHl: 'testare la tecnologia',
-    heroTrail: ' senza pesare sul budget in corso, garantendo la sostenibilità finanziaria nel tempo.',
+    heroHl: "testare la tecnologia",
+    heroTrail:
+      " senza pesare sul budget in corso, garantendo la sostenibilità finanziaria nel tempo.",
     tiers: [
-      { title: "Una soluzione che cresce con l'azienda", points: ['Startup rapido, contatto diretto', 'Supporto costante da chi parla la tua lingua', "Ogni dato inserito diventa un patrimonio di know-how che aumenta il valore dell'impresa"] },
-      { title: 'Un investimento proporzionale', points: ['Software snello, paghi solo quello che usi', 'Funzioni proporzionate alle necessità', 'Attenzione alle PMI, soluzioni livello corporate'] },
-      { title: 'Da 0 a regime in sei mesi', points: ['Primi giorni: Audit di Maturità Digitale di dominio', '0-5 mesi: Setup, onboarding, roll out', 'Dal 6° mese: Analisi finale ROI + Scale up'] },
+      {
+        title: "Una soluzione che cresce con l'azienda",
+        points: [
+          "Startup rapido, contatto diretto",
+          "Supporto costante da chi parla la tua lingua",
+          "Ogni dato inserito diventa un patrimonio di know-how che aumenta il valore dell'impresa",
+        ],
+      },
+      {
+        title: "Un investimento proporzionale",
+        points: [
+          "Software snello, paghi solo quello che usi",
+          "Funzioni proporzionate alle necessità",
+          "Attenzione alle PMI, soluzioni livello corporate",
+        ],
+      },
+      {
+        title: "Da 0 a regime in sei mesi",
+        points: [
+          "Primi giorni: Audit di Maturità Digitale di dominio",
+          "0-5 mesi: Setup, onboarding, roll out",
+          "Dal 6° mese: Analisi finale ROI + Scale up",
+        ],
+      },
     ],
-    saasTitle: 'SaaS',
-    saasBody: 'Un canone mensile proporzionato ai moduli attivi, al numero di stabilimenti e di utenti.',
-    onPremTitle: 'On premise',
-    onPremBody: 'Se hai esigenze di sicurezza o compliance specifiche, puoi installare Open EAM sui tuoi server.',
-    roiHeadingLead: 'Un ROI ',
-    roiHeadingHl: 'tangibile',
-    roiLead: 'Non puoi gestire ciò che non misuri. Con Open EAM, ogni centesimo è tracciato.',
+    saasTitle: "SaaS",
+    saasBody:
+      "Un canone mensile proporzionato ai moduli attivi, al numero di stabilimenti e di utenti.",
+    onPremTitle: "On premise",
+    onPremBody:
+      "Se hai esigenze di sicurezza o compliance specifiche, puoi installare Open EAM sui tuoi server.",
+    roiHeadingLead: "Un ROI ",
+    roiHeadingHl: "tangibile",
+    roiLead:
+      "Non puoi gestire ciò che non misuri. Con Open EAM, ogni centesimo è tracciato.",
     roiParas: [
       "OpenEAM è progettato per ripagarsi da solo entro i primi <strong>12 mesi</strong> grazie all'eliminazione dei fermi macchina e delle inefficienze nascoste.",
       "<strong>Risparmio Strutturale:</strong> la manutenzione programmata abbatte i costi d'urgenza (i più cari) fino al 40%.",
@@ -45,73 +71,187 @@ const COPY = {
       "<strong>Consolidamento Software:</strong> sostituisci i sistemi legacy (documentali, reporting, CMMS) con un'unica piattaforma.",
     ],
     roi: [
-      { problem: 'Riduzione Costi Diretti', benefit: 'Risparmio 15-20%', tone: 'teal' },
-      { problem: 'Tracciamento costi', benefit: 'Per singolo intervento e ricambio', tone: 'orange' },
-      { problem: 'Ottimizzazione gestione Ricambi', benefit: 'Niente emergenze né giacenze', tone: 'teal' },
-      { problem: 'Controllo su contratti e listini fornitori', benefit: 'Maggior potere contrattuale', tone: 'orange' },
-      { problem: 'Da know-how frammentato', benefit: 'Ad archivio tecnico strutturato', tone: 'teal' },
+      {
+        problem: "Riduzione Costi Diretti",
+        benefit: "Risparmio 15-20%",
+        tone: "teal",
+      },
+      {
+        problem: "Tracciamento costi",
+        benefit: "Per singolo intervento e ricambio",
+        tone: "orange",
+      },
+      {
+        problem: "Ottimizzazione gestione Ricambi",
+        benefit: "Niente emergenze né giacenze",
+        tone: "teal",
+      },
+      {
+        problem: "Controllo su contratti e listini fornitori",
+        benefit: "Maggior potere contrattuale",
+        tone: "orange",
+      },
+      {
+        problem: "Da know-how frammentato",
+        benefit: "Ad archivio tecnico strutturato",
+        tone: "teal",
+      },
     ],
-    contactCta: 'Contattaci',
-    faqHeading: 'Domande frequenti',
+    contactCta: "Contattaci",
+    faqHeading: "Domande frequenti",
     faqs: [
-      { q: "L'evoluzione della piattaforma OpenEAM è inclusa nell'investimento?", a: 'Assolutamente sì. Crediamo in una partnership a lungo termine. Tutti gli aggiornamenti, le nuove funzionalità e i miglioramenti di sicurezza rilasciati per i moduli attivi sono inclusi nel vostro canone, garantendovi di avere sempre a disposizione la tecnologia più avanzata senza costi nascosti.' },
-      { q: "Qual è l'investimento richiesto per la fase di setup iniziale?", a: "La fase di setup non è un costo fisso, ma un percorso su misura. Include il nostro Audit di Maturità Digitale e la configurazione della piattaforma sui vostri processi. L'investimento dipende dalla complessità e dai moduli attivi, ed è calibrato per essere sostenibile e generare risparmi misurabili già nelle prime settimane, coprendo rapidamente l'esborso iniziale." },
-      { q: 'Sono previste agevolazioni per organizzazioni non profit o progetti speciali?', a: "Sì, OpenEAM sostiene l'efficienza anche nel terzo settore. Valutiamo piani d'investimento specifici e agevolati per organizzazioni non profit e progetti a impatto sociale, previa verifica dei requisiti." },
-      { q: "Qual è la flessibilità dell'impegno contrattuale con OpenEAM?", a: "La nostra filosofia si basa sul valore: vogliamo che restiate con noi perché OpenEAM vi fa risparmiare, non per un vincolo contrattuale. Per il modello Cloud (SaaS), offriamo la massima flessibilità di adeguare o interrompere il piano. Il vostro controllo sulla soluzione è totale e l'esportazione dei dati è sempre garantita." },
-      { q: 'Come si adatta OpenEAM se la mia azienda cresce o le esigenze cambiano?', a: "OpenEAM è nativamente scalabile. Se la vostra squadra si amplia o avete bisogno di tracciare nuovi processi, potete aggiungere utenti o attivare nuovi moduli in qualsiasi momento. L'investimento si adeguerà proporzionalmente all'uso effettivo, garantendo che paghiate sempre e solo per il valore che ricevete." },
-      { q: 'Come posso essere sicuro che OpenEAM genererà un reale risparmio per la mia azienda?', a: "Non ci basiamo su promesse, ma su dati. Nel percorso di setup, definiremo insieme i KPI da monitorare. OpenEAM traccia ogni costo e inefficienza, permettendovi di misurare l'abbattimento dei costi diretti (15-20% mediamente nei primi mesi) e il ROI in tempi rapidi, spesso tra i 6 e i 12 mesi." },
-      { q: 'La mia azienda ha processi molto specifici. OpenEAM riuscirà a tracciarli e controllarli?', a: 'Sì. A differenza di software standard, la nostra forza è la personalizzazione. Grazie all\'Audit iniziale e alla modularità della piattaforma, OpenEAM "prende la forma" dei vostri processi specifici. Questo vi garantisce una tracciabilità totale e un controllo a prova di audit, riducendo drasticamente i rischi operativi.' },
-      { q: 'Qual è la differenza principale tra OpenEAM e i sistemi Legacy più blasonati?', a: 'Agilità e focus sul valore. Mentre i sistemi Legacy richiedono investimenti enormi, lunghi tempi di implementazione e spesso sono rigidi, OpenEAM offre una soluzione Enterprise agile, un go-live rapido e un modello di investimento flessibile che mira a un ROI veloce e a un controllo granulare del processo, senza i costi di manutenzione IT dei vecchi sistemi.' },
+      {
+        q: "L'evoluzione della piattaforma OpenEAM è inclusa nell'investimento?",
+        a: "Assolutamente sì. Crediamo in una partnership a lungo termine. Tutti gli aggiornamenti, le nuove funzionalità e i miglioramenti di sicurezza rilasciati per i moduli attivi sono inclusi nel vostro canone, garantendovi di avere sempre a disposizione la tecnologia più avanzata senza costi nascosti.",
+      },
+      {
+        q: "Qual è l'investimento richiesto per la fase di setup iniziale?",
+        a: "La fase di setup non è un costo fisso, ma un percorso su misura. Include il nostro Audit di Maturità Digitale e la configurazione della piattaforma sui vostri processi. L'investimento dipende dalla complessità e dai moduli attivi, ed è calibrato per essere sostenibile e generare risparmi misurabili già nelle prime settimane, coprendo rapidamente l'esborso iniziale.",
+      },
+      {
+        q: "Sono previste agevolazioni per organizzazioni non profit o progetti speciali?",
+        a: "Sì, OpenEAM sostiene l'efficienza anche nel terzo settore. Valutiamo piani d'investimento specifici e agevolati per organizzazioni non profit e progetti a impatto sociale, previa verifica dei requisiti.",
+      },
+      {
+        q: "Qual è la flessibilità dell'impegno contrattuale con OpenEAM?",
+        a: "La nostra filosofia si basa sul valore: vogliamo che restiate con noi perché OpenEAM vi fa risparmiare, non per un vincolo contrattuale. Per il modello Cloud (SaaS), offriamo la massima flessibilità di adeguare o interrompere il piano. Il vostro controllo sulla soluzione è totale e l'esportazione dei dati è sempre garantita.",
+      },
+      {
+        q: "Come si adatta OpenEAM se la mia azienda cresce o le esigenze cambiano?",
+        a: "OpenEAM è nativamente scalabile. Se la vostra squadra si amplia o avete bisogno di tracciare nuovi processi, potete aggiungere utenti o attivare nuovi moduli in qualsiasi momento. L'investimento si adeguerà proporzionalmente all'uso effettivo, garantendo che paghiate sempre e solo per il valore che ricevete.",
+      },
+      {
+        q: "Come posso essere sicuro che OpenEAM genererà un reale risparmio per la mia azienda?",
+        a: "Non ci basiamo su promesse, ma su dati. Nel percorso di setup, definiremo insieme i KPI da monitorare. OpenEAM traccia ogni costo e inefficienza, permettendovi di misurare l'abbattimento dei costi diretti (15-20% mediamente nei primi mesi) e il ROI in tempi rapidi, spesso tra i 6 e i 12 mesi.",
+      },
+      {
+        q: "La mia azienda ha processi molto specifici. OpenEAM riuscirà a tracciarli e controllarli?",
+        a: 'Sì. A differenza di software standard, la nostra forza è la personalizzazione. Grazie all\'Audit iniziale e alla modularità della piattaforma, OpenEAM "prende la forma" dei vostri processi specifici. Questo vi garantisce una tracciabilità totale e un controllo a prova di audit, riducendo drasticamente i rischi operativi.',
+      },
+      {
+        q: "Qual è la differenza principale tra OpenEAM e i sistemi Legacy più blasonati?",
+        a: "Agilità e focus sul valore. Mentre i sistemi Legacy richiedono investimenti enormi, lunghi tempi di implementazione e spesso sono rigidi, OpenEAM offre una soluzione Enterprise agile, un go-live rapido e un modello di investimento flessibile che mira a un ROI veloce e a un controllo granulare del processo, senza i costi di manutenzione IT dei vecchi sistemi.",
+      },
     ],
   },
   en: {
-    description: 'A calibrated, proportional investment: SaaS or on-premise. OpenEAM is designed to pay for itself within the first 12 months.',
-    heroLead: 'The initial investment is calibrated to let you ',
-    heroHl: 'test the technology',
-    heroTrail: ' without straining your current budget, ensuring financial sustainability over time.',
+    description:
+      "A calibrated, proportional investment: SaaS or on-premise. OpenEAM is designed to pay for itself within the first 12 months.",
+    heroLead: "The initial investment is calibrated to let you ",
+    heroHl: "test the technology",
+    heroTrail:
+      " without straining your current budget, ensuring financial sustainability over time.",
     tiers: [
-      { title: 'A solution that grows with your company', points: ['Fast startup, direct contact', 'Ongoing support from people who speak your language', "Every piece of data entered becomes know-how that adds to your company's value"] },
-      { title: 'A proportional investment', points: ['Lean software, pay only for what you use', 'Features scaled to your needs', 'SME-friendly, corporate-grade solutions'] },
-      { title: 'From zero to full speed in six months', points: ['First days: domain Digital Maturity Audit', '0-5 months: setup, onboarding, roll-out', 'From month 6: final ROI analysis + scale-up'] },
+      {
+        title: "A solution that grows with your company",
+        points: [
+          "Fast startup, direct contact",
+          "Ongoing support from people who speak your language",
+          "Every piece of data entered becomes know-how that adds to your company's value",
+        ],
+      },
+      {
+        title: "A proportional investment",
+        points: [
+          "Lean software, pay only for what you use",
+          "Features scaled to your needs",
+          "SME-friendly, corporate-grade solutions",
+        ],
+      },
+      {
+        title: "From zero to full speed in six months",
+        points: [
+          "First days: domain Digital Maturity Audit",
+          "0-5 months: setup, onboarding, roll-out",
+          "From month 6: final ROI analysis + scale-up",
+        ],
+      },
     ],
-    saasTitle: 'SaaS',
-    saasBody: 'A monthly subscription proportional to your active modules, number of plants, and number of users.',
-    onPremTitle: 'On premise',
-    onPremBody: 'If you have specific security or compliance requirements, you can install Open EAM on your own servers.',
-    roiHeadingLead: 'A ',
-    roiHeadingHl: 'tangible',
-    roiLead: "You can't manage what you don't measure. With Open EAM, every cent is tracked.",
+    saasTitle: "SaaS",
+    saasBody:
+      "A monthly subscription proportional to your active modules, number of plants, and number of users.",
+    onPremTitle: "On premise",
+    onPremBody:
+      "If you have specific security or compliance requirements, you can install Open EAM on your own servers.",
+    roiHeadingLead: "A ",
+    roiHeadingHl: "tangible",
+    roiLead:
+      "You can't manage what you don't measure. With Open EAM, every cent is tracked.",
     roiParas: [
-      'OpenEAM is designed to pay for itself within the first <strong>12 months</strong> by eliminating downtime and hidden inefficiencies.',
-      '<strong>Structural savings:</strong> scheduled maintenance cuts emergency costs (the most expensive kind) by up to 40%.',
-      '<strong>Extended asset life:</strong> tracking everything means plants last 25% longer, delaying multi-million investments in new equipment.',
-      '<strong>Software consolidation:</strong> replace legacy systems (document management, reporting, CMMS) with a single platform.',
+      "OpenEAM is designed to pay for itself within the first <strong>12 months</strong> by eliminating downtime and hidden inefficiencies.",
+      "<strong>Structural savings:</strong> scheduled maintenance cuts emergency costs (the most expensive kind) by up to 40%.",
+      "<strong>Extended asset life:</strong> tracking everything means plants last 25% longer, delaying multi-million investments in new equipment.",
+      "<strong>Software consolidation:</strong> replace legacy systems (document management, reporting, CMMS) with a single platform.",
     ],
     roi: [
-      { problem: 'Direct Cost Reduction', benefit: '15-20% savings', tone: 'teal' },
-      { problem: 'Cost tracking', benefit: 'Per work order and per spare part', tone: 'orange' },
-      { problem: 'Spare-parts management optimization', benefit: 'No more emergencies or excess stock', tone: 'teal' },
-      { problem: 'Control over supplier contracts and price lists', benefit: 'Greater negotiating power', tone: 'orange' },
-      { problem: 'From fragmented know-how', benefit: 'To a structured technical archive', tone: 'teal' },
+      {
+        problem: "Direct Cost Reduction",
+        benefit: "15-20% savings",
+        tone: "teal",
+      },
+      {
+        problem: "Cost tracking",
+        benefit: "Per work order and per spare part",
+        tone: "orange",
+      },
+      {
+        problem: "Spare-parts management optimization",
+        benefit: "No more emergencies or excess stock",
+        tone: "teal",
+      },
+      {
+        problem: "Control over supplier contracts and price lists",
+        benefit: "Greater negotiating power",
+        tone: "orange",
+      },
+      {
+        problem: "From fragmented know-how",
+        benefit: "To a structured technical archive",
+        tone: "teal",
+      },
     ],
-    contactCta: 'Contact us',
-    faqHeading: 'Frequently asked questions',
+    contactCta: "Contact us",
+    faqHeading: "Frequently asked questions",
     faqs: [
-      { q: 'Is the evolution of the OpenEAM platform included in the investment?', a: 'Absolutely. We believe in a long-term partnership. All updates, new features, and security improvements released for your active modules are included in your subscription, so you always have the most advanced technology available with no hidden costs.' },
-      { q: 'What investment is required for the initial setup phase?', a: "Setup isn't a fixed cost — it's a tailored path. It includes our Digital Maturity Audit and configuring the platform around your processes. The investment depends on complexity and active modules, and it's calibrated to be sustainable and to generate measurable savings within the first few weeks, quickly covering the initial outlay." },
-      { q: 'Are there discounts for non-profit organizations or special projects?', a: 'Yes, OpenEAM supports efficiency in the non-profit sector too. We evaluate dedicated, discounted investment plans for non-profit organizations and social-impact projects, subject to eligibility checks.' },
-      { q: 'How flexible is the contractual commitment with OpenEAM?', a: "Our philosophy is value-based: we want you to stay with us because OpenEAM saves you money, not because of a contractual lock-in. For the Cloud (SaaS) model, we offer maximum flexibility to adjust or cancel your plan. You keep full control of the solution, and data export is always guaranteed." },
-      { q: 'How does OpenEAM adapt if my company grows or needs change?', a: 'OpenEAM is natively scalable. If your team grows or you need to track new processes, you can add users or activate new modules at any time. The investment adjusts proportionally to actual usage, so you always pay only for the value you receive.' },
-      { q: 'How can I be sure OpenEAM will generate real savings for my company?', a: "We don't rely on promises, but on data. During setup, we'll define the KPIs to monitor together. OpenEAM tracks every cost and inefficiency, letting you measure the reduction in direct costs (15-20% on average in the first months) and a fast ROI, often within 6 to 12 months." },
-      { q: 'My company has very specific processes. Will OpenEAM be able to track and control them?', a: 'Yes. Unlike standard software, our strength is customization. Thanks to the initial audit and the platform\'s modularity, OpenEAM "takes the shape" of your specific processes. This gives you full traceability and audit-proof control, drastically reducing operational risk.' },
-      { q: "What's the main difference between OpenEAM and the big-name legacy systems?", a: 'Agility and a focus on value. While legacy systems require huge investments, long implementation times, and are often rigid, OpenEAM offers an agile Enterprise solution, a fast go-live, and a flexible investment model aimed at quick ROI and granular process control, without the IT maintenance costs of old systems.' },
+      {
+        q: "Is the evolution of the OpenEAM platform included in the investment?",
+        a: "Absolutely. We believe in a long-term partnership. All updates, new features, and security improvements released for your active modules are included in your subscription, so you always have the most advanced technology available with no hidden costs.",
+      },
+      {
+        q: "What investment is required for the initial setup phase?",
+        a: "Setup isn't a fixed cost — it's a tailored path. It includes our Digital Maturity Audit and configuring the platform around your processes. The investment depends on complexity and active modules, and it's calibrated to be sustainable and to generate measurable savings within the first few weeks, quickly covering the initial outlay.",
+      },
+      {
+        q: "Are there discounts for non-profit organizations or special projects?",
+        a: "Yes, OpenEAM supports efficiency in the non-profit sector too. We evaluate dedicated, discounted investment plans for non-profit organizations and social-impact projects, subject to eligibility checks.",
+      },
+      {
+        q: "How flexible is the contractual commitment with OpenEAM?",
+        a: "Our philosophy is value-based: we want you to stay with us because OpenEAM saves you money, not because of a contractual lock-in. For the Cloud (SaaS) model, we offer maximum flexibility to adjust or cancel your plan. You keep full control of the solution, and data export is always guaranteed.",
+      },
+      {
+        q: "How does OpenEAM adapt if my company grows or needs change?",
+        a: "OpenEAM is natively scalable. If your team grows or you need to track new processes, you can add users or activate new modules at any time. The investment adjusts proportionally to actual usage, so you always pay only for the value you receive.",
+      },
+      {
+        q: "How can I be sure OpenEAM will generate real savings for my company?",
+        a: "We don't rely on promises, but on data. During setup, we'll define the KPIs to monitor together. OpenEAM tracks every cost and inefficiency, letting you measure the reduction in direct costs (15-20% on average in the first months) and a fast ROI, often within 6 to 12 months.",
+      },
+      {
+        q: "My company has very specific processes. Will OpenEAM be able to track and control them?",
+        a: 'Yes. Unlike standard software, our strength is customization. Thanks to the initial audit and the platform\'s modularity, OpenEAM "takes the shape" of your specific processes. This gives you full traceability and audit-proof control, drastically reducing operational risk.',
+      },
+      {
+        q: "What's the main difference between OpenEAM and the big-name legacy systems?",
+        a: "Agility and a focus on value. While legacy systems require huge investments, long implementation times, and are often rigid, OpenEAM offers an agile Enterprise solution, a fast go-live, and a flexible investment model aimed at quick ROI and granular process control, without the IT maintenance costs of old systems.",
+      },
     ],
   },
 } as const;
 const t = COPY[lang];
 ---
-<BaseLayout title="Pricing" description={t.description}>
 
+<BaseLayout title="Pricing" description={t.description}>
   <!-- Hero statement -->
   <Section bg="light" class="pricing-hero">
     <Image src={blobBg} alt="" class="pricing-hero__blob" aria-hidden="true" />
@@ -123,26 +263,77 @@ const t = COPY[lang];
   <!-- Tiers -->
   <Section bg="light">
     <div class="tiers">
-      {t.tiers.map((tier, i) => (
-        <article class="tier card">
-          <div class="tier__img"><Image src={[imgStart, imgMid, imgPro][i]} alt="" width={260} height={200} loading="lazy" /></div>
-          <h3 class="tier__title">{tier.title}</h3>
-          <ul class="tier__list">
-            {tier.points.map((p) => <li>{p}</li>)}
-          </ul>
-        </article>
-      ))}
+      {
+        t.tiers.map((tier, i) => (
+          <article class="tier card">
+            <div class="tier__img">
+              <Image
+                src={[imgStart, imgMid, imgPro][i]}
+                alt=""
+                width={260}
+                height={200}
+                loading="lazy"
+              />
+            </div>
+            <h3 class="tier__title">{tier.title}</h3>
+            <ul class="tier__list">
+              {tier.points.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
     </div>
   </Section>
 
   <!-- SaaS / On premise -->
   <Section bg="light">
     <div class="plans">
-      <div class="plan card">
+      <div class="plan plan--saas card">
+        <div class="plan__icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path
+              d="M17.5 19a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.3-1.8A4.5 4.5 0 0 0 6.5 19h11Z"
+            ></path></svg
+          >
+        </div>
         <h3 class="plan__title">{t.saasTitle}</h3>
         <p class="plan__body">{t.saasBody}</p>
       </div>
-      <div class="plan card">
+      <div class="plan plan--onprem card">
+        <div class="plan__icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><rect x="4" y="4" width="16" height="6" rx="1.2"></rect><rect
+              x="4"
+              y="14"
+              width="16"
+              height="6"
+              rx="1.2"></rect><circle
+              cx="8"
+              cy="7"
+              r="0.6"
+              fill="currentColor"
+              stroke="none"></circle><circle
+              cx="8"
+              cy="17"
+              r="0.6"
+              fill="currentColor"
+              stroke="none"></circle></svg
+          >
+        </div>
         <h3 class="plan__title">{t.onPremTitle}</h3>
         <p class="plan__body">{t.onPremBody}</p>
       </div>
@@ -153,31 +344,74 @@ const t = COPY[lang];
   <Section bg="light">
     <div class="roi">
       <div class="roi__narrative card">
-        <h2 class="roi__title">{t.roiHeadingLead}<span class="hl">{t.roiHeadingHl}</span></h2>
+        <h2 class="roi__title">
+          {t.roiHeadingLead}<span class="hl">{t.roiHeadingHl}</span>
+        </h2>
         <p class="roi__lead">{t.roiLead}</p>
         {t.roiParas.map((p) => <p set:html={p} />)}
       </div>
-      <div class="roi__grid card">
-        {t.roi.map((r) => (
-          <div class="roi__row">
-            <span class="chip chip--problem">{r.problem}</span>
-            <span class:list={['chip', `chip--${r.tone}`]}>→ {r.benefit}</span>
-          </div>
-        ))}
+      <div class="roi__grid card" data-roi-grid>
+        {
+          t.roi.map((r, i) => (
+            <div class="roi__row" style={`--i: ${i}`}>
+              <span class="chip chip--problem">{r.problem}</span>
+              <span class:list={["chip", `chip--${r.tone}`]}>
+                → {r.benefit}
+              </span>
+            </div>
+          ))
+        }
       </div>
     </div>
   </Section>
 
+  <script>
+    function initRoiReveal() {
+      const rows = document.querySelectorAll<HTMLElement>(
+        ".roi__row:not([data-roi-inited])",
+      );
+      if (!rows.length) return;
+
+      const reveal = (row: HTMLElement) => {
+        row.dataset.roiInited = "true";
+        row.classList.add("is-visible");
+      };
+
+      if (!("IntersectionObserver" in window)) {
+        rows.forEach(reveal);
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              reveal(entry.target as HTMLElement);
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.4 },
+      );
+      rows.forEach((row) => observer.observe(row));
+    }
+
+    document.addEventListener("astro:page-load", initRoiReveal);
+    initRoiReveal();
+  </script>
+
   <!-- Contact CTA -->
-  <Section bg="light">
+  <Section bg="light" class="contact-cta-section">
     <div class="contact-cta">
-      <Button href={l('/demo')} variant="primary" class="contact-cta__btn">{t.contactCta}</Button>
+      <Button href={l("/demo")} variant="primary" class="contact-cta__btn"
+        >{t.contactCta}</Button
+      >
     </div>
   </Section>
 
   <!-- Trust -->
-  <Section bg="teal">
-    <LogoMarquee heading={tUi('trustHeading')} />
+  <Section bg="white">
+    <LogoMarquee heading={tUi("trustHeading")} mono={false} />
   </Section>
 
   <!-- FAQ -->
@@ -185,11 +419,13 @@ const t = COPY[lang];
     <SectionHeading heading={t.faqHeading} />
     <div class="faq-wrap"><Faq items={t.faqs} /></div>
   </Section>
-
 </BaseLayout>
 
 <style>
-  .pricing-hero { position: relative; overflow: hidden; }
+  .pricing-hero {
+    position: relative;
+    overflow: hidden;
+  }
   .pricing-hero__blob {
     position: absolute;
     top: 50%;
@@ -201,11 +437,20 @@ const t = COPY[lang];
     pointer-events: none;
     z-index: 0;
   }
-  .pricing-hero :global(.container-page) { position: relative; z-index: 1; }
+  .pricing-hero :global(.container-page) {
+    position: relative;
+    z-index: 1;
+  }
 
   @keyframes price-rise {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   .price-hero {
     max-width: 52rem;
@@ -220,58 +465,293 @@ const t = COPY[lang];
     letter-spacing: -0.01em;
     animation: price-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-  .price-hero .hl { color: var(--color-orange); }
+  .price-hero .hl {
+    color: var(--color-orange);
+  }
   @media (prefers-reduced-motion: reduce) {
-    .price-hero { animation: none; }
+    .price-hero {
+      animation: none;
+    }
   }
 
-  .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
   .tier {
-    padding: 2rem; display: grid; gap: 1.25rem; align-content: start; text-align: center;
-    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 2rem;
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+    text-align: center;
+    transition:
+      transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .tier:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -20px rgb(35 48 56 / 0.3); }
-  .tier__img { display: grid; place-items: center; min-height: 150px; }
-  .tier__img :global(img) { width: auto; max-height: 160px; object-fit: contain; }
-  .tier__title { font-size: 1.3rem; }
-  .tier__list { list-style: none; display: grid; gap: 0.7rem; text-align: left; }
+  .tier:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 48px -20px rgb(35 48 56 / 0.3);
+  }
+  .tier__img {
+    display: grid;
+    place-items: center;
+    min-height: 150px;
+  }
+  .tier__img :global(img) {
+    width: auto;
+    max-height: 160px;
+    object-fit: contain;
+    animation: tier-float 4.5s ease-in-out infinite;
+  }
+  .tier:nth-child(2) .tier__img :global(img) {
+    animation-delay: 0.3s;
+  }
+  .tier:nth-child(3) .tier__img :global(img) {
+    animation-delay: 0.6s;
+  }
+  @keyframes tier-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  .tier__title {
+    font-size: 1.3rem;
+  }
+  .tier__list {
+    list-style: none;
+    display: grid;
+    gap: 0.7rem;
+    text-align: left;
+  }
   .tier__list li {
-    position: relative; padding-left: 1.4rem;
-    color: var(--color-slate); font-size: 0.95rem; line-height: 1.5;
+    position: relative;
+    padding-left: 1.4rem;
+    color: var(--color-slate);
+    font-size: 0.95rem;
+    line-height: 1.5;
   }
-  .tier__list li::before { content: '✓'; position: absolute; left: 0; color: var(--color-orange); font-weight: 700; }
-  @media (max-width: 860px) { .tiers { grid-template-columns: 1fr; } }
+  .tier__list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--color-orange);
+    font-weight: 700;
+  }
+  @media (max-width: 860px) {
+    .tiers {
+      grid-template-columns: 1fr;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .tier { transition: none; }
-    .tier:hover { transform: none; }
+    .tier {
+      transition: none;
+    }
+    .tier:hover {
+      transform: none;
+    }
+    .tier__img :global(img) {
+      animation: none;
+    }
   }
 
-  .plans { display: grid; gap: 1.5rem; }
-  .plan { padding: 1.75rem 2.25rem; display: grid; grid-template-columns: 220px 1fr; gap: 1.5rem; align-items: center; }
-  .plan__title { font-size: 1.7rem; }
-  .plan__body { color: var(--color-slate); font-size: 1.05rem; }
-  @media (max-width: 640px) { .plan { grid-template-columns: 1fr; gap: 0.5rem; } }
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .plan {
+    padding: 2.25rem;
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+    border: 1px solid rgb(35 48 56 / 0.07);
+    transition:
+      transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .plan:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 48px -20px rgb(35 48 56 / 0.3);
+  }
+  .plan__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+  }
+  .plan__icon svg {
+    width: 28px;
+    height: 28px;
+  }
+  .plan--saas .plan__icon {
+    background: rgb(70 165 163 / 0.12);
+    color: var(--color-teal);
+  }
+  .plan--onprem .plan__icon {
+    background: rgb(245 139 84 / 0.12);
+    color: var(--color-orange);
+  }
+  .plan__title {
+    font-size: 1.5rem;
+  }
+  .plan__body {
+    color: var(--color-slate);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+  @media (max-width: 640px) {
+    .plans {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .plan {
+      transition: none;
+    }
+    .plan:hover {
+      transform: none;
+    }
+  }
 
-  .roi { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
-  .roi__narrative { padding: 2.25rem; display: grid; gap: 0.9rem; }
-  .roi__title { font-size: clamp(1.6rem, 3vw, 2.2rem); }
-  .roi__title .hl { color: var(--color-orange); }
-  .roi__lead { font-weight: 600; color: var(--color-ink); font-size: 1.1rem; }
-  .roi__narrative p { color: var(--color-slate); font-size: 0.98rem; line-height: 1.6; }
-  .roi__grid { padding: 1.75rem; display: grid; gap: 0.9rem; align-content: center; }
-  .roi__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .roi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: stretch;
+  }
+  .roi__narrative {
+    padding: 2.25rem;
+    display: grid;
+    gap: 0.9rem;
+  }
+  .roi__title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+  .roi__title .hl {
+    color: var(--color-orange);
+  }
+  .roi__lead {
+    font-weight: 600;
+    color: var(--color-ink);
+    font-size: 1.1rem;
+  }
+  .roi__narrative p {
+    color: var(--color-slate);
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+  .roi__grid {
+    padding: 1.75rem;
+    display: grid;
+    gap: 0.9rem;
+    align-content: center;
+  }
+  .roi__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
   .chip {
-    display: flex; align-items: center;
-    padding: 0.75rem 1rem; border-radius: 12px;
-    font-size: 0.88rem; font-weight: 600; line-height: 1.25;
+    display: flex;
+    align-items: center;
+    padding: 1.1rem 1.4rem;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.25;
   }
-  .chip--problem { background: #d2d8d9; color: var(--color-ink); }
-  .chip--teal { background: #46a5a3; color: #fff; }
-  .chip--orange { background: #f58b54; color: #fff; }
-  @media (max-width: 860px) { .roi { grid-template-columns: 1fr; } }
+  .chip--problem {
+    background: #d2d8d9;
+    color: var(--color-ink);
+  }
+  .chip--teal {
+    background: #46a5a3;
+    color: #fff;
+  }
+  .chip--orange {
+    background: #f58b54;
+    color: #fff;
+  }
 
-  .contact-cta { display: flex; justify-content: center; }
-  .contact-cta__btn { font-size: 1.1rem; padding-inline: 3rem; }
+  /* Reveal: the gray "problem" chip settles in first, then the colored
+     "benefit" chip wipes in left-to-right behind it — the row visually
+     resolves the same way the copy does, problem first, answer after. */
+  .roi__row .chip--problem {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .roi__row .chip:not(.chip--problem) {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+  .roi__row.is-visible .chip--problem {
+    animation: roi-settle 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: calc(var(--i, 0) * 90ms);
+  }
+  .roi__row.is-visible .chip:not(.chip--problem) {
+    animation: roi-wipe 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: calc(var(--i, 0) * 90ms + 260ms);
+  }
+  @keyframes roi-settle {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes roi-wipe {
+    from {
+      opacity: 0;
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      opacity: 1;
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .roi__row .chip {
+      opacity: 1 !important;
+      transform: none !important;
+      clip-path: none !important;
+      animation: none !important;
+    }
+  }
 
-  .faq-wrap { margin-top: 2.5rem; }
+  @media (max-width: 860px) {
+    .roi {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  :global(.contact-cta-section) {
+    padding-block-start: clamp(1.5rem, 3vw, 2.5rem) !important;
+  }
+  .contact-cta {
+    display: flex;
+    justify-content: center;
+  }
+  .contact-cta__btn {
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding-inline: 3.5rem;
+    padding-block: 1.1rem;
+    box-shadow: 0 16px 36px -12px rgb(245 139 84 / 0.55);
+  }
+  .contact-cta__btn:hover {
+    box-shadow: 0 20px 44px -12px rgb(245 139 84 / 0.65);
+  }
+
+  .faq-wrap {
+    margin-top: 2.5rem;
+  }
 </style>

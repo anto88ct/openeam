@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import seedmaLogoSrc from '../assets/img/logos/seedma-marchio.svg';
 import {
   company,
+  platformLinks,
+  industryLinks,
   sitemapLinks,
   legalLinks,
 } from '../config/site';
@@ -11,6 +13,14 @@ import { getLangFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const l = (href: string) => getLocalizedPath(lang, href);
+
+const [copyrightBefore, copyrightAfter] = t('footerCopyright').split(company.legal);
+
+const columns = [
+  { title: 'Sitemap', links: sitemapLinks },
+  { title: 'Platform', links: platformLinks },
+  { title: 'By Industry', links: industryLinks },
+];
 ---
 <footer class="footer">
   <div class="container-page footer__top">
@@ -18,19 +28,23 @@ const l = (href: string) => getLocalizedPath(lang, href);
       <Image class="footer__logo" src={seedmaLogoSrc} alt="Seedma" loading="eager" />
     </div>
 
-    <nav class="footer__col" aria-label="Sitemap">
-      <h3 class="footer__col-title">Sitemap</h3>
-      <ul>
-        {sitemapLinks.map((link) => (
-          <li><a href={l(link.href)}>{link.label}</a></li>
-        ))}
-      </ul>
-    </nav>
+    <div class="footer__cols">
+      {columns.map((col) => (
+        <nav class="footer__col" aria-label={col.title}>
+          <h3 class="footer__col-title">{col.title}</h3>
+          <ul>
+            {col.links.map((link) => (
+              <li><a href={l(link.href)}>{link.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      ))}
+    </div>
   </div>
 
   <div class="container-page footer__legal">
     <p class="footer__copyright">
-      <strong>{company.legal}</strong> — {t('footerCopyright')}
+      {copyrightBefore}<strong>{company.legal}</strong>{copyrightAfter}
     </p>
     <p class="footer__addr">{company.address}</p>
     <ul class="footer__policies">
@@ -56,9 +70,14 @@ const l = (href: string) => getLocalizedPath(lang, href);
   }
   .footer__brand { max-width: 22rem; }
   .footer__logo {
-    height: 2.6rem;
+    height: 10rem;
     width: auto;
     display: block;
+  }
+  .footer__cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(140px, auto));
+    gap: 2.5rem;
   }
   .footer__col-title {
     font-family: var(--font-sans);
@@ -93,4 +112,8 @@ const l = (href: string) => getLocalizedPath(lang, href);
   .footer__policies { list-style: none; display: flex; gap: 1.5rem; }
   .footer__policies a { text-decoration: underline; }
   .footer__policies a:hover { color: var(--color-orange); }
+
+  @media (max-width: 640px) {
+    .footer__cols { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 2rem; }
+  }
 </style>
