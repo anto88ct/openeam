@@ -371,24 +371,28 @@ const moduleSlides = [
 const platformGridItems = [
   {
     icon: iconGear,
+    iconName: "gear" as const,
     image: featAsset,
     href: l("/platform/asset-management"),
     ...t.platformGrid[0],
   },
   {
     icon: iconWrench,
+    iconName: "wrench" as const,
     image: workerIndustry,
     href: l("/platform/maintenance-operations"),
     ...t.platformGrid[1],
   },
   {
     icon: iconDocument,
+    iconName: "document" as const,
     image: featDoc,
     href: l("/platform/technical-documentation"),
     ...t.platformGrid[2],
   },
   {
     icon: iconChart,
+    iconName: "chart" as const,
     image: featAnalytics,
     href: l("/platform/asset-analytics"),
     ...t.platformGrid[3],
@@ -435,7 +439,7 @@ const caseSlides = [
         heading: m.heading,
         body: m.body,
         ctaLabel: t.platformCta,
-        ctaHref: l("/demo"),
+        ctaHref: l("/video-tour"),
       }))}
     />
   </Section>
@@ -454,6 +458,7 @@ const caseSlides = [
         platformGridItems.map((m) => (
           <PlatformShowcaseCard
             icon={m.icon}
+            iconName={m.iconName}
             image={m.image}
             imageAlt={m.heading}
             heading={m.heading}

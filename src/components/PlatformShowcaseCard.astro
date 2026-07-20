@@ -5,6 +5,7 @@ import Button from './Button.astro';
 /** Photo card with a teal arc accent and a frosted glass panel overlapping the bottom, holding icon/heading/tagline/body/CTA. */
 interface Props {
   icon: ImageMetadata;
+  iconName: "gear" | "wrench" | "document" | "chart";
   image: ImageMetadata;
   imageAlt: string;
   heading: string;
@@ -13,7 +14,7 @@ interface Props {
   ctaLabel: string;
   ctaHref: string;
 }
-const { icon, image, imageAlt, heading, tagline, body, ctaLabel, ctaHref } = Astro.props;
+const { icon, iconName, image, imageAlt, heading, tagline, body, ctaLabel, ctaHref } = Astro.props;
 ---
 
 <article class="psc">
@@ -23,7 +24,7 @@ const { icon, image, imageAlt, heading, tagline, body, ctaLabel, ctaHref } = Ast
   </div>
   <div class="psc__panel">
     <div class="psc__head">
-      <span class="psc__icon"><Image src={icon} alt="" width={28} height={28} /></span>
+      <span class={`psc__icon psc__icon--${iconName}`}><Image src={icon} alt="" width={28} height={28} /></span>
       <h3 class="psc__heading">{heading}</h3>
     </div>
     <p class="psc__tagline">{tagline}</p>
@@ -80,7 +81,39 @@ const { icon, image, imageAlt, heading, tagline, body, ctaLabel, ctaHref } = Ast
     align-items: center;
     gap: 0.65rem;
   }
-  .psc__icon :global(img) { width: 26px; height: 26px; object-fit: contain; }
+  .psc__icon :global(img) {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    transform-origin: center;
+    transition: transform 0.25s ease-out;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .psc:hover .psc__icon--gear :global(img) {
+      animation: psc-spin 1.1s linear infinite;
+    }
+    .psc:hover .psc__icon--wrench :global(img) {
+      animation: psc-wiggle 0.5s ease-in-out infinite;
+    }
+    .psc:hover .psc__icon--document :global(img) {
+      transform: translateY(-3px) rotate(3deg);
+    }
+    .psc:hover .psc__icon--chart :global(img) {
+      transform: scale(1.12) translateY(-2px);
+    }
+  }
+
+  @keyframes psc-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes psc-wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-15deg); }
+    75% { transform: rotate(15deg); }
+  }
   .psc__heading { font-size: clamp(1.15rem, 1.8vw, 1.4rem); color: var(--color-ink); }
   .psc__tagline {
     color: var(--color-ink);
