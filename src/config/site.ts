@@ -18,6 +18,8 @@ export const industryLinks = [
   { label: 'Manufacturing', href: '/industries/manufacturing' },
   { label: 'Oil & Gas', href: '/industries/oil-and-gas' },
   { label: 'Large scale facilities', href: '/industries/large-scale-facilities' },
+  { label: 'Utilities', href: '/industries/utilities' },
+  { label: 'Healthcare', href: '/industries/sanitario' },
 ];
 
 export const sitemapLinks = [

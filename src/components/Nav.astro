@@ -19,11 +19,23 @@ const groupActive = (links: { href: string }[]) => links.some((link) => isActive
   <div class="container-page nav__inner">
     <Logo tone="dark" href={l('/')} />
 
-    <button class="nav__burger" data-nav-toggle aria-label={t('burgerAriaLabel')} aria-expanded="false">
-      <span></span><span></span><span></span>
+    <button
+      class="nav__burger"
+      data-nav-toggle
+      aria-label={t('burgerAriaLabel')}
+      aria-expanded="false"
+      aria-controls="nav-menu"
+    >
+      <span class="nav__burger-line"></span>
+      <span class="nav__burger-line"></span>
+      <span class="nav__burger-line"></span>
     </button>
 
-    <nav class="nav__menu" data-nav-menu aria-label={t('navAriaLabel')}>
+    <div class="nav__scrim" data-nav-scrim></div>
+
+    <nav id="nav-menu" class="nav__menu" data-nav-menu aria-label={t('navAriaLabel')}>
+      <span class="nav__eyebrow" aria-hidden="true">Menu</span>
+
       <a href={l('/')} class:list={['nav__link', { 'is-active': isActive('/') }]}>Home</a>
 
       <div class="nav__item" data-dropdown>
@@ -62,7 +74,9 @@ const groupActive = (links: { href: string }[]) => links.some((link) => isActive
 
       <a href={l('/pricing')} class:list={['nav__link', { 'is-active': isActive('/pricing') }]}>Pricing</a>
 
-      <LangSwitch lang={lang} />
+      <div class="nav__lang-row">
+        <LangSwitch lang={lang} />
+      </div>
     </nav>
   </div>
 </header>
@@ -102,6 +116,8 @@ const groupActive = (links: { href: string }[]) => links.some((link) => isActive
     align-items: center;
     gap: 0.5rem;
   }
+  .nav__eyebrow { display: none; }
+  .nav__lang-row { display: contents; }
   .nav__link {
     display: inline-flex;
     align-items: center;
@@ -165,38 +181,92 @@ const groupActive = (links: { href: string }[]) => links.some((link) => isActive
   .nav__burger {
     display: none;
     flex-direction: column;
+    justify-content: center;
     gap: 5px;
+    width: 40px;
+    height: 40px;
     background: none;
     border: 0;
+    border-radius: 10px;
     cursor: pointer;
     padding: 8px;
+    z-index: 52;
   }
-  .nav__burger span {
+  .nav__burger-line {
     width: 24px;
     height: 2px;
     background: var(--color-ink);
     border-radius: 2px;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transform-origin: center;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
   }
+  .nav[data-open] .nav__burger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav[data-open] .nav__burger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .nav[data-open] .nav__burger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav__scrim { display: none; }
 
   @media (max-width: 900px) {
-    .nav__burger { display: flex; }
+    .nav__inner { padding-inline: 1.25rem; }
+    .nav__burger { display: flex; margin-right: -8px; }
+    .nav__inner :global(.logo) { margin-left: -0.6rem; }
+
+    .nav__scrim {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 46;
+      background: rgb(35 48 56 / 0.45);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.25s ease, visibility 0.25s;
+    }
+    .nav[data-open] .nav__scrim { opacity: 1; visibility: visible; pointer-events: auto; }
+
     .nav__menu {
       position: fixed;
-      inset: 74px 0 auto 0;
+      inset: 0 0 0 auto;
+      z-index: 47;
+      width: min(85vw, 380px);
       flex-direction: column;
       align-items: stretch;
-      gap: 0.25rem;
+      gap: 0.2rem;
       background: #fff;
-      padding: 1rem 1.5rem 1.5rem;
-      border-bottom: 1px solid rgb(35 48 56 / 0.08);
-      box-shadow: var(--shadow-soft);
-      transform: translateY(-120%);
-      transition: transform 0.25s ease;
-      max-height: calc(100dvh - 74px);
+      padding: 88px 1.25rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+      box-shadow: -18px 0 40px -20px rgb(35 48 56 / 0.35);
+      transform: translateX(100%);
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
       overflow-y: auto;
     }
-    .nav[data-open] .nav__menu { transform: translateY(0); }
+    .nav[data-open] .nav__menu { transform: translateX(0); }
+
+    .nav__eyebrow {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-slate-muted);
+      padding: 0 1.05rem 0.6rem;
+    }
+
+    .nav__link {
+      width: 100%;
+      justify-content: space-between;
+      padding: 0.85rem 1.05rem;
+      border-radius: 12px;
+      border-left: 3px solid transparent;
+    }
+    .nav__link.is-active {
+      background: rgb(255 91 4 / 0.08);
+      border-left-color: var(--color-orange);
+    }
+    .nav__item + a.nav__link,
+    .nav__item { border-top: 1px solid rgb(35 48 56 / 0.06); }
+    a.nav__link:first-of-type { border-top: 0; }
+
     .nav__panel {
       position: static;
       opacity: 1;
@@ -204,23 +274,80 @@ const groupActive = (links: { href: string }[]) => links.some((link) => isActive
       transform: none;
       box-shadow: none;
       border: 0;
-      padding: 0 0 0.5rem 1rem;
+      background: transparent;
+      padding: 0.1rem 0 0.6rem 1.3rem;
+      margin-left: 0.55rem;
+      border-left: 2px solid rgb(35 48 56 / 0.08);
       display: none;
     }
     .nav__panel.is-open { display: grid; }
+    .nav__mega-link { padding: 0.55rem 0.7rem; }
+
+    .nav__lang-row {
+      display: block;
+      margin-top: 0.75rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid rgb(35 48 56 / 0.08);
+    }
+    .nav__lang-row :global(.lang-switch) {
+      width: 100%;
+      justify-content: stretch;
+      background: var(--color-bg);
+    }
+    .nav__lang-row :global(.lang-switch__flag) {
+      flex: 1;
+      justify-content: center;
+      padding: 0.6rem;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .nav__menu > * {
+        opacity: 0;
+        transform: translateX(12px);
+      }
+      .nav[data-open] .nav__menu > * {
+        animation: nav-item-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+      .nav[data-open] .nav__menu > *:nth-child(1) { animation-delay: 0.05s; }
+      .nav[data-open] .nav__menu > *:nth-child(2) { animation-delay: 0.09s; }
+      .nav[data-open] .nav__menu > *:nth-child(3) { animation-delay: 0.13s; }
+      .nav[data-open] .nav__menu > *:nth-child(4) { animation-delay: 0.17s; }
+      .nav[data-open] .nav__menu > *:nth-child(5) { animation-delay: 0.21s; }
+      .nav[data-open] .nav__menu > *:nth-child(6) { animation-delay: 0.25s; }
+      @keyframes nav-item-in {
+        to { opacity: 1; transform: translateX(0); }
+      }
+    }
   }
 </style>
 
 <script>
   const header = document.querySelector('[data-nav]');
   const toggle = document.querySelector('[data-nav-toggle]');
-  toggle?.addEventListener('click', () => {
-    const open = header?.toggleAttribute('data-open');
-    toggle.setAttribute('aria-expanded', String(!!open));
+  const menu = document.querySelector('[data-nav-menu]');
+  const scrim = document.querySelector('[data-nav-scrim]');
+  const mq = window.matchMedia('(max-width: 900px)');
+
+  function setOpen(open: boolean) {
+    header?.toggleAttribute('data-open', open);
+    toggle?.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open && mq.matches ? 'hidden' : '';
+  }
+
+  toggle?.addEventListener('click', () => setOpen(!header?.hasAttribute('data-open')));
+  scrim?.addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+  menu?.addEventListener('click', (e) => {
+    const target = (e.target as HTMLElement).closest('a.nav__link, a.nav__mega-link');
+    if (target && mq.matches) setOpen(false);
+  });
+  mq.addEventListener('change', (e) => {
+    if (!e.matches) setOpen(false);
   });
 
   // Mobile: tap a dropdown trigger to expand its panel in place.
-  const mq = window.matchMedia('(max-width: 900px)');
   document.querySelectorAll('[data-dropdown]').forEach((item) => {
     const trigger = item.querySelector('.nav__trigger');
     const panel = item.querySelector('.nav__panel');

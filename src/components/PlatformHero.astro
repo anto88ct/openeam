@@ -95,6 +95,8 @@ const ctaVariant = accent === 'dark' ? 'dark' : 'primary';
   .phero__media:empty { display: none; }
   .phero__media :global(img) {
     width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
     border-radius: 20px;
     box-shadow: var(--shadow-card);
   }

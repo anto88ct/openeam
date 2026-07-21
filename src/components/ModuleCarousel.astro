@@ -50,19 +50,27 @@ const { slides, intervalMs = 6000 } = Astro.props;
       }
     </div>
   </div>
-  <div class="carousel__dots" role="tablist" aria-label="Slide della piattaforma">
-    {
-      slides.map((_, i) => (
-        <button
-          type="button"
-          class:list={['carousel__dot', { 'is-active': i === 0 }]}
-          data-dot={i}
-          role="tab"
-          aria-selected={i === 0}
-          aria-label={`Vai alla slide ${i + 1}`}
-        />
-      ))
-    }
+  <div class="carousel__nav">
+    <button type="button" class="carousel__arrow" data-arrow="prev" aria-label="Slide precedente">
+      <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M8.5 1 1.5 8l7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="carousel__dots" role="tablist" aria-label="Slide della piattaforma">
+      {
+        slides.map((_, i) => (
+          <button
+            type="button"
+            class:list={['carousel__dot', { 'is-active': i === 0 }]}
+            data-dot={i}
+            role="tab"
+            aria-selected={i === 0}
+            aria-label={`Vai alla slide ${i + 1}`}
+          />
+        ))
+      }
+    </div>
+    <button type="button" class="carousel__arrow" data-arrow="next" aria-label="Slide successiva">
+      <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1.5 1l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
   </div>
 </div>
 
@@ -75,6 +83,7 @@ const { slides, intervalMs = 6000 } = Astro.props;
       const images = Array.from(root.querySelectorAll<HTMLElement>('.carousel__img'));
       const panels = Array.from(root.querySelectorAll<HTMLElement>('.carousel__panel'));
       const dots = Array.from(root.querySelectorAll<HTMLElement>('.carousel__dot'));
+      const arrows = Array.from(root.querySelectorAll<HTMLButtonElement>('.carousel__arrow'));
       const total = images.length;
       if (total < 2) return;
 
@@ -110,6 +119,15 @@ const { slides, intervalMs = 6000 } = Astro.props;
         dot.addEventListener('click', () => {
           if (i === index) return;
           show(i);
+          stop();
+          start();
+        });
+      });
+
+      arrows.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const dir = btn.dataset.arrow === 'prev' ? -1 : 1;
+          show((index + dir + total) % total);
           stop();
           start();
         });
@@ -205,11 +223,32 @@ const { slides, intervalMs = 6000 } = Astro.props;
   }
   .carousel__body :global(strong) { color: var(--color-ink); font-weight: 700; }
 
+  .carousel__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 1.75rem;
+  }
+  .carousel__arrow {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid rgb(35 48 56 / 0.18);
+    background: transparent;
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+  .carousel__arrow:hover { background: rgb(35 48 56 / 0.07); border-color: var(--color-orange); color: var(--color-orange); }
+  .carousel__arrow:active { transform: scale(0.92); }
   .carousel__dots {
     display: flex;
     justify-content: center;
     gap: 0.6rem;
-    margin-top: 1.75rem;
   }
   .carousel__dot {
     width: 10px;

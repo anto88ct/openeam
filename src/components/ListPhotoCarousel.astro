@@ -1,0 +1,241 @@
+---
+import { Image } from 'astro:assets';
+
+/** Sibling of CaseStudyCarousel.astro: same 1fr/3fr sliding layout and dot-pagination JS, but the text panel is a heading + bullet list instead of a stat + quote. */
+interface Slide {
+  image: ImageMetadata;
+  imageAlt: string;
+  heading: string;
+  items: string[];
+}
+interface Props {
+  slides: Slide[];
+  intervalMs?: number;
+}
+const { slides, intervalMs = 6000 } = Astro.props;
+const referenceRatio = `${slides[0].image.width} / ${slides[0].image.height}`;
+---
+
+<div class="lpcarousel" data-carousel data-interval={intervalMs}>
+  <div class="lpcarousel__row">
+    <div class="lpcarousel__text">
+      {
+        slides.map((s, i) => (
+          <div class:list={['lpcarousel__panel', { 'is-active': i === 0 }]} data-panel={i}>
+            <h3 class="lpcarousel__heading">{s.heading}</h3>
+            <ul class="lpcarousel__list">
+              {s.items.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    <div class="lpcarousel__media" style={`--lpc-ratio: ${referenceRatio}`}>
+      {
+        slides.map((s, i) => (
+          <Image
+            src={s.image}
+            alt={s.imageAlt}
+            width={1200}
+            height={675}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            class:list={['lpcarousel__img', { 'is-active': i === 0 }]}
+            data-slide={i}
+          />
+        ))
+      }
+    </div>
+  </div>
+  <div class="lpcarousel__nav">
+    <button type="button" class="lpcarousel__arrow" data-arrow="prev" aria-label="Slide precedente">
+      <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M8.5 1 1.5 8l7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="lpcarousel__dots" role="tablist" aria-label="Slide">
+      {
+        slides.map((_, i) => (
+          <button
+            type="button"
+            class:list={['lpcarousel__dot', { 'is-active': i === 0 }]}
+            data-dot={i}
+            role="tab"
+            aria-selected={i === 0}
+            aria-label={`Slide ${i + 1}`}
+          />
+        ))
+      }
+    </div>
+    <button type="button" class="lpcarousel__arrow" data-arrow="next" aria-label="Slide successiva">
+      <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1.5 1l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  function initCarousels() {
+    document.querySelectorAll<HTMLElement>('[data-carousel]:not([data-lpc-inited])').forEach((root) => {
+      root.dataset.lpcInited = 'true';
+
+      const images = Array.from(root.querySelectorAll<HTMLElement>('.lpcarousel__img'));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>('.lpcarousel__panel'));
+      const dots = Array.from(root.querySelectorAll<HTMLElement>('.lpcarousel__dot'));
+      const arrows = Array.from(root.querySelectorAll<HTMLButtonElement>('.lpcarousel__arrow'));
+      const total = images.length;
+      if (total < 2) return;
+
+      const interval = Number(root.dataset.interval) || 6000;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let index = 0;
+      let timer: ReturnType<typeof setInterval> | null = null;
+
+      const show = (next: number) => {
+        images[index]?.classList.remove('is-active');
+        panels[index]?.classList.remove('is-active');
+        dots[index]?.classList.remove('is-active');
+        dots[index]?.setAttribute('aria-selected', 'false');
+        index = next;
+        images[index]?.classList.add('is-active');
+        panels[index]?.classList.add('is-active');
+        dots[index]?.classList.add('is-active');
+        dots[index]?.setAttribute('aria-selected', 'true');
+      };
+
+      const advance = () => show((index + 1) % total);
+
+      const start = () => {
+        if (timer || reduceMotion) return;
+        timer = setInterval(advance, interval);
+      };
+      const stop = () => {
+        if (timer) clearInterval(timer);
+        timer = null;
+      };
+
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          if (i === index) return;
+          show(i);
+          stop();
+          start();
+        });
+      });
+
+      arrows.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const dir = btn.dataset.arrow === 'prev' ? -1 : 1;
+          show((index + dir + total) % total);
+          stop();
+          start();
+        });
+      });
+
+      start();
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      root.addEventListener('focusin', stop);
+      root.addEventListener('focusout', start);
+    });
+  }
+
+  document.addEventListener('astro:page-load', initCarousels);
+  initCarousels();
+</script>
+
+<style>
+  .lpcarousel__row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: stretch;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .lpcarousel__text { position: relative; display: grid; }
+  .lpcarousel__panel {
+    grid-area: 1 / 1;
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    background: rgb(35 48 56 / 0.07);
+    border-radius: var(--radius-card);
+    padding: clamp(1.25rem, 2.5vw, 1.5rem);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .lpcarousel__panel.is-active { opacity: 1; visibility: visible; transform: translateY(0); }
+  .lpcarousel__heading { color: var(--color-ink); font-size: 1.15rem; }
+  .lpcarousel__list { display: grid; gap: 0.4rem; }
+  .lpcarousel__list li {
+    color: var(--color-slate);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    padding-left: 1.1rem;
+    position: relative;
+  }
+  .lpcarousel__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-orange);
+  }
+
+  .lpcarousel__media {
+    position: relative;
+    aspect-ratio: var(--lpc-ratio);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+  .lpcarousel__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .lpcarousel__img.is-active { opacity: 1; }
+
+  .lpcarousel__nav { display: flex; align-items: center; justify-content: center; gap: 1.25rem; margin-top: 1.75rem; }
+  .lpcarousel__arrow {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid rgb(35 48 56 / 0.18);
+    background: transparent;
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+  .lpcarousel__arrow:hover { background: rgb(35 48 56 / 0.07); border-color: var(--color-orange); color: var(--color-orange); }
+  .lpcarousel__arrow:active { transform: scale(0.92); }
+  .lpcarousel__dots { display: flex; justify-content: center; gap: 0.6rem; }
+  .lpcarousel__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: rgb(35 48 56 / 0.18);
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .lpcarousel__dot:hover { background: rgb(35 48 56 / 0.32); }
+  .lpcarousel__dot.is-active { background: var(--color-ink); transform: scale(1.15); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lpcarousel__img, .lpcarousel__panel { transition: none; }
+  }
+  @media (max-width: 820px) {
+    .lpcarousel__row { grid-template-columns: 1fr; }
+    .lpcarousel__text { min-height: 320px; }
+    .lpcarousel__media { aspect-ratio: 16 / 11; }
+  }
+</style>

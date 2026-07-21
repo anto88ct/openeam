@@ -5,4 +5,4 @@
  * visitor from resubmitting the lead form within the window.
  */
 export const VIDEO_TOUR_GRANT_KEY = 'openeam:video-tour-access';
-export const VIDEO_TOUR_GRANT_TTL_MS = 2 * 24 * 60 * 60 * 1000;
+export const VIDEO_TOUR_GRANT_TTL_MS = 24 * 60 * 60 * 1000;

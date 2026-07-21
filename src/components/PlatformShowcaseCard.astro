@@ -19,7 +19,7 @@ const { icon, iconName, image, imageAlt, heading, tagline, body, ctaLabel, ctaHr
 
 <article class="psc">
   <div class="psc__media">
-    <Image src={image} alt={imageAlt} width={640} height={520} loading="lazy" />
+    <Image src={image} alt={imageAlt} width={1280} height={1040} loading="lazy" />
     <div class="psc__arc" aria-hidden="true"></div>
   </div>
   <div class="psc__panel">
@@ -119,11 +119,13 @@ const { icon, iconName, image, imageAlt, heading, tagline, body, ctaLabel, ctaHr
     color: var(--color-ink);
     font-weight: 600;
     font-size: 0.98rem;
+    min-height: 3.3em;
   }
   .psc__body {
     color: var(--color-slate-muted);
     font-size: 0.98rem;
     line-height: 1.6;
+    min-height: 6.4em;
   }
   .psc__panel :global(.btn) { margin-top: 0.5rem; }
 

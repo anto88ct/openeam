@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import Section from './Section.astro';
+import blobBg from '../assets/img/pricing/blob-bg.svg';
+
+/** Text-only sector hero: centered orange H1 + ink H2 sub + intro paragraphs over a decorative blob background that extends down through the slotted content (feature-card grid) below it. */
+interface Props {
+  title: string;
+  subtitle: string;
+  intro: string;
+}
+const { title, subtitle, intro } = Astro.props;
+---
+
+<Section bg="light" class="sector-hero">
+  <Image src={blobBg} alt="" class="sector-hero__blob" aria-hidden="true" />
+  <div class="sector-hero__content">
+    <h1 class="sector-hero__title">{title}</h1>
+    <h2 class="sector-hero__subtitle">{subtitle}</h2>
+    <div class="sector-hero__intro rich" set:html={intro} />
+  </div>
+  <div class="sector-hero__cards">
+    <slot />
+  </div>
+</Section>
+
+<style>
+  :global(.sector-hero) { position: relative; overflow: hidden; contain: paint; }
+  .sector-hero__blob {
+    position: absolute;
+    top: -8%;
+    left: 50%;
+    width: min(150%, 1700px);
+    height: auto;
+    transform: translateX(-50%) scale(1.5);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .sector-hero__content {
+    position: relative;
+    z-index: 1;
+    max-width: 72rem;
+    margin-inline: auto;
+    text-align: center;
+    display: grid;
+    gap: 1.1rem;
+  }
+  .sector-hero__title { color: var(--color-orange); font-size: clamp(2.8rem, 6vw, 4.2rem); }
+  .sector-hero__subtitle { color: var(--color-ink); font-size: clamp(1.6rem, 3.2vw, 2.3rem); margin-bottom: 50px;}
+  .sector-hero__intro { display: grid; gap: 1.1rem; margin-top: 0.5rem; text-align: left; margin-bottom: 50px; }
+  .sector-hero__intro :global(p) { color: var(--color-slate); font-size: 1.2rem; line-height: 1.8; }
+  .sector-hero__cards {
+    position: relative;
+    z-index: 1;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+</style>

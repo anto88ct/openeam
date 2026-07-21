@@ -11,7 +11,8 @@ import { getLocalizedPath, useTranslations } from "../../i18n/utils";
 import imgStart from "../../assets/img/pricing/start.png";
 import imgMid from "../../assets/img/pricing/mid.png";
 import imgPro from "../../assets/img/pricing/pro.png";
-import blobBg from "../../assets/img/pricing/blob-bg.svg";
+import blobBg from "../../assets/img/pricing/blob-bg.svg?url";
+import intersectBg from "../../assets/img/pricing/intersect.svg?url";
 
 interface Props {
   lang: "it" | "en";
@@ -252,118 +253,122 @@ const t = COPY[lang];
 ---
 
 <BaseLayout title="Pricing" description={t.description}>
-  <!-- Hero statement -->
-  <Section bg="light" class="pricing-hero">
-    <Image src={blobBg} alt="" class="pricing-hero__blob" aria-hidden="true" />
-    <p class="price-hero">
-      {t.heroLead}<span class="hl">{t.heroHl}</span>{t.heroTrail}
-    </p>
-  </Section>
+  <!-- Hero + Tiers + Plans + ROI share one continuous background -->
+  <div class="pricing-bg-group" style={`background-image: url("${blobBg}")`}>
+    <!-- Hero statement -->
+    <Section bg="light" class="pricing-hero">
+      <p class="price-hero">
+        {t.heroLead}<span class="hl">{t.heroHl}</span>{t.heroTrail}
+      </p>
+    </Section>
 
-  <!-- Tiers -->
-  <Section bg="light">
-    <div class="tiers">
-      {
-        t.tiers.map((tier, i) => (
-          <article class="tier card">
-            <div class="tier__img">
-              <Image
-                src={[imgStart, imgMid, imgPro][i]}
-                alt=""
-                width={260}
-                height={200}
-                loading="lazy"
-              />
-            </div>
-            <h3 class="tier__title">{tier.title}</h3>
-            <ul class="tier__list">
-              {tier.points.map((p) => (
-                <li>{p}</li>
-              ))}
-            </ul>
-          </article>
-        ))
-      }
-    </div>
-  </Section>
-
-  <!-- SaaS / On premise -->
-  <Section bg="light">
-    <div class="plans">
-      <div class="plan plan--saas card">
-        <div class="plan__icon" aria-hidden="true">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.75"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><path
-              d="M17.5 19a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.3-1.8A4.5 4.5 0 0 0 6.5 19h11Z"
-            ></path></svg
-          >
-        </div>
-        <h3 class="plan__title">{t.saasTitle}</h3>
-        <p class="plan__body">{t.saasBody}</p>
-      </div>
-      <div class="plan plan--onprem card">
-        <div class="plan__icon" aria-hidden="true">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.75"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><rect x="4" y="4" width="16" height="6" rx="1.2"></rect><rect
-              x="4"
-              y="14"
-              width="16"
-              height="6"
-              rx="1.2"></rect><circle
-              cx="8"
-              cy="7"
-              r="0.6"
-              fill="currentColor"
-              stroke="none"></circle><circle
-              cx="8"
-              cy="17"
-              r="0.6"
-              fill="currentColor"
-              stroke="none"></circle></svg
-          >
-        </div>
-        <h3 class="plan__title">{t.onPremTitle}</h3>
-        <p class="plan__body">{t.onPremBody}</p>
-      </div>
-    </div>
-  </Section>
-
-  <!-- ROI -->
-  <Section bg="light">
-    <div class="roi">
-      <div class="roi__narrative card">
-        <h2 class="roi__title">
-          {t.roiHeadingLead}<span class="hl">{t.roiHeadingHl}</span>
-        </h2>
-        <p class="roi__lead">{t.roiLead}</p>
-        {t.roiParas.map((p) => <p set:html={p} />)}
-      </div>
-      <div class="roi__grid card" data-roi-grid>
+    <!-- Tiers -->
+    <Section bg="light">
+      <div class="tiers">
         {
-          t.roi.map((r, i) => (
-            <div class="roi__row" style={`--i: ${i}`}>
-              <span class="chip chip--problem">{r.problem}</span>
-              <span class:list={["chip", `chip--${r.tone}`]}>
-                → {r.benefit}
-              </span>
-            </div>
+          t.tiers.map((tier, i) => (
+            <article class="tier card">
+              <div class="tier__img">
+                <Image
+                  src={[imgStart, imgMid, imgPro][i]}
+                  alt=""
+                  width={260}
+                  height={200}
+                  loading="lazy"
+                />
+              </div>
+              <h3 class="tier__title">{tier.title}</h3>
+              <ul class="tier__list">
+                {tier.points.map((p) => (
+                  <li>{p}</li>
+                ))}
+              </ul>
+            </article>
           ))
         }
       </div>
-    </div>
-  </Section>
+    </Section>
+
+    <!-- SaaS / On premise -->
+    <Section bg="light">
+      <div class="plans">
+        <div class="plan plan--saas card">
+          <img class="plan__bg" src={intersectBg} alt="" aria-hidden="true" />
+          <div class="plan__icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path
+                d="M17.5 19a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.3-1.8A4.5 4.5 0 0 0 6.5 19h11Z"
+              ></path></svg
+            >
+          </div>
+          <h3 class="plan__title">{t.saasTitle}</h3>
+          <p class="plan__body">{t.saasBody}</p>
+        </div>
+        <div class="plan plan--onprem card">
+          <img class="plan__bg" src={intersectBg} alt="" aria-hidden="true" />
+          <div class="plan__icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><rect x="4" y="4" width="16" height="6" rx="1.2"></rect><rect
+                x="4"
+                y="14"
+                width="16"
+                height="6"
+                rx="1.2"></rect><circle
+                cx="8"
+                cy="7"
+                r="0.6"
+                fill="currentColor"
+                stroke="none"></circle><circle
+                cx="8"
+                cy="17"
+                r="0.6"
+                fill="currentColor"
+                stroke="none"></circle></svg
+            >
+          </div>
+          <h3 class="plan__title">{t.onPremTitle}</h3>
+          <p class="plan__body">{t.onPremBody}</p>
+        </div>
+      </div>
+    </Section>
+
+    <!-- ROI -->
+    <Section bg="light">
+      <div class="roi">
+        <div class="roi__narrative card">
+          <h2 class="roi__title">
+            {t.roiHeadingLead}<span class="hl">{t.roiHeadingHl}</span>
+          </h2>
+          <p class="roi__lead">{t.roiLead}</p>
+          {t.roiParas.map((p) => <p set:html={p} />)}
+        </div>
+        <div class="roi__grid card" data-roi-grid>
+          {
+            t.roi.map((r, i) => (
+              <div class="roi__row" style={`--i: ${i}`}>
+                <span class="chip chip--problem">{r.problem}</span>
+                <span class:list={["chip", `chip--${r.tone}`]}>
+                  → {r.benefit}
+                </span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </Section>
+  </div>
 
   <script>
     function initRoiReveal() {
@@ -422,24 +427,15 @@ const t = COPY[lang];
 </BaseLayout>
 
 <style>
-  .pricing-hero {
+  .pricing-bg-group {
     position: relative;
-    overflow: hidden;
+    background-color: var(--color-bg);
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: min(160%, 2000px) auto;
   }
-  .pricing-hero__blob {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: min(120%, 1400px);
-    height: auto;
-    transform: translate(-50%, -50%) scale(1.4);
-    opacity: 1;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .pricing-hero :global(.container-page) {
-    position: relative;
-    z-index: 1;
+  .pricing-bg-group :global(.section) {
+    background: transparent;
   }
 
   @keyframes price-rise {
@@ -565,14 +561,35 @@ const t = COPY[lang];
     gap: 1.5rem;
   }
   .plan {
+    position: relative;
     padding: 2.25rem;
     display: grid;
     gap: 0.9rem;
     align-content: start;
     border: 1px solid rgb(35 48 56 / 0.07);
+    overflow: hidden;
     transition:
       transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
       box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .plan__bg {
+    position: absolute;
+    bottom: 0;
+    width: auto;
+    height: 115%;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .plan--saas .plan__bg,
+  .plan--onprem .plan__bg {
+    right: -8%;
+  }
+  .plan__icon,
+  .plan__title,
+  .plan__body {
+    position: relative;
+    z-index: 1;
   }
   .plan:hover {
     transform: translateY(-4px);
