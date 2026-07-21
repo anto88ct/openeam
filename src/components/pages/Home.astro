@@ -10,6 +10,7 @@ import PlatformShowcaseCard from "../PlatformShowcaseCard.astro";
 import CaseStudyCarousel from "../CaseStudyCarousel.astro";
 import FeatureMarquee from "../FeatureMarquee.astro";
 import Button from "../Button.astro";
+import DottedGridFX from "../DottedGridFX.astro";
 import { getLocalizedPath, useTranslations } from "../../i18n/utils";
 
 import heroRings from "../../assets/img/hero-rings.svg";
@@ -410,6 +411,7 @@ const caseSlides = [
 <BaseLayout title={t.title} description={t.description}>
   <!-- Hero -->
   <section class="hero">
+    <DottedGridFX />
     <div class="hero__grid dotted-grid container-page">
       <div class="hero__text">
         <h1 class="hero__title">
@@ -514,6 +516,10 @@ const caseSlides = [
     padding-block: clamp(4rem, 9vw, 8.5rem);
     position: relative;
     z-index: 1;
+  }
+  /* The canvas draws the dots once it takes over; drop the static texture. */
+  .hero[data-dotfx-live] .hero__grid {
+    background-image: none;
   }
   .hero__text {
     max-width: 50rem;

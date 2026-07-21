@@ -1,0 +1,290 @@
+---
+/**
+ * Interactive dotted grid — "inspection probe".
+ *
+ * Renders a canvas dot-field that mirrors the static `.dotted-grid` texture.
+ * The probe follows the pointer with inertia, so quick moves leave a trailing
+ * comet of activation. Dots inside it magnetise inward, grow, and take on the
+ * brand accent in the tight core, then spring back once the probe passes.
+ *
+ * Mount inside a `position: relative` container. When the script takes over it
+ * sets `data-dotfx-live` on that container so the CSS fallback can hide itself:
+ * without JS, on touch devices or with reduced motion, the static background
+ * stays untouched.
+ */
+interface Props {
+  /** Grid spacing in px (matches the CSS `dotted-grid` background-size). */
+  spacing?: number;
+  /** Base dot radius in px. */
+  size?: number;
+  /** Dot colour channels at rest, space separated (`"255 255 255"`). */
+  rgb?: string;
+  /** Dot colour channels in the core of the probe. */
+  accent?: string;
+  /** Dot opacity at rest. */
+  opacity?: number;
+  /** Dot opacity in the core of the probe. */
+  opacityHover?: number;
+  /** Reach of the probe in px. */
+  radius?: number;
+  /** Dot scale in the core of the probe. */
+  scale?: number;
+  /** Max inward displacement toward the probe in px. */
+  pull?: number;
+}
+
+const {
+  spacing = 30,
+  size = 1,
+  rgb = '255 255 255',
+  accent = '255 91 4',
+  opacity = 0.25,
+  opacityHover = 1,
+  radius = 200,
+  scale = 2.8,
+  pull = 7,
+} = Astro.props;
+---
+
+<canvas
+  class="dotfx"
+  aria-hidden="true"
+  data-dotfx
+  data-spacing={spacing}
+  data-size={size}
+  data-rgb={rgb}
+  data-accent={accent}
+  data-opacity={opacity}
+  data-opacity-hover={opacityHover}
+  data-radius={radius}
+  data-scale={scale}
+  data-pull={pull}></canvas>
+
+<style>
+  .dotfx {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>
+
+<script>
+  type Dot = {
+    hx: number;
+    hy: number;
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    a: number;
+    r: number;
+    t: number;
+  };
+
+  const SETTLED = 0.02;
+
+  function initDotField(canvas: HTMLCanvasElement) {
+    const host = canvas.parentElement;
+    const ctx = canvas.getContext('2d');
+    if (!host || !ctx) return;
+
+    const d = canvas.dataset;
+    const spacing = Number(d.spacing) || 30;
+    const baseR = Number(d.size) || 1;
+    const [br, bg, bb] = (d.rgb || '255 255 255').split(/\s+/).map(Number);
+    const [ar, ag, ab] = (d.accent || '255 91 4').split(/\s+/).map(Number);
+    const baseA = Number(d.opacity) || 0.25;
+    const peakA = Number(d.opacityHover) || 1;
+    const radius = Number(d.radius) || 200;
+    const scale = Number(d.scale) || 2.8;
+    const pull = Number(d.pull) || 7;
+
+    let dots: Dot[] = [];
+    let w = 0;
+    let h = 0;
+    // Raw pointer, then the probe that chases it — the gap between the two is
+    // what makes the field trail behind a fast cursor.
+    let mx = 0;
+    let my = 0;
+    let px = 0;
+    let py = 0;
+    let pointerOn = false;
+    let frame = 0;
+
+    const build = () => {
+      // Measure the canvas itself: it is the surface being drawn on, so its box
+      // is what the bitmap has to match.
+      const rect = canvas.getBoundingClientRect();
+      const nw = Math.round(rect.width);
+      const nh = Math.round(rect.height);
+      if (nw === 0 || nh === 0 || (nw === w && nh === h)) return;
+      w = nw;
+      h = nh;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      dots = [];
+      // Offset by half a step so the field reads centred, like the CSS texture.
+      for (let y = spacing / 2; y < h; y += spacing) {
+        for (let x = spacing / 2; x < w; x += spacing) {
+          dots.push({ hx: x, hy: y, x, y, vx: 0, vy: 0, a: baseA, r: baseR, t: 0 });
+        }
+      }
+      draw();
+    };
+
+    const atRest = (dot: Dot) =>
+      Math.abs(dot.x - dot.hx) <= SETTLED &&
+      Math.abs(dot.y - dot.hy) <= SETTLED &&
+      Math.abs(dot.a - baseA) <= 0.004 &&
+      Math.abs(dot.r - baseR) <= 0.01 &&
+      dot.t <= 0.004;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+
+      // Dots at rest share one fill, so only the animating ones cost a state change.
+      const idle = new Path2D();
+      let hasIdle = false;
+
+      for (const dot of dots) {
+        if (atRest(dot)) {
+          idle.moveTo(dot.hx + baseR, dot.hy);
+          idle.arc(dot.hx, dot.hy, baseR, 0, Math.PI * 2);
+          hasIdle = true;
+          continue;
+        }
+
+        const t = dot.t;
+        const r = Math.round(br + (ar - br) * t);
+        const g = Math.round(bg + (ag - bg) * t);
+        const b = Math.round(bb + (ab - bb) * t);
+        ctx.fillStyle = `rgba(${r},${g},${b},${dot.a})`;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, dot.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      if (hasIdle) {
+        ctx.fillStyle = `rgba(${br},${bg},${bb},${baseA})`;
+        ctx.fill(idle);
+      }
+    };
+
+    const step = () => {
+      // The probe lags the pointer; everything downstream reads off the probe.
+      px += (mx - px) * 0.14;
+      py += (my - py) * 0.14;
+      const chasing = pointerOn && (Math.abs(mx - px) > 0.4 || Math.abs(my - py) > 0.4);
+
+      let awake = false;
+
+      for (const dot of dots) {
+        let tx = dot.hx;
+        let ty = dot.hy;
+        let ta = baseA;
+        let tr = baseR;
+        let tt = 0;
+
+        if (pointerOn) {
+          const dx = px - dot.hx;
+          const dy = py - dot.hy;
+          const dist = Math.hypot(dx, dy);
+          if (dist < radius) {
+            const f = 1 - dist / radius;
+            // Smoothstep keeps the edge of the probe from banding.
+            const e = f * f * (3 - 2 * f);
+            if (dist > 0.001) {
+              // Inward, and never past the probe: the grid tightens, never tears.
+              const shift = Math.min(pull * e, dist * 0.7);
+              tx += (dx / dist) * shift;
+              ty += (dy / dist) * shift;
+            }
+            ta = baseA + (peakA - baseA) * e;
+            tr = baseR * (1 + (scale - 1) * e);
+            // Squared falloff: the accent stays in the hot core only.
+            tt = e * e;
+          }
+        }
+
+        dot.vx = (dot.vx + (tx - dot.x) * 0.13) * 0.8;
+        dot.vy = (dot.vy + (ty - dot.y) * 0.13) * 0.8;
+        dot.x += dot.vx;
+        dot.y += dot.vy;
+        dot.a += (ta - dot.a) * 0.16;
+        dot.r += (tr - dot.r) * 0.16;
+        dot.t += (tt - dot.t) * 0.16;
+
+        if (!atRest(dot)) awake = true;
+      }
+
+      draw();
+
+      // Stay alive while the pointer is in, the probe is still catching up,
+      // or dots are still settling back.
+      if (pointerOn || chasing || awake) {
+        frame = requestAnimationFrame(step);
+      } else {
+        frame = 0;
+        for (const dot of dots) {
+          dot.x = dot.hx;
+          dot.y = dot.hy;
+          dot.vx = 0;
+          dot.vy = 0;
+          dot.a = baseA;
+          dot.r = baseR;
+          dot.t = 0;
+        }
+        draw();
+      }
+    };
+
+    const wake = () => {
+      if (!frame) frame = requestAnimationFrame(step);
+    };
+
+    host.addEventListener('pointermove', (ev: PointerEvent) => {
+      if (ev.pointerType !== 'mouse' && ev.pointerType !== 'pen') return;
+      const rect = host.getBoundingClientRect();
+      mx = ev.clientX - rect.left;
+      my = ev.clientY - rect.top;
+      if (!pointerOn) {
+        // Enter without a swipe across the whole field.
+        px = mx;
+        py = my;
+        pointerOn = true;
+      }
+      wake();
+    });
+
+    host.addEventListener('pointerleave', () => {
+      pointerOn = false;
+      wake();
+    });
+
+    const ro = new ResizeObserver(build);
+    ro.observe(canvas);
+
+    host.dataset.dotfxLive = '';
+    build();
+    // Late layout shifts (fonts, images) may land after the observer's first pass.
+    window.addEventListener('load', build);
+  }
+
+  const canvases = document.querySelectorAll<HTMLCanvasElement>('canvas[data-dotfx]');
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (fine && !calm) {
+    canvases.forEach(initDotField);
+  } else {
+    canvases.forEach((c) => c.remove());
+  }
+</script>
