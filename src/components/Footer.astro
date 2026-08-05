@@ -1,5 +1,6 @@
 ---
-import Logo from './Logo.astro';
+import { Image } from 'astro:assets';
+import seedmaLogoSrc from '../assets/img/logos/seedma-marchio.svg';
 import {
   company,
   platformLinks,
@@ -13,6 +14,8 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const l = (href: string) => getLocalizedPath(lang, href);
 
+const [copyrightBefore, copyrightAfter] = t('footerCopyright').split(company.legal);
+
 const columns = [
   { title: 'Sitemap', links: sitemapLinks },
   { title: 'Platform', links: platformLinks },
@@ -22,8 +25,9 @@ const columns = [
 <footer class="footer">
   <div class="container-page footer__top">
     <div class="footer__brand">
-      <Logo tone="dark" href={null} />
-      <p class="footer__tagline">{t('footerTagline')}</p>
+      <a href={l('/azienda')} aria-label="Seedma">
+        <Image class="footer__logo" src={seedmaLogoSrc} alt="Seedma" loading="eager" />
+      </a>
     </div>
 
     <div class="footer__cols">
@@ -41,15 +45,44 @@ const columns = [
   </div>
 
   <div class="container-page footer__legal">
-    <p>
-      <strong>{company.legal}</strong> — {t('footerCopyright')}
-      <span class="footer__addr">{company.address}</span>
+    <p class="footer__copyright">
+      {copyrightBefore}<strong>{company.legal}</strong>{copyrightAfter}
     </p>
+    <p class="footer__addr">{company.address}</p>
     <ul class="footer__policies">
       {legalLinks.map((link) => (
         <li><a href={l(link.href)}>{link.label}</a></li>
       ))}
     </ul>
+    <div class="footer__socials">
+      <a
+        href="https://www.instagram.com/openeam_seedma/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+        class="footer__social"
+      >
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="12" r="4.3" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/>
+        </svg>
+      </a>
+      <a
+        href="https://www.linkedin.com/search/results/all/?keywords=OpenEAM&origin=RICH_QUERY_SUGGESTION&heroEntityKey=urn%3Ali%3Aorganization%3A104333450&position=0"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn"
+        class="footer__social"
+      >
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="6.7" y="9.8" width="1.9" height="7.7" fill="currentColor"/>
+          <circle cx="7.65" cy="6.9" r="1.25" fill="currentColor"/>
+          <path d="M10.9 17.5V9.8h1.9v1.05c.5-.75 1.3-1.25 2.4-1.25 1.85 0 3 1.2 3 3.4v4.55h-1.9v-4.2c0-1.2-.55-1.9-1.6-1.9-1.05 0-1.8.7-1.8 1.9v4.2h-2Z" fill="currentColor"/>
+        </svg>
+      </a>
+    </div>
   </div>
 </footer>
 
@@ -67,10 +100,30 @@ const columns = [
     padding-bottom: 2.5rem;
   }
   .footer__brand { max-width: 22rem; }
-  .footer__tagline {
-    margin-top: 1rem;
+  .footer__logo {
+    height: 10rem;
+    width: auto;
+    display: block;
+  }
+  .footer__socials {
+    display: flex;
+    gap: 0.75rem;
+  }
+  .footer__social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    border: 1px solid rgb(35 48 56 / 0.15);
     color: var(--color-slate-muted);
-    font-size: 0.95rem;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .footer__social svg { width: 1.15rem; height: 1.15rem; }
+  .footer__social:hover {
+    color: var(--color-orange);
+    border-color: var(--color-orange);
   }
   .footer__cols {
     display: grid;
@@ -106,7 +159,7 @@ const columns = [
     color: var(--color-slate-muted);
   }
   .footer__legal strong { color: var(--color-ink); }
-  .footer__addr { display: block; opacity: 0.85; }
+  .footer__addr { opacity: 0.85; }
   .footer__policies { list-style: none; display: flex; gap: 1.5rem; }
   .footer__policies a { text-decoration: underline; }
   .footer__policies a:hover { color: var(--color-orange); }

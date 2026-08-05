@@ -1,0 +1,111 @@
+---
+/** Infinite horizontal auto-scroll of feature cards. Content is duplicated once for a seamless loop; the duplicate is hidden and the scroll disabled under prefers-reduced-motion, falling back to a manually scrollable row. */
+interface Feature {
+  title: string;
+  tagline: string;
+  bullets: string[];
+}
+interface Props {
+  features: Feature[];
+}
+const { features } = Astro.props;
+const speedSeconds = features.length * 5;
+---
+
+<div class="fm-bleed">
+  <div class="fm-track" style={`animation-duration: ${speedSeconds}s`}>
+    {
+      [0, 1].map((setIndex) => (
+        <div class="fm-set" aria-hidden={setIndex === 1 ? 'true' : undefined}>
+          {features.map((f) => (
+            <article class="fm-card">
+              <h3 class="fm-title">{f.title}</h3>
+              <p class="fm-tagline">{f.tagline}</p>
+              <ul class="fm-bullets">
+                {f.bullets.map((b) => (
+                  <li>{b}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .fm-bleed {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    overflow: hidden;
+  }
+  .fm-track {
+    display: flex;
+    gap: clamp(1.25rem, 2.5vw, 1.75rem);
+    width: max-content;
+    padding-inline: 5.5rem;
+    animation-name: fm-scroll;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .fm-bleed:hover .fm-track {
+    animation-play-state: paused;
+  }
+  .fm-set {
+    display: flex;
+    gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+  .fm-card {
+    flex: 0 0 320px;
+    background: #fff;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: clamp(1.5rem, 3vw, 2rem);
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+  }
+  .fm-title {
+    font-size: 1.3rem;
+    color: var(--color-ink);
+  }
+  .fm-tagline {
+    color: var(--color-slate-muted);
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .fm-bullets {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+    list-style: none;
+    padding: 0;
+  }
+  .fm-bullets li {
+    display: flex;
+    gap: 0.55rem;
+    align-items: flex-start;
+    color: var(--color-slate);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  .fm-bullets li::before {
+    content: '\2713';
+    color: var(--color-orange);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  @keyframes fm-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fm-bleed { overflow-x: auto; }
+    .fm-track { animation: none; }
+    .fm-set:last-child { display: none; }
+  }
+</style>

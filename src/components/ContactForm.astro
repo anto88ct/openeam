@@ -4,8 +4,13 @@ import { getLocalizedPath } from '../i18n/utils';
 
 interface Props {
   lang: 'it' | 'en';
+  variant?: 'demo' | 'videoTour';
+  successRedirect?: string;
+  /** localStorage key to grant on successful submit, e.g. so a returning visitor skips the form for a while. */
+  grantKey?: string;
+  grantTtlMs?: number;
 }
-const { lang } = Astro.props;
+const { lang, variant = 'demo', successRedirect, grantKey, grantTtlMs } = Astro.props;
 const l = (href: string) => getLocalizedPath(lang, href);
 
 const COPY = {
@@ -19,18 +24,22 @@ const COPY = {
     email: 'Email aziendale',
     consentLead: "Acconsento al trattamento dei miei dati personali in conformità con l'",
     consentLinkText: 'Informativa sulla Privacy',
-    submit: 'Richiedi la demo',
+    submit: { demo: 'Richiedi la demo', videoTour: 'Accedi al video tour' },
     messages: {
       firstName: 'Inserisci il nome',
       lastName: 'Inserisci il cognome',
       company: "Inserisci l'azienda",
       role: 'Seleziona un ruolo',
       email: 'Inserisci un indirizzo email valido',
+      emailBusiness: 'Inserire un indirizzo email aziendale',
       consent: 'Devi accettare il trattamento dei dati per proseguire.',
       configMissing: 'Configurazione email non completata. Imposta le variabili PUBLIC_EMAILJS_* (vedi README).',
       sending: 'Invio in corso...',
-      success: 'Grazie! Ti contatteremo a breve per fissare la demo.',
       error: "Si è verificato un errore nell'invio. Riprova più tardi.",
+    },
+    success: {
+      demo: 'Grazie! Ti contatteremo a breve per fissare la demo.',
+      videoTour: 'Grazie! Riceverai il link al video tour a breve.',
     },
   },
   en: {
@@ -43,25 +52,44 @@ const COPY = {
     email: 'Business email',
     consentLead: 'I consent to the processing of my personal data in accordance with the ',
     consentLinkText: 'Privacy Policy',
-    submit: 'Request the demo',
+    submit: { demo: 'Request the demo', videoTour: 'Access the video tour' },
     messages: {
       firstName: 'Enter your first name',
       lastName: 'Enter your last name',
       company: 'Enter your company',
       role: 'Select a role',
       email: 'Enter a valid email address',
+      emailBusiness: 'Please enter a business email address',
       consent: 'You must accept the data processing terms to continue.',
       configMissing: 'Email configuration incomplete. Set the PUBLIC_EMAILJS_* variables (see README).',
       sending: 'Sending...',
-      success: "Thank you! We'll be in touch shortly to schedule your demo.",
       error: 'Something went wrong while sending. Please try again later.',
+    },
+    success: {
+      demo: "Thank you! We'll be in touch shortly to schedule your demo.",
+      videoTour: "Thank you! We'll send you the video tour link shortly.",
     },
   },
 } as const;
 const t = COPY[lang];
+const submitLabel = t.submit[variant];
+const successMessage = t.success[variant];
 const privacyHref = l('/privacy-policy');
+const variantLabel = {
+  it: { demo: 'Richiesta Demo', videoTour: 'Richiesta Video Tour' },
+  en: { demo: 'Demo Request', videoTour: 'Video Tour Request' },
+}[lang][variant];
 ---
-<form class="demo-form" data-demo-form data-msgs={JSON.stringify(t.messages)} novalidate>
+<form
+  class="demo-form"
+  data-demo-form
+  data-msgs={JSON.stringify({ ...t.messages, success: successMessage })}
+  data-redirect={successRedirect ?? ''}
+  data-grant-key={grantKey ?? ''}
+  data-grant-ttl={grantTtlMs ?? ''}
+  novalidate
+>
+  <input type="hidden" name="tipo_richiesta" value={variantLabel} />
   <div class="demo-form__row">
     <div class="field">
       <label for="nome">{t.firstName}</label>
@@ -101,7 +129,7 @@ const privacyHref = l('/privacy-policy');
     <span>{t.consentLead}<a href={privacyHref}>{t.consentLinkText}</a>.</span>
   </label>
 
-  <Button type="submit" variant="primary" class="demo-form__submit">{t.submit}</Button>
+  <Button type="submit" variant="primary" class="demo-form__submit">{submitLabel}</Button>
 
   <p class="demo-form__status" data-status role="status" aria-live="polite" hidden></p>
 </form>
@@ -162,6 +190,7 @@ const privacyHref = l('/privacy-policy');
     company: string;
     role: string;
     email: string;
+    emailBusiness: string;
     consent: string;
     configMissing: string;
     sending: string;
@@ -177,12 +206,36 @@ const privacyHref = l('/privacy-policy');
   const statusEl = form?.querySelector<HTMLElement>('[data-status]');
   const msgs: Messages = JSON.parse(form?.dataset.msgs ?? '{}');
 
+  const submitBtn = form?.querySelector<HTMLButtonElement>('[type="submit"]');
+
+  function updateSubmitState() {
+    if (!form || !submitBtn) return;
+    submitBtn.disabled = !!form.querySelector('.field[data-invalid]');
+  }
+
   function setError(field: Element | null, msg: string) {
     if (!field) return;
     const wrap = field.closest('.field');
     wrap?.toggleAttribute('data-invalid', !!msg);
     const err = wrap?.querySelector('[data-err]');
     if (err) err.textContent = msg;
+    updateSubmitState();
+  }
+
+  const FREE_EMAIL_DOMAINS = new Set([
+    'gmail.com', 'outlook.com', 'hotmail.com', 'hotmail.it', 'icloud.com',
+    'yahoo.it', 'yahoo.com', 'libero.it', 'tiscali.it', 'virgilio.it',
+    'alice.it', 'fastwebnet.it', 'proton.me', 'protonmail.com',
+  ]);
+
+  function validateEmailField(email: HTMLInputElement | null): boolean {
+    const emailValue = email?.value.trim() ?? '';
+    const emailFormatOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+    const domain = emailValue.split('@')[1]?.toLowerCase();
+    const isFreeEmail = !!domain && FREE_EMAIL_DOMAINS.has(domain);
+    const emailOk = emailFormatOk && !isFreeEmail;
+    setError(email, emailOk ? '' : isFreeEmail ? msgs.emailBusiness : msgs.email);
+    return emailOk;
   }
 
   function validate(): boolean {
@@ -201,9 +254,7 @@ const privacyHref = l('/privacy-policy');
       if (bad) ok = false;
     }
     const email = form.elements.namedItem('email') as HTMLInputElement | null;
-    const emailOk = !!email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
-    setError(email, emailOk ? '' : msgs.email);
-    if (!emailOk) ok = false;
+    if (!validateEmailField(email)) ok = false;
 
     const consent = form.elements.namedItem('consenso') as HTMLInputElement | null;
     if (!consent?.checked) {
@@ -219,6 +270,26 @@ const privacyHref = l('/privacy-policy');
     statusEl.textContent = msg;
     statusEl.setAttribute('data-tone', tone);
   }
+
+  const requiredFields: [string, string][] = [
+    ['nome', msgs.firstName],
+    ['cognome', msgs.lastName],
+    ['azienda', msgs.company],
+    ['ruolo', msgs.role],
+  ];
+  for (const [name, msg] of requiredFields) {
+    const el = form?.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement | null;
+    const revalidate = () => setError(el, el?.value.trim() ? '' : msg);
+    el?.addEventListener('blur', revalidate);
+    el?.addEventListener('input', revalidate);
+    el?.addEventListener('change', revalidate);
+  }
+
+  const emailInput = form?.elements.namedItem('email') as HTMLInputElement | null;
+  emailInput?.addEventListener('blur', () => validateEmailField(emailInput));
+  emailInput?.addEventListener('input', () => {
+    if (emailInput.closest('.field')?.hasAttribute('data-invalid')) validateEmailField(emailInput);
+  });
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -237,6 +308,22 @@ const privacyHref = l('/privacy-policy');
 
     try {
       await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form, { publicKey: PUBLIC_KEY });
+
+      const grantKey = form.dataset.grantKey;
+      const grantTtl = Number(form.dataset.grantTtl);
+      if (grantKey && grantTtl > 0) {
+        try {
+          localStorage.setItem(grantKey, JSON.stringify({ expires: Date.now() + grantTtl }));
+        } catch (storageErr) {
+          console.error('[VideoTourAccess]', storageErr);
+        }
+      }
+
+      const redirect = form.dataset.redirect;
+      if (redirect) {
+        window.location.href = redirect;
+        return;
+      }
       form.reset();
       showStatus(msgs.success, 'ok');
     } catch (err) {

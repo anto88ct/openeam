@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../ContactForm.astro';
+import heroRings from '../../assets/img/hero-rings.svg';
+import { getLocalizedPath } from '../../i18n/utils';
+import { VIDEO_TOUR_GRANT_KEY, VIDEO_TOUR_GRANT_TTL_MS } from '../../lib/videoTourAccess';
+
+interface Props {
+  lang: 'it' | 'en';
+}
+const { lang } = Astro.props;
+const watchHref = getLocalizedPath(lang, '/video-tour/watch');
+
+const COPY = {
+  it: {
+    title: 'Video tour della piattaforma',
+    description: 'Inserisci il tuo indirizzo mail e accedi a un video tour registrato della piattaforma Open EAM.',
+    heading: 'Scopri come funziona Open EAM',
+    sub: 'Inserisci il tuo indirizzo mail e accedi a un video tour registrato della piattaforma. Scopri funzioni, strumenti e potenzialità in meno di 5 minuti e in piena autonomia.',
+  },
+  en: {
+    title: 'Platform video tour',
+    description: 'Enter your email address and get access to a recorded video tour of the Open EAM platform.',
+    heading: 'See how Open EAM works',
+    sub: 'Enter your email address and get access to a recorded video tour of the platform. Discover the features, tools, and capabilities in under 5 minutes, fully on your own.',
+  },
+} as const;
+const t = COPY[lang];
+---
+<BaseLayout title={t.title} description={t.description}>
+  <section class="video-tour">
+    <Image src={heroRings} alt="" class="video-tour__arcs" aria-hidden="true" />
+    <div class="container-page video-tour__inner">
+      <div class="video-tour__card card">
+        <div class="video-tour__head">
+          <h1 class="video-tour__title">{t.heading}</h1>
+          <p class="video-tour__sub">{t.sub}</p>
+        </div>
+        <ContactForm
+          lang={lang}
+          variant="videoTour"
+          successRedirect={watchHref}
+          grantKey={VIDEO_TOUR_GRANT_KEY}
+          grantTtlMs={VIDEO_TOUR_GRANT_TTL_MS}
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline define:vars={{ grantKey: VIDEO_TOUR_GRANT_KEY, watchHref }}>
+  try {
+    const raw = localStorage.getItem(grantKey);
+    const grant = raw ? JSON.parse(raw) : null;
+    if (grant && typeof grant.expires === 'number' && grant.expires > Date.now()) {
+      window.location.replace(watchHref);
+    }
+  } catch (err) {
+    console.error('[VideoTourAccess]', err);
+  }
+</script>
+
+<style>
+  .video-tour { position: relative; background: var(--color-ink); overflow: hidden; }
+  .video-tour__arcs {
+    position: absolute;
+    right: -8%;
+    bottom: -18%;
+    width: min(45%, 560px);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .video-tour__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    padding-block: clamp(3rem, 8vw, 6rem);
+  }
+  .video-tour__card { width: 100%; max-width: 42rem; padding: clamp(1.75rem, 4vw, 3rem); }
+  .video-tour__head { text-align: center; margin-bottom: 2rem; display: grid; gap: 1rem; }
+  .video-tour__title { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+  .video-tour__sub { color: var(--color-slate-muted); max-width: 42ch; margin-inline: auto; }
+</style>

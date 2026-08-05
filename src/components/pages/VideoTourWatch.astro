@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLocalizedPath } from '../../i18n/utils';
+import { VIDEO_TOUR_GRANT_KEY } from '../../lib/videoTourAccess';
+
+interface Props {
+  lang: 'it' | 'en';
+}
+const { lang } = Astro.props;
+const l = (href: string) => getLocalizedPath(lang, href);
+const formHref = l('/video-tour');
+
+const COPY = {
+  it: {
+    title: 'Il tuo video tour',
+    description: 'Guarda il video tour della piattaforma Open EAM.',
+    heading: 'Ecco il tuo video tour di Open EAM',
+    sub: 'Scopri funzioni, strumenti e potenzialità della piattaforma in meno di 5 minuti.',
+    backCta: 'Torna alla home',
+  },
+  en: {
+    title: 'Your video tour',
+    description: 'Watch the Open EAM platform video tour.',
+    heading: "Here's your Open EAM video tour",
+    sub: 'Discover the platform features, tools, and capabilities in under 5 minutes.',
+    backCta: 'Back to home',
+  },
+} as const;
+const t = COPY[lang];
+---
+<BaseLayout title={t.title} description={t.description}>
+  <script is:inline define:vars={{ grantKey: VIDEO_TOUR_GRANT_KEY, formHref }}>
+    (function () {
+      try {
+        const raw = localStorage.getItem(grantKey);
+        const grant = raw ? JSON.parse(raw) : null;
+        const valid = grant && typeof grant.expires === 'number' && grant.expires > Date.now();
+        if (!valid) window.location.replace(formHref);
+      } catch (err) {
+        console.error('[VideoTourAccess]', err);
+        window.location.replace(formHref);
+      }
+    })();
+  </script>
+  <section class="watch">
+    <div class="container-page watch__inner">
+      <div class="watch__head">
+        <h1 class="watch__title">{t.heading}</h1>
+        <p class="watch__sub">{t.sub}</p>
+      </div>
+      <div class="watch__player">
+        <video controls preload="metadata" src="/video/openeam-video-tour.mp4">
+        </video>
+      </div>
+      <a class="watch__back" href={l('/')}>&larr; {t.backCta}</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .watch { background: var(--color-ink); }
+  .watch__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+    padding-block: clamp(3rem, 8vw, 6rem);
+  }
+  .watch__head { text-align: center; display: grid; gap: 0.75rem; max-width: 42rem; }
+  .watch__title { color: #fff; font-size: clamp(1.9rem, 4vw, 2.6rem); }
+  .watch__sub { color: rgb(255 255 255 / 0.85); }
+  .watch__player {
+    width: 100%;
+    max-width: 56rem;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    background: #000;
+  }
+  .watch__player video { display: block; width: 100%; height: auto; }
+  .watch__back { color: rgb(255 255 255 / 0.85); text-decoration: underline; margin-top: 0.5rem; }
+  .watch__back:hover { color: #fff; }
+</style>

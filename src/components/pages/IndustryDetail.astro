@@ -1,12 +1,14 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../Section.astro';
 import SectionHeading from '../SectionHeading.astro';
-import PhotoHero from '../PhotoHero.astro';
-import FeatureCard from '../FeatureCard.astro';
+import SectorHero from '../SectorHero.astro';
+import SectorFeatureCard from '../SectorFeatureCard.astro';
+import BlobCtaBand from '../BlobCtaBand.astro';
+import ListPhotoCarousel from '../ListPhotoCarousel.astro';
+import CtaBand from '../CtaBand.astro';
 import CaseStudyCard from '../CaseStudyCard.astro';
-import { getIcon } from '../../lib/icons';
 import { getLocalizedPath } from '../../i18n/utils';
 
 interface Props {
@@ -17,93 +19,75 @@ const { lang, entry } = Astro.props;
 const l = (href: string) => getLocalizedPath(lang, href);
 const caseStudiesCollection = lang === 'en' ? 'caseStudiesEn' : 'caseStudiesIt';
 const demoCta = lang === 'en' ? 'Request a demo' : 'Richiedi una demo';
+const expertCta = lang === 'en' ? 'Talk to an expert' : 'Parla con un esperto';
 const caseCtaLabel = lang === 'en' ? 'Learn more' : 'Scopri di più';
+const capabilitiesHeading = lang === 'en' ? 'What you can manage with Open EAM' : 'Cosa puoi gestire con Open EAM';
 
 const data = entry.data;
-const { Content } = await render(entry);
 
-// Resolve referenced case studies (in listed order, skipping missing/draft).
 const featured = (
   await Promise.all(
     data.caseStudies.map((slug: string) => getEntry(caseStudiesCollection, slug)),
   )
 ).filter((c: any): c is NonNullable<typeof c> => !!c && !c.data.draft);
-
-const introBg = data.introTone; // 'light' | 'teal' | 'ink'
-const cardBg = data.cardTone;
-const cardFace = cardBg === 'light' ? 'light' : 'dark';
-const overlay = introBg === 'teal' ? 'teal' : 'ink';
 ---
 <BaseLayout
   title={`${data.title} — OpenEAM Industries`}
-  description={data.seoDescription ?? data.intro.slice(0, 155)}
+  description={data.seoDescription ?? data.intro.replace(/<[^>]+>/g, '').slice(0, 155)}
 >
-  <PhotoHero
-    image={data.heroImage}
-    heading={data.title}
-    sub={data.subtitle}
-    overlay={overlay}
-    ctaLabel={demoCta}
-    ctaHref={l('/demo')}
-  />
-
-  <!-- Intro -->
-  <Section bg={introBg} dotted={introBg !== 'light'}>
-    <div class="intro">
-      {data.eyebrow && <p class="eyebrow intro__eyebrow">{data.eyebrow}</p>}
-      <p class="intro__body rich" set:html={data.intro} />
-    </div>
-    {/* Optional extra prose from the MDX body */}
-    <div class="intro__prose"><Content /></div>
-  </Section>
-
-  <!-- Feature cards -->
-  <Section bg={cardBg} dotted={cardBg !== 'light'}>
-    <div class="feat-grid">
-      {data.cards.map((c: any) => (
-        <FeatureCard title={c.title} body={c.body} icon={getIcon(c.icon)} tone={cardFace} />
+  <SectorHero title={data.title} subtitle={data.subtitle} intro={data.intro}>
+    <div class="sector-grid">
+      {data.features.map((f: any, i: number) => (
+        <SectorFeatureCard
+          image={data.featureImages[i]}
+          imageAlt={f.heading}
+          heading={f.heading}
+          body={f.body}
+        />
       ))}
     </div>
+  </SectorHero>
+
+  <BlobCtaBand heading={data.ctaHeading} body={data.ctaBody} ctaLabel={demoCta} ctaHref={l('/demo')} />
+
+  <Section bg="light">
+    <ListPhotoCarousel
+      slides={[
+        {
+          image: data.capabilitiesImage,
+          imageAlt: capabilitiesHeading,
+          heading: capabilitiesHeading,
+          items: data.capabilitiesItems,
+        },
+        {
+          image: data.scopesImage,
+          imageAlt: data.scopesLabel,
+          heading: data.scopesLabel,
+          items: data.scopesItems,
+        },
+      ]}
+    />
   </Section>
 
-  <!-- Case studies -->
-  {featured.length > 0 && (
-    <section class="cs-band">
-      <div class="container-page">
-        <SectionHeading heading="Case studies" align="center" class="cs-band__head" />
-        <div class:list={['cs-grid', { 'cs-grid--single': featured.length === 1 }]}>
-          {featured.map((c: any) => (
-            <CaseStudyCard
-              title={c.data.title}
-              href={l(`/case-studies/${c.id}`)}
-              image={c.data.heroImage}
-              imageAlt={c.data.title}
-              body={c.data.excerpt}
-              ctaLabel={caseCtaLabel}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
+  <Section bg="light">
+    <CtaBand
+      heading={data.closingHeading}
+      body={data.closingBody}
+      tone="sage"
+      ctaLabel={expertCta}
+      ctaHref={l('/demo')}
+      compact
+    />
+  </Section>
 </BaseLayout>
 
 <style>
-  .intro { max-width: 60rem; margin-inline: auto; text-align: center; display: grid; gap: 1.25rem; }
-  .intro__body { font-size: 1.2rem; line-height: 1.7; }
-  :global(.section--teal) .intro__body,
-  :global(.section--ink) .intro__body { color: rgb(255 255 255 / 0.92); }
-  :global(.section--teal) .intro__body strong,
-  :global(.section--ink) .intro__body strong { color: #fff; }
-  .intro__prose { max-width: 60rem; margin: 1.5rem auto 0; }
-  .intro__prose:empty { display: none; }
-
-  .feat-grid {
+  .sector-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
-  @media (max-width: 720px) { .feat-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) { .sector-grid { grid-template-columns: 1fr; } }
 
   .cs-band {
     padding-block: clamp(3.5rem, 7vw, 6rem);

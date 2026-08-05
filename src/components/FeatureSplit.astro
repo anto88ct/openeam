@@ -11,7 +11,7 @@ interface Props {
   reverse?: boolean;          // media on the right instead of the left
   ctaLabel: string;
   ctaHref: string;
-  ctaVariant?: 'primary' | 'teal' | 'dark';
+  ctaVariant?: 'primary' | 'teal' | 'dark' | 'outline-ink';
   class?: string;
 }
 const {
@@ -20,7 +20,7 @@ const {
   reverse = false,
   ctaLabel,
   ctaHref,
-  ctaVariant = 'primary',
+  ctaVariant = 'outline-ink',
   class: className = '',
 } = Astro.props;
 ---
