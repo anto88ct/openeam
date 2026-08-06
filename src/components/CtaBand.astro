@@ -144,18 +144,24 @@ const {
   }
 
   .band--compact {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.4rem;
     overflow: visible;
     min-height: unset;
+    padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid rgb(0 0 0 / 0.08);
   }
   .band--compact .band__text {
     display: block;
-    padding: clamp(1.5rem, 4vw, 4rem) clamp(2rem, 4vw, 3rem);
-    padding-right: clamp(12rem, 24vw, 16rem);
+    padding: 0;
   }
   .band--compact .band__copy {
     gap: 0.4rem;
     max-width: 50rem;
+    margin: 0 auto;
   }
   .band--compact .band__title {
     max-width: none;
@@ -164,13 +170,10 @@ const {
   .band--compact .band__body {
     max-width: 80ch;
     font-size: 1rem;
+    margin: 0 auto;
   }
   .band--compact .band__cta {
-    position: absolute;
-    right: clamp(0rem, 0vw, 3rem);
-    bottom: -1.5rem;
-    border-radius: var(--radius-card);
-    padding: 2rem 1.25rem;
+    flex-shrink: 0;
   }
 
   .band__cta > a {
@@ -191,15 +194,6 @@ const {
     }
     .band--compact {
       overflow: hidden;
-    }
-    .band--compact .band__text {
-      padding-right: clamp(1.5rem, 3vw, 2rem);
-      padding-bottom: 5rem;
-    }
-    .band--compact .band__cta {
-      position: static;
-      margin: 0 clamp(1.5rem, 3vw, 2rem) clamp(1.5rem, 3vw, 2rem);
-      display: inline-block;
     }
   }
 </style>

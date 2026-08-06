@@ -1,0 +1,431 @@
+---
+/**
+ * Scroll-driven product video. Plays (with sound where the browser allows it)
+ * as soon as the frame is half in view, pauses the instant it isn't, and
+ * resumes from the same point on re-entry — the video element already keeps
+ * its own `currentTime`, so play()/pause() is all that's needed.
+ *
+ * Clicking the video, or the transport bar underneath it, gives manual
+ * control (play/pause, mute, full screen) on top of the automatic behaviour.
+ * If sound is blocked by the browser's autoplay policy it falls back to
+ * muted playback; the volume button doubles as the user gesture that
+ * unlocks audio for the rest of the session. `prefers-reduced-motion` gets
+ * native controls instead of the scroll-triggered behaviour.
+ */
+interface Props {
+  src: string;
+  eyebrow: string;
+  heading: string;
+  sub?: string;
+  playLabel: string;
+  pauseLabel: string;
+  muteLabel: string;
+  unmuteLabel: string;
+  zoomInLabel: string;
+  zoomOutLabel: string;
+  playingAnnounce: string;
+  pausedAnnounce: string;
+}
+const {
+  src,
+  eyebrow,
+  heading,
+  sub,
+  playLabel,
+  pauseLabel,
+  muteLabel,
+  unmuteLabel,
+  zoomInLabel,
+  zoomOutLabel,
+  playingAnnounce,
+  pausedAnnounce,
+} = Astro.props;
+---
+
+<div class="vshow">
+  <div class="vshow__head">
+    <p class="eyebrow">{eyebrow}</p>
+    <h2 class="vshow__title">{heading}</h2>
+    {sub && <p class="vshow__sub">{sub}</p>}
+  </div>
+
+  <div class="vshow__stage">
+    <div class="vshow__glow" aria-hidden="true"></div>
+
+    <div class="vshow__frame" data-video-frame>
+      <span class="vshow__status" aria-hidden="true"></span>
+
+      <video
+        class="vshow__video"
+        data-video
+        data-mute-label={muteLabel}
+        data-unmute-label={unmuteLabel}
+        data-play-label={playLabel}
+        data-pause-label={pauseLabel}
+        data-zoom-in-label={zoomInLabel}
+        data-zoom-out-label={zoomOutLabel}
+        src={src}
+        playsinline
+        preload="metadata"
+        muted
+      ></video>
+
+      <div class="vshow__controls">
+        <div class="vshow__rail" aria-hidden="true">
+          <div class="vshow__rail-fill" data-video-progress></div>
+        </div>
+
+        <div class="vshow__buttons">
+          <button type="button" class="vshow__btn" data-video-play aria-pressed="false">
+            <svg class="vshow__icon" data-icon-play viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7L8 5Z" fill="currentColor" /></svg>
+            <svg class="vshow__icon" data-icon-pause viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor" /></svg>
+            <span class="vshow__sr" data-play-label>{playLabel}</span>
+          </button>
+
+          <button type="button" class="vshow__btn" data-video-sound aria-pressed="false">
+            <svg class="vshow__icon" data-icon-muted viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor" />
+              <path d="M15.5 4.5 20 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+            <svg class="vshow__icon" data-icon-on viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor" />
+              <path d="M16 8.5c1 1 1 6 0 7M18.5 6c2 2 2 10 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none" />
+            </svg>
+            <span class="vshow__sr" data-sound-label>{unmuteLabel}</span>
+          </button>
+
+          <span class="vshow__spacer"></span>
+
+          <button type="button" class="vshow__btn" data-video-zoom>
+            <svg class="vshow__icon" data-icon-zoom-in viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" /></svg>
+            <svg class="vshow__icon" data-icon-zoom-out viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" /></svg>
+            <span class="vshow__sr" data-zoom-label>{zoomInLabel}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <p class="vshow__sr" role="status" data-video-announce></p>
+  </div>
+</div>
+
+<script>
+  function initVideoSections() {
+    const frames = document.querySelectorAll<HTMLElement>(
+      "[data-video-frame]:not([data-inited])",
+    );
+    if (!frames.length) return;
+
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    frames.forEach((frame) => {
+      frame.dataset.inited = "true";
+
+      const video = frame.querySelector<HTMLVideoElement>("[data-video]");
+      const playBtn = frame.querySelector<HTMLButtonElement>("[data-video-play]");
+      const soundBtn = frame.querySelector<HTMLButtonElement>("[data-video-sound]");
+      const zoomBtn = frame.querySelector<HTMLButtonElement>("[data-video-zoom]");
+      const soundLabel = frame.querySelector<HTMLElement>("[data-sound-label]");
+      const playLabelEl = frame.querySelector<HTMLElement>("[data-play-label]");
+      const zoomLabelEl = frame.querySelector<HTMLElement>("[data-zoom-label]");
+      const stage = frame.closest<HTMLElement>(".vshow__stage");
+      const progress = stage?.querySelector<HTMLElement>("[data-video-progress]");
+      const announce = stage?.querySelector<HTMLElement>("[data-video-announce]");
+      if (!video) return;
+
+      const muteLabel = video.dataset.muteLabel || "Mute";
+      const unmuteLabel = video.dataset.unmuteLabel || "Unmute";
+      const playLabel = video.dataset.playLabel || "Play";
+      const pauseLabel = video.dataset.pauseLabel || "Pause";
+      const zoomInLabel = video.dataset.zoomInLabel || "Full screen";
+      const zoomOutLabel = video.dataset.zoomOutLabel || "Exit full screen";
+      const playingText = frame.dataset.playingAnnounce || "";
+      const pausedText = frame.dataset.pausedAnnounce || "";
+
+      // Tracks what the visitor last asked for, so a stale autoplay retry
+      // (see attemptAutoplay) can't override a pause that happened while it
+      // was still pending.
+      let wantPlaying = false;
+
+      const setSoundUI = () => {
+        frame.dataset.muted = video.muted ? "true" : "false";
+        soundBtn?.setAttribute("aria-pressed", video.muted ? "false" : "true");
+        if (soundLabel) soundLabel.textContent = video.muted ? unmuteLabel : muteLabel;
+      };
+
+      const setPlayingUI = (playing: boolean) => {
+        frame.dataset.playing = playing ? "true" : "false";
+        playBtn?.setAttribute("aria-pressed", playing ? "true" : "false");
+        if (playLabelEl) playLabelEl.textContent = playing ? pauseLabel : playLabel;
+        if (announce) announce.textContent = playing ? playingText : pausedText;
+      };
+
+      video.addEventListener("play", () => setPlayingUI(true));
+      video.addEventListener("pause", () => setPlayingUI(false));
+      video.addEventListener("ended", () => {
+        // Let a finished video be re-watched from the top on the next play,
+        // since currentTime otherwise sticks at duration once ended.
+        video.currentTime = 0;
+        wantPlaying = false;
+      });
+      video.addEventListener("timeupdate", () => {
+        if (progress && video.duration) {
+          progress.style.width = `${(video.currentTime / video.duration) * 100}%`;
+        }
+      });
+
+      // Reduced motion: hand full control to the visitor via native controls
+      // instead of driving playback from scroll position.
+      if (calm) {
+        video.removeAttribute("muted");
+        video.muted = false;
+        video.setAttribute("controls", "");
+        frame.dataset.reducedMotion = "true";
+        return;
+      }
+
+      const attemptAutoplay = () => {
+        wantPlaying = true;
+        video.muted = false;
+        Promise.resolve(video.play()).catch(() => {
+          if (!wantPlaying) return;
+          video.muted = true;
+          setSoundUI();
+          Promise.resolve(video.play()).catch(() => {
+            /* autoplay unavailable here — it stays paused; controls still work */
+          });
+        });
+        setSoundUI();
+      };
+
+      const manualToggle = () => {
+        if (video.paused) {
+          wantPlaying = true;
+          video.play().catch(() => {});
+        } else {
+          wantPlaying = false;
+          video.pause();
+        }
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              attemptAutoplay();
+            } else {
+              wantPlaying = false;
+              video.pause();
+            }
+          }
+        },
+        { threshold: 0.5 },
+      );
+      observer.observe(frame);
+
+      video.addEventListener("click", manualToggle);
+      playBtn?.addEventListener("click", manualToggle);
+
+      soundBtn?.addEventListener("click", () => {
+        video.muted = !video.muted;
+        setSoundUI();
+      });
+
+      zoomBtn?.addEventListener("click", () => {
+        if (document.fullscreenElement === frame) {
+          document.exitFullscreen();
+        } else {
+          frame.requestFullscreen?.().catch(() => {});
+        }
+      });
+      document.addEventListener("fullscreenchange", () => {
+        const isFull = document.fullscreenElement === frame;
+        frame.dataset.fullscreen = isFull ? "true" : "false";
+        if (zoomLabelEl) zoomLabelEl.textContent = isFull ? zoomOutLabel : zoomInLabel;
+      });
+
+      setSoundUI();
+      setPlayingUI(false);
+    });
+  }
+
+  document.addEventListener("astro:page-load", initVideoSections);
+  initVideoSections();
+</script>
+
+<style>
+  .vshow {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 3.5rem);
+  }
+  .vshow__head {
+    display: grid;
+    gap: 1rem;
+    justify-items: center;
+    text-align: center;
+  }
+  .vshow__title {
+    color: #fff;
+    font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+    max-width: 26ch;
+  }
+  .vshow__sub {
+    color: var(--color-on-dark);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 46ch;
+  }
+
+  .vshow__stage {
+    position: relative;
+    max-width: 62rem;
+    margin-inline: auto;
+    width: 100%;
+  }
+  .vshow__glow {
+    position: absolute;
+    inset: -12% -6%;
+    background:
+      radial-gradient(38% 55% at 18% 20%, rgb(255 91 4 / 0.32), transparent 70%),
+      radial-gradient(42% 60% at 88% 85%, rgb(15 175 188 / 0.28), transparent 70%);
+    filter: blur(48px);
+    opacity: 0.8;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .vshow__frame {
+    position: relative;
+    z-index: 1;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background: var(--color-ink-700);
+    box-shadow: var(--shadow-card);
+    outline: 1px solid rgb(255 255 255 / 0.08);
+    outline-offset: -1px;
+  }
+  .vshow__frame:fullscreen,
+  .vshow__frame:-webkit-full-screen {
+    aspect-ratio: unset;
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .vshow__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+  }
+
+  .vshow__status {
+    position: absolute;
+    top: 1.1rem;
+    left: 1.1rem;
+    z-index: 2;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.45);
+    transition: background 0.25s ease;
+    pointer-events: none;
+  }
+  [data-video-frame][data-playing="true"] .vshow__status {
+    background: var(--color-orange);
+    animation: vshow-pulse 1.8s ease-out infinite;
+  }
+  [data-video-frame][data-reduced-motion="true"] .vshow__status {
+    display: none;
+  }
+  @keyframes vshow-pulse {
+    0% { box-shadow: 0 0 0 0 rgb(255 91 4 / 0.55); }
+    70% { box-shadow: 0 0 0 10px rgb(255 91 4 / 0); }
+    100% { box-shadow: 0 0 0 0 rgb(255 91 4 / 0); }
+  }
+
+  .vshow__controls {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 2;
+    display: grid;
+    gap: 0.6rem;
+    padding: 1.5rem 0.9rem 0.7rem;
+    background: linear-gradient(to top, rgb(8 12 14 / 0.8), rgb(8 12 14 / 0.28) 60%, transparent);
+    pointer-events: none;
+  }
+  [data-video-frame][data-reduced-motion="true"] .vshow__controls {
+    display: none;
+  }
+
+  .vshow__rail {
+    height: 3px;
+    border-radius: var(--radius-pill);
+    background: rgb(255 255 255 / 0.22);
+    overflow: hidden;
+  }
+  .vshow__rail-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--color-orange);
+    transition: width 0.15s linear;
+  }
+
+  .vshow__buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .vshow__btn {
+    pointer-events: auto;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.18s ease;
+  }
+  .vshow__btn:hover {
+    background: rgb(255 255 255 / 0.14);
+  }
+  .vshow__btn:focus-visible {
+    outline: 2px solid var(--color-orange);
+    outline-offset: 2px;
+  }
+  .vshow__icon {
+    width: 19px;
+    height: 19px;
+    grid-area: 1 / 1;
+  }
+  .vshow__spacer {
+    flex: 1;
+  }
+
+  [data-video-frame][data-playing="true"] [data-icon-play] { display: none; }
+  [data-video-frame]:not([data-playing="true"]) [data-icon-pause] { display: none; }
+  [data-video-frame][data-muted="false"] [data-icon-muted] { display: none; }
+  [data-video-frame]:not([data-muted="false"]) [data-icon-on] { display: none; }
+  [data-video-frame][data-fullscreen="true"] [data-icon-zoom-in] { display: none; }
+  [data-video-frame]:not([data-fullscreen="true"]) [data-icon-zoom-out] { display: none; }
+
+  .vshow__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vshow__status { animation: none !important; }
+  }
+</style>

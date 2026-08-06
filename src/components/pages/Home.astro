@@ -11,10 +11,13 @@ import CaseStudyCarousel from "../CaseStudyCarousel.astro";
 import FeatureMarquee from "../FeatureMarquee.astro";
 import Button from "../Button.astro";
 import DottedGridFX from "../DottedGridFX.astro";
+import VideoScrollSection from "../VideoScrollSection.astro";
+import FlagIcon from "../FlagIcon.astro";
 import { getLocalizedPath, useTranslations } from "../../i18n/utils";
 
 import heroRings from "../../assets/img/hero-rings.svg";
 import platformBg from "../../assets/img/pricing/blob-bg.svg";
+import videoBg from "../../assets/img/intersect.svg";
 import featAsset from "../../assets/img/feat-asset-management.avif";
 import featMaint from "../../assets/img/feat-maintenance.avif";
 import featDoc from "../../assets/img/feat-documentation.avif";
@@ -45,8 +48,20 @@ const COPY = {
     heroTitleLead: "Un solo sistema ",
     heroTitleHl: "per gestire tutti i tuoi sistemi",
     heroSub:
-      "Manutenzione, asset management, documentazione e analytics in un'unica piattaforma EAM modulare con AI integrata. Costruita attorno ai tuoi processi, operativa in 5 mesi.",
+      "Manutenzione, asset management, documentazione e analytics in un'unica piattaforma EAM modulare con AI integrata. Costruita attorno ai tuoi processi, operativa in 2 mesi.",
     ctaDemo: "Richiedi una demo",
+    videoEyebrow: "Demo",
+    videoHeading: "Vedi Open EAM in azione",
+    videoSub:
+      "Interfaccia, ordini di lavoro e dashboard: un giro rapido dentro la piattaforma.",
+    videoPlay: "Riproduci",
+    videoPause: "Metti in pausa",
+    videoMute: "Disattiva audio",
+    videoUnmute: "Attiva audio",
+    videoZoomIn: "Schermo intero",
+    videoZoomOut: "Esci da schermo intero",
+    videoPlaying: "Video in riproduzione",
+    videoPaused: "Video in pausa",
     platformCta: "Vai al video tour della piattaforma",
     platformSlides: [
       {
@@ -68,8 +83,8 @@ const COPY = {
     ],
     stats: [
       { numbers: [40], prefix: "-", suffix: "%", label: "sui costi di urgenza" },
-      { numbers: [15, 20], sep: "/", suffix: "%", label: "riduzione dei costi diretti" },
-      { numbers: [25], prefix: "+", label: "vita degli asset" },
+      { numbers: [20], suffix: "%", label: "riduzione dei costi diretti" },
+      { numbers: [25], prefix: "+", suffix: "%", label: "vita utile degli asset" },
       { numbers: [12], label: "mesi per il ROI" },
     ],
     discoverCta: "Scopri di più",
@@ -206,8 +221,20 @@ const COPY = {
     heroTitleLead: "One platform ",
     heroTitleHl: "to manage all your systems",
     heroSub:
-      "Maintenance, asset management, documentation, and analytics in one modular EAM platform with built-in AI. Built around your processes, live in 5 months.",
+      "Maintenance, asset management, documentation, and analytics in one modular EAM platform with built-in AI. Built around your processes, live in 2 months.",
     ctaDemo: "Request a demo",
+    videoEyebrow: "Demo",
+    videoHeading: "See Open EAM in action",
+    videoSub:
+      "Interface, work orders, dashboards: a quick look inside the platform.",
+    videoPlay: "Play",
+    videoPause: "Pause",
+    videoMute: "Mute",
+    videoUnmute: "Unmute",
+    videoZoomIn: "Full screen",
+    videoZoomOut: "Exit full screen",
+    videoPlaying: "Video playing",
+    videoPaused: "Video paused",
     platformCta: "Watch the platform video tour",
     platformSlides: [
       {
@@ -229,8 +256,8 @@ const COPY = {
     ],
     stats: [
       { numbers: [40], prefix: "-", suffix: "%", label: "on emergency costs" },
-      { numbers: [15, 20], sep: "/", suffix: "%", label: "reduction in direct costs" },
-      { numbers: [25], prefix: "+", label: "asset lifespan" },
+      { numbers: [20], suffix: "%", label: "reduction in direct costs" },
+      { numbers: [25], prefix: "+", suffix: "%", label: "asset useful life" },
       { numbers: [12], label: "months to ROI" },
     ],
     discoverCta: "Learn more",
@@ -432,8 +459,33 @@ const caseSlides = [
     <LogoMarquee heading={tUi("trustHeading")} />
   </Section>
 
+  <!-- Product video -->
+  <Section bg="ink" class="video-section">
+    <Image src={videoBg} alt="" class="video-section__bg" aria-hidden="true" />
+    <div class="video-wrapper">
+      <div class="video-language-badge">
+        <FlagIcon lang="it" />
+        <span class="video-language-badge__text">Video in italiano</span>
+      </div>
+      <VideoScrollSection
+        src="/video/openeam-showcase.mp4"
+        eyebrow=""
+        heading=""
+        sub=""
+        playLabel={t.videoPlay}
+        pauseLabel={t.videoPause}
+        muteLabel={t.videoMute}
+        unmuteLabel={t.videoUnmute}
+        zoomInLabel={t.videoZoomIn}
+        zoomOutLabel={t.videoZoomOut}
+        playingAnnounce={t.videoPlaying}
+        pausedAnnounce={t.videoPaused}
+      />
+    </div>
+  </Section>
+
   <!-- Modules -->
-  <Section bg="light" dotted>
+  <Section bg="light">
     <ModuleCarousel
       slides={moduleSlides.map((m) => ({
         image: m.image,
@@ -447,12 +499,12 @@ const caseSlides = [
   </Section>
 
   <!-- Stats -->
-  <Section bg="ink" dotted>
+  <Section bg="ink">
     <StatsBand stats={t.stats} />
   </Section>
 
   <!-- Platform showcase -->
-  <Section bg="light" dotted class="platform-section">
+  <Section bg="light" class="platform-section">
     <Image src={platformBg} alt="" class="platform-section__bg" aria-hidden="true" loading="eager" />
     <SectionHeading heading={t.platformHeading} />
     <div class="platform-grid">
@@ -600,6 +652,31 @@ const caseSlides = [
     position: relative;
     z-index: 1;
   }
+
+  :global(.video-section) {
+    position: relative;
+    overflow: hidden;
+  }
+  :global(.video-section .container-page) {
+    position: relative;
+    z-index: 1;
+  }
+  .video-section__bg {
+    /* .container-page (its containing block) is only as tall as its content,
+       shorter than the section — a replaced element's auto width/height
+       ignores inset stretching, so size it explicitly past the container
+       and let `overflow: hidden` on `.video-section` clip it flush to the
+       actual section edge. */
+    position: absolute;
+    top: -7rem;
+    left: -3rem;
+    width: calc(100% + 6rem);
+    height: calc(100% + 14rem);
+    object-fit: cover;
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
   .platform-section__bg {
     position: absolute;
     top: 50%;
@@ -626,5 +703,37 @@ const caseSlides = [
 
   .features-marquee-wrap {
     margin-top: 3.5rem;
+  }
+
+  .video-wrapper {
+    position: relative;
+  }
+
+  .video-language-badge {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    background: rgb(255 255 255 / 0.95);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-card);
+  }
+
+  .video-language-badge :global(.flag-icon) {
+    width: 20px;
+    height: 20px;
+  }
+
+  .video-language-badge__text {
+    display: none;
+  }
+
+  :global(.video-section .vshow__stage) {
+    max-width: 75%;
   }
 </style>

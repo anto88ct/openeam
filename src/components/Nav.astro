@@ -37,6 +37,7 @@ const groupActive = (links: { href: string }[]) => links.some((link) => isActive
       <span class="nav__eyebrow" aria-hidden="true">Menu</span>
 
       <a href={l('/')} class:list={['nav__link', { 'is-active': isActive('/') }]}>Home</a>
+      <a href={l('/azienda')} class:list={['nav__link', { 'is-active': isActive('/azienda') }]}>Azienda</a>
 
       <div class="nav__item" data-dropdown>
         <button

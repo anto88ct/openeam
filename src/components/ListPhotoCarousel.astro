@@ -13,7 +13,10 @@ interface Props {
   intervalMs?: number;
 }
 const { slides, intervalMs = 6000 } = Astro.props;
-const referenceRatio = `${slides[0].image.width} / ${slides[0].image.height}`;
+// Fixed 16/9, not derived from the source photo's own dimensions: a portrait
+// capabilitiesImage (e.g. utilities' manutentore4.jpg) would otherwise blow up
+// the media box height and make that page's carousel taller than the rest.
+const referenceRatio = '16 / 9';
 ---
 
 <div class="lpcarousel" data-carousel data-interval={intervalMs}>

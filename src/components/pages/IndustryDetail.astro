@@ -52,20 +52,36 @@ const featured = (
 
   <Section bg="light">
     <ListPhotoCarousel
-      slides={[
-        {
-          image: data.capabilitiesImage,
-          imageAlt: capabilitiesHeading,
-          heading: capabilitiesHeading,
-          items: data.capabilitiesItems,
-        },
-        {
-          image: data.scopesImage,
-          imageAlt: data.scopesLabel,
-          heading: data.scopesLabel,
-          items: data.scopesItems,
-        },
-      ]}
+      slides={data.title === 'Manufacturing'
+        ? [
+            {
+              image: data.scopesImage,
+              imageAlt: capabilitiesHeading,
+              heading: capabilitiesHeading,
+              items: data.capabilitiesItems,
+            },
+            {
+              image: data.capabilitiesImage,
+              imageAlt: data.scopesLabel,
+              heading: data.scopesLabel,
+              items: data.scopesItems,
+            },
+          ]
+        : [
+            {
+              image: data.capabilitiesImage,
+              imageAlt: capabilitiesHeading,
+              heading: capabilitiesHeading,
+              items: data.capabilitiesItems,
+            },
+            {
+              image: data.scopesImage,
+              imageAlt: data.scopesLabel,
+              heading: data.scopesLabel,
+              items: data.scopesItems,
+            },
+          ]
+      }
     />
   </Section>
 
