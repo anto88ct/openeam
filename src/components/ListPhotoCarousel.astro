@@ -16,10 +16,10 @@ const { slides, intervalMs = 6000 } = Astro.props;
 // Fixed 16/9, not derived from the source photo's own dimensions: a portrait
 // capabilitiesImage (e.g. utilities' manutentore4.jpg) would otherwise blow up
 // the media box height and make that page's carousel taller than the rest.
-const referenceRatio = '16 / 9';
+const referenceRatio = '20 / 9';
 ---
 
-<div class="lpcarousel" data-carousel data-interval={intervalMs}>
+<div class="lpcarousel reveal" data-carousel data-interval={intervalMs}>
   <div class="lpcarousel__row">
     <div class="lpcarousel__text">
       {
@@ -143,6 +143,12 @@ const referenceRatio = '16 / 9';
   initCarousels();
 </script>
 
+<script>
+  import { initReveal } from '../scripts/reveal';
+  document.addEventListener('astro:page-load', initReveal);
+  initReveal();
+</script>
+
 <style>
   .lpcarousel__row {
     display: grid;
@@ -155,7 +161,7 @@ const referenceRatio = '16 / 9';
     grid-area: 1 / 1;
     display: grid;
     gap: 0.75rem;
-    align-content: start;
+    align-content: end;
     background: rgb(35 48 56 / 0.07);
     border-radius: var(--radius-card);
     padding: clamp(1.25rem, 2.5vw, 1.5rem);
@@ -239,6 +245,6 @@ const referenceRatio = '16 / 9';
   @media (max-width: 820px) {
     .lpcarousel__row { grid-template-columns: 1fr; }
     .lpcarousel__text { min-height: 320px; }
-    .lpcarousel__media { aspect-ratio: 16 / 11; }
+    .lpcarousel__media { aspect-ratio: 20 / 11; }
   }
 </style>

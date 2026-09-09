@@ -32,8 +32,8 @@ const {
 const iconAsset = icon ? getIcon(icon) : undefined;
 const ctaVariant = accent === 'dark' ? 'dark' : 'primary';
 ---
-<section class:list={['phero', `phero--${tone}`]}>
-  <div class="phero__grid dotted-grid container-page">
+<section class:list={['phero', `phero--${tone}`, 'dotted-grid']}>
+  <div class="phero__grid container-page">
     <div class="phero__text">
       {iconAsset && (
         <span class="phero__icon"><Image src={iconAsset} alt="" width={48} height={48} /></span>
@@ -52,22 +52,21 @@ const ctaVariant = accent === 'dark' ? 'dark' : 'primary';
 </section>
 
 <style>
-  .phero { position: relative; overflow: hidden; }
-  .phero--ink { background: var(--color-ink); }
-  .phero--teal { background: var(--color-teal); }
-  .phero--orange { background: var(--color-orange); }
-  .phero--light { background: var(--color-bg); }
+  .phero { position: relative; overflow: hidden; background-position: center; }
+  .phero--ink { background-color: var(--color-ink); }
+  .phero--teal { background-color: var(--color-teal); }
+  .phero--orange { background-color: var(--color-orange); }
+  .phero--light { background-color: var(--color-bg); }
   .phero--light .phero__text { color: var(--color-ink); }
   .phero--light .phero__title { color: var(--color-ink); }
   .phero--light .phero__sub { color: var(--color-slate-muted); }
-  .phero--light .dotted-grid { color: rgb(35 48 56 / 0.05); }
+  .phero--light.dotted-grid { color: rgb(35 48 56 / 0.05); }
   .phero__grid {
     display: grid;
     grid-template-columns: 1.05fr 0.95fr;
     gap: clamp(2rem, 5vw, 4rem);
     align-items: center;
-    padding-block: clamp(3.5rem, 8vw, 6rem);
-    background-position: center;
+    padding-block: clamp(2.75rem, 6vw, 4.75rem);
   }
   .phero__text { display: grid; gap: 1.5rem; justify-items: start; color: #fff; }
   /* Icons ship already coloured orange (#FF5B04) — no tint needed. */
@@ -95,6 +94,7 @@ const ctaVariant = accent === 'dark' ? 'dark' : 'primary';
   .phero__media:empty { display: none; }
   .phero__media :global(img) {
     width: 100%;
+    max-height: 420px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 20px;
@@ -105,4 +105,20 @@ const ctaVariant = accent === 'dark' ? 'dark' : 'primary';
     .phero__grid { grid-template-columns: 1fr; }
     .phero__media:empty { display: none; }
   }
+
+  /* Entrance on load — same rise curve/timing as the home hero (hero-rise
+     in Home.astro), so the two heroes feel like the same motion language. */
+  @keyframes phero-rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .phero__icon,
+  .phero__title,
+  .phero__sub,
+  .phero__cta {
+    animation: phero-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .phero__title { animation-delay: 0.05s; }
+  .phero__sub { animation-delay: 0.16s; }
+  .phero__cta { animation-delay: 0.27s; }
 </style>

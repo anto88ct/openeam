@@ -267,7 +267,7 @@ const t = COPY[lang];
       <div class="tiers">
         {
           t.tiers.map((tier, i) => (
-            <article class="tier card">
+            <article class="tier card reveal">
               <div class="tier__img">
                 <Image
                   src={[imgStart, imgMid, imgPro][i]}
@@ -292,7 +292,7 @@ const t = COPY[lang];
     <!-- SaaS / On premise -->
     <Section bg="light">
       <div class="plans">
-        <div class="plan plan--saas card">
+        <div class="plan plan--saas card reveal">
           <img class="plan__bg" src={intersectBg} alt="" aria-hidden="true" />
           <div class="plan__icon" aria-hidden="true">
             <svg
@@ -310,7 +310,7 @@ const t = COPY[lang];
           <h3 class="plan__title">{t.saasTitle}</h3>
           <p class="plan__body">{t.saasBody}</p>
         </div>
-        <div class="plan plan--onprem card">
+        <div class="plan plan--onprem card reveal">
           <img class="plan__bg" src={intersectBg} alt="" aria-hidden="true" />
           <div class="plan__icon" aria-hidden="true">
             <svg
@@ -347,14 +347,14 @@ const t = COPY[lang];
     <!-- ROI -->
     <Section bg="light">
       <div class="roi">
-        <div class="roi__narrative card">
+        <div class="roi__narrative card reveal">
           <h2 class="roi__title">
             {t.roiHeadingLead}<span class="hl">{t.roiHeadingHl}</span>
           </h2>
           <p class="roi__lead">{t.roiLead}</p>
           {t.roiParas.map((p) => <p set:html={p} />)}
         </div>
-        <div class="roi__grid card" data-roi-grid>
+        <div class="roi__grid card reveal" data-roi-grid>
           {
             t.roi.map((r, i) => (
               <div class="roi__row" style={`--i: ${i}`}>
@@ -366,6 +366,15 @@ const t = COPY[lang];
             ))
           }
         </div>
+      </div>
+    </Section>
+
+    <!-- Contact CTA -->
+    <Section bg="light" class="contact-cta-section">
+      <div class="contact-cta reveal">
+        <Button href={l("/demo")} variant="primary" class="contact-cta__btn"
+          >{t.contactCta}</Button
+        >
       </div>
     </Section>
   </div>
@@ -405,14 +414,11 @@ const t = COPY[lang];
     initRoiReveal();
   </script>
 
-  <!-- Contact CTA -->
-  <Section bg="light" class="contact-cta-section">
-    <div class="contact-cta">
-      <Button href={l("/demo")} variant="primary" class="contact-cta__btn"
-        >{t.contactCta}</Button
-      >
-    </div>
-  </Section>
+  <script>
+    import { initReveal } from "../../scripts/reveal";
+    document.addEventListener("astro:page-load", initReveal);
+    initReveal();
+  </script>
 
   <!-- Trust -->
   <Section bg="white">
@@ -422,7 +428,7 @@ const t = COPY[lang];
   <!-- FAQ -->
   <Section bg="white">
     <SectionHeading heading={t.faqHeading} />
-    <div class="faq-wrap"><Faq items={t.faqs} /></div>
+    <div class="faq-wrap reveal"><Faq items={t.faqs} /></div>
   </Section>
 </BaseLayout>
 
@@ -482,6 +488,7 @@ const t = COPY[lang];
     align-content: start;
     text-align: center;
     transition:
+      opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
       transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
       box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -569,6 +576,7 @@ const t = COPY[lang];
     border: 1px solid rgb(35 48 56 / 0.07);
     overflow: hidden;
     transition:
+      opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
       transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
       box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   }

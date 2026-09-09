@@ -70,7 +70,9 @@ const t = COPY[lang];
   </Section>
 
   <Section bg="white">
-    <CtaBand tone="sage" image={closingPhoto} imageAlt={t.ctaImgAlt} heading={t.ctaHeading} body={t.ctaBody} ctaLabel={t.ctaLabel} ctaHref={l('/demo')} />
+    <div class="asset-cta-band">
+      <CtaBand tone="sage" image={closingPhoto} imageAlt={t.ctaImgAlt} heading={t.ctaHeading} body={t.ctaBody} ctaLabel={t.ctaLabel} ctaHref={l('/demo')} />
+    </div>
   </Section>
 
 </BaseLayout>
@@ -78,4 +80,19 @@ const t = COPY[lang];
 <style>
   .stack { display: grid; gap: 2rem; }
   .lottie-box { width: 100%; min-height: 300px; display: grid; place-items: center; }
+  .asset-cta-band { max-width: 1280px; margin-inline: auto; }
+  /* align-items:start stops .band__media's stretch from fighting its own
+     aspect-ratio (that combo made the grid container's resolved height
+     diverge from its row-track size in Chromium, clipping content). Media
+     now sizes purely from aspect-ratio (720/448 = -20% off the component's
+     default 720/560), and .band__text opts back into bottom-alignment via
+     align-self so it still sits flush at the bottom of the taller row. */
+  .asset-cta-band :global(.band) { align-items: start; }
+  .asset-cta-band :global(.band__media) { aspect-ratio: 720 / 448; }
+  .asset-cta-band :global(.band__text) {
+    align-self: end;
+    justify-content: flex-end;
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    gap: 1rem;
+  }
 </style>

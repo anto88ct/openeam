@@ -24,7 +24,7 @@ const {
   class: className = '',
 } = Astro.props;
 ---
-<article class:list={['split', { 'split--reverse': reverse }, className]}>
+<article class:list={['split', 'reveal', { 'split--reverse': reverse }, className]}>
   <div class="split__media">
     <slot />
   </div>
@@ -35,6 +35,12 @@ const {
   </div>
 </article>
 
+<script>
+  import { initReveal } from '../scripts/reveal';
+  document.addEventListener('astro:page-load', initReveal);
+  initReveal();
+</script>
+
 <style>
   .split {
     display: grid;
@@ -43,6 +49,8 @@ const {
     overflow: hidden;
     box-shadow: var(--shadow-soft);
     min-height: 380px;
+    max-width: 1280px;
+    margin-inline: auto;
   }
   .split__media {
     background: var(--color-panel-050);
@@ -61,7 +69,7 @@ const {
     text-align: center;
     align-items: center;
   }
-  .split__title { font-size: clamp(1.5rem, 2.6vw, 2rem); max-width: 18ch; }
+  .split__title { font-size: clamp(1.5rem, 2.6vw, 2rem); max-width: 26ch; text-wrap: balance; }
   .split__title :global(.hl) { color: var(--color-orange); }
   .split__body {
     color: var(--color-slate);

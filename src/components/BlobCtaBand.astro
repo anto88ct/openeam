@@ -13,7 +13,7 @@ interface Props {
 const { heading, body, ctaLabel, ctaHref } = Astro.props;
 ---
 
-<section class="blob-cta">
+<section class="blob-cta reveal">
   <Image src={statementBg} alt="" class="blob-cta__bg" aria-hidden="true" />
   <div class="container-page blob-cta__content">
     <h2 class="blob-cta__heading">{heading}</h2>
@@ -22,13 +22,19 @@ const { heading, body, ctaLabel, ctaHref } = Astro.props;
   </div>
 </section>
 
+<script>
+  import { initReveal } from '../scripts/reveal';
+  document.addEventListener('astro:page-load', initReveal);
+  initReveal();
+</script>
+
 <style>
   .blob-cta {
     position: relative;
     overflow: hidden;
     background: var(--color-ink);
     text-align: center;
-    padding-block: clamp(3.5rem, 7vw, 6rem);
+    padding-block: clamp(3.5rem, 7vw, 6.5rem);
   }
   .blob-cta__bg {
     position: absolute;
@@ -42,10 +48,10 @@ const { heading, body, ctaLabel, ctaHref } = Astro.props;
   .blob-cta__content {
     position: relative;
     z-index: 1;
-    max-width: 50rem;
+    max-width: 52rem;
     margin-inline: auto;
     display: grid;
-    gap: 1.4rem;
+    gap: 1.25rem;
     justify-items: center;
   }
   .blob-cta__heading { color: #fff; font-size: clamp(1.7rem, 3.4vw, 2.6rem); }

@@ -40,6 +40,8 @@ const { icon, iconName, image, imageAlt, heading, tagline, body, ctaLabel, ctaHr
     overflow: hidden;
     box-shadow: var(--shadow-card);
     background: #fff;
+    max-width: 1280px;
+    margin-inline: auto;
   }
   .psc__media {
     position: relative;
@@ -71,9 +73,9 @@ const { icon, iconName, image, imageAlt, heading, tagline, body, ctaLabel, ctaHr
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
     border-radius: 20px 20px 0 0;
-    padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.5rem, 3vw, 2rem) clamp(1.75rem, 3vw, 2.25rem);
+    padding: clamp(1.15rem, 2.2vw, 1.5rem) clamp(1.15rem, 2.2vw, 1.4rem) clamp(1.25rem, 2.2vw, 1.5rem);
     display: grid;
-    gap: 0.65rem;
+    gap: 0.4rem;
     justify-items: start;
   }
   .psc__head {
@@ -114,20 +116,20 @@ const { icon, iconName, image, imageAlt, heading, tagline, body, ctaLabel, ctaHr
     25% { transform: rotate(-15deg); }
     75% { transform: rotate(15deg); }
   }
-  .psc__heading { font-size: clamp(1.15rem, 1.8vw, 1.4rem); color: var(--color-ink); }
+  .psc__heading { font-size: clamp(1.1rem, 1.7vw, 1.3rem); color: var(--color-ink); }
   .psc__tagline {
     color: var(--color-ink);
     font-weight: 600;
-    font-size: 0.98rem;
-    min-height: 3.3em;
+    font-size: 0.92rem;
+    line-height: 1.4;
   }
   .psc__body {
     color: var(--color-slate-muted);
-    font-size: 0.98rem;
-    line-height: 1.6;
-    min-height: 6.4em;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    margin-top: 0.2rem;
   }
-  .psc__panel :global(.btn) { margin-top: 0.5rem; }
+  .psc__panel :global(.btn) { margin-top: 0.3rem; }
 
   @media (max-width: 480px) {
     .psc__media { aspect-ratio: 16 / 11; }

@@ -11,11 +11,11 @@ import CaseStudyCarousel from "../CaseStudyCarousel.astro";
 import FeatureMarquee from "../FeatureMarquee.astro";
 import Button from "../Button.astro";
 import DottedGridFX from "../DottedGridFX.astro";
+import HeroRings from "../HeroRings.astro";
 import VideoScrollSection from "../VideoScrollSection.astro";
 import FlagIcon from "../FlagIcon.astro";
 import { getLocalizedPath, useTranslations } from "../../i18n/utils";
 
-import heroRings from "../../assets/img/hero-rings.svg";
 import platformBg from "../../assets/img/pricing/blob-bg.svg";
 import videoBg from "../../assets/img/intersect.svg";
 import featAsset from "../../assets/img/feat-asset-management.avif";
@@ -89,7 +89,7 @@ const COPY = {
     ],
     discoverCta: "Scopri di più",
     platformHeading:
-      "Manutenzione, asset management, documenti e analytics in una piattaforma che prende la forma dei tuoi processi",
+      "Manutenzione, asset management, documenti e analytics in una piattaforma che prende la forma dei tuoi processi",
     platformGrid: [
       {
         heading: "Asset Management",
@@ -451,7 +451,7 @@ const caseSlides = [
         </div>
       </div>
     </div>
-    <Image src={heroRings} alt="" class="hero__rings" aria-hidden="true" />
+    <HeroRings />
   </section>
 
   <!-- Trust band -->
@@ -499,7 +499,7 @@ const caseSlides = [
   </Section>
 
   <!-- Stats -->
-  <Section bg="ink">
+  <Section bg="ink" dotted>
     <StatsBand stats={t.stats} />
   </Section>
 
@@ -565,7 +565,7 @@ const caseSlides = [
     overflow: hidden;
   }
   .hero__grid {
-    padding-block: clamp(4rem, 9vw, 8.5rem);
+    padding-block: clamp(3.25rem, 7.5vw, 7rem);
     position: relative;
     z-index: 1;
   }
@@ -601,13 +601,14 @@ const caseSlides = [
     margin-top: 0.25rem;
   }
 
+  /* transform-only: an opacity fade here made white text momentarily read as
+     dim gray against the dark hero background mid-transition (the orange
+     highlight stayed legible at any opacity, but plain white ghosted out) */
   @keyframes hero-rise {
     from {
-      opacity: 0;
       transform: translateY(16px);
     }
     to {
-      opacity: 1;
       transform: translateY(0);
     }
   }
@@ -625,24 +626,6 @@ const caseSlides = [
   .hero__cta {
     animation-delay: 0.27s;
   }
-  .hero__rings {
-    position: absolute;
-    right: -5%;
-    bottom: -10%;
-    width: min(62%, 880px);
-    height: auto;
-    opacity: 1;
-    pointer-events: none;
-    z-index: 0;
-  }
-  @media (max-width: 860px) {
-    .hero__rings {
-      opacity: 0.22;
-      right: -25%;
-      bottom: -6%;
-      width: 90%;
-    }
-  }
 
   :global(.platform-section) {
     position: relative;
@@ -651,6 +634,9 @@ const caseSlides = [
   :global(.platform-section .container-page) {
     position: relative;
     z-index: 1;
+  }
+  :global(.platform-section .sh__title) {
+    max-width: 30ch;
   }
 
   :global(.video-section) {
@@ -668,14 +654,19 @@ const caseSlides = [
        and let `overflow: hidden` on `.video-section` clip it flush to the
        actual section edge. */
     position: absolute;
-    top: -7rem;
-    left: -3rem;
-    width: calc(100% + 6rem);
-    height: calc(100% + 14rem);
+    top: -10rem;
+    left: -14rem;
+    width: calc(100% + 28rem);
+    height: calc(100% + 20rem);
     object-fit: cover;
     opacity: 0.18;
     pointer-events: none;
     z-index: 0;
+  }
+  @media (max-width: 640px) {
+    .video-section__bg {
+      left: 0rem;
+    }
   }
   .platform-section__bg {
     position: absolute;
@@ -735,5 +726,10 @@ const caseSlides = [
 
   :global(.video-section .vshow__stage) {
     max-width: 75%;
+  }
+  @media (max-width: 640px) {
+    :global(.video-section .vshow__stage) {
+      max-width: 100%;
+    }
   }
 </style>

@@ -159,8 +159,13 @@ const { slides, intervalMs = 6000 } = Astro.props;
   }
 
   .carousel__media {
+    /* padding-top percentage, not aspect-ratio: aspect-ratio combined with
+       align-items:stretch on an auto-height grid container with
+       overflow:hidden makes the container's resolved height diverge from
+       its row-track size in Chromium (clips content). The percentage-padding
+       trick sizes purely from width, so stretch behaves normally here. */
     position: relative;
-    aspect-ratio: 6 / 5;
+    padding-top: 66.667%; /* 3 / 2, -20% off the original 6 / 5 (83.33%) */
   }
   .carousel__img {
     position: absolute;
@@ -172,8 +177,12 @@ const { slides, intervalMs = 6000 } = Astro.props;
     transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .carousel__img.is-active {
+    /* stay absolute (not relative like the other carousels): .carousel__media
+       is sized via padding-top, not aspect-ratio, so it has no definite
+       height for an in-flow (position:relative) child's height:100% to
+       resolve against -- the active slide would collapse to the wrong
+       height. Absolute+inset:0 fills the padding box correctly instead. */
     opacity: 1;
-    position: relative;
   }
 
   .carousel__text {
@@ -186,7 +195,7 @@ const { slides, intervalMs = 6000 } = Astro.props;
     grid-area: 1 / 1;
     display: grid;
     gap: 1.25rem;
-    align-content: center;
+    align-content: end;
     justify-items: start;
     opacity: 0;
     visibility: hidden;
@@ -262,6 +271,6 @@ const { slides, intervalMs = 6000 } = Astro.props;
 
   @media (max-width: 820px) {
     .carousel__row { grid-template-columns: 1fr; }
-    .carousel__media { aspect-ratio: 16 / 11; }
+    .carousel__media { padding-top: 55%; } /* 20 / 11 */
   }
 </style>

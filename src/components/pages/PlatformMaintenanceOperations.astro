@@ -28,7 +28,7 @@ const COPY = {
       { heading: 'Ricambi e listini sempre sotto controllo', body: 'Monitora disponibilità, movimenti e costi di magazzino. Associa ricambi e materiali agli asset e agli interventi, garantendo approvvigionamenti puntuali e una gestione economica ottimizzata.', anim: 'list_with_pz_150pz_110_pz_80pz' },
       { heading: 'Passaggi di consegna efficaci', body: 'OpenEAM gestisce il passaggio di informazioni tra turni e squadre secondo le procedure interne, garantendo tracciabilità completa e riducendo il rischio di errori. La trasmissione delle conoscenze operative avviene direttamente nella piattaforma, integrandosi nei tuoi flussi standard.', anim: 'Turno_Docs_arrows' },
     ],
-    ctaHeading: 'Operazioni fluide, manutenzione intelligente',
+    ctaHeading: 'Operazioni fluide, manutenzione intelligente',
     ctaBody: 'Con Open EAM hai il pieno controllo di processi, asset e risorse, in un\'unica piattaforma che si adatta ai tuoi flussi di lavoro e migliora le performance operative.',
     ctaImgAlt: 'Operatore su macchinario industriale',
     ctaLabel: 'Richiedi una demo',
@@ -70,7 +70,9 @@ const t = COPY[lang];
   </Section>
 
   <Section bg="white">
-    <CtaBand tone="teal" image={closingPhoto} imageAlt={t.ctaImgAlt} heading={t.ctaHeading} body={t.ctaBody} ctaLabel={t.ctaLabel} ctaHref={l('/demo')} />
+    <div class="asset-cta-band">
+      <CtaBand tone="teal" image={closingPhoto} imageAlt={t.ctaImgAlt} heading={t.ctaHeading} body={t.ctaBody} ctaLabel={t.ctaLabel} ctaHref={l('/demo')} />
+    </div>
   </Section>
 
 </BaseLayout>
@@ -78,4 +80,19 @@ const t = COPY[lang];
 <style>
   .stack { display: grid; gap: 2rem; }
   .lottie-box { width: 100%; min-height: 300px; display: grid; place-items: center; }
+  .asset-cta-band { max-width: 1280px; margin-inline: auto; }
+  /* align-items:start stops .band__media's stretch from fighting its own
+     aspect-ratio (that combo made the grid container's resolved height
+     diverge from its row-track size in Chromium, clipping content). Media
+     now sizes purely from aspect-ratio (720/448 = -20% off the component's
+     default 720/560), and .band__text opts back into bottom-alignment via
+     align-self so it still sits flush at the bottom of the taller row. */
+  .asset-cta-band :global(.band) { align-items: start; }
+  .asset-cta-band :global(.band__media) { aspect-ratio: 720 / 448; }
+  .asset-cta-band :global(.band__text) {
+    align-self: end;
+    justify-content: flex-end;
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    gap: 1rem;
+  }
 </style>

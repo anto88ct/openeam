@@ -10,6 +10,10 @@ export const ui = {
     legalUpdatedLabel: 'Ultimo aggiornamento:',
     ogLocale: 'it_IT',
     trustHeading: 'Il software di manutenzione e asset management scelto da',
+    cookieBannerText:
+      'Questo sito utilizza unicamente cookie tecnici, necessari al corretto funzionamento della piattaforma. Non sono presenti cookie di profilazione o di tracciamento di terze parti.',
+    cookieBannerAccept: 'Ho capito',
+    cookieBannerLink: 'Cookie Policy',
   },
   en: {
     skipLink: 'Skip to content',
@@ -21,6 +25,10 @@ export const ui = {
     legalUpdatedLabel: 'Last updated:',
     ogLocale: 'en_US',
     trustHeading: 'The maintenance and asset management software chosen by',
+    cookieBannerText:
+      'This site uses only technical cookies, strictly necessary for the platform to work correctly. No profiling or third-party tracking cookies are used.',
+    cookieBannerAccept: 'Got it',
+    cookieBannerLink: 'Cookie Policy',
   },
 } as const;
 

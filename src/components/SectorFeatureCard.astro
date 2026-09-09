@@ -11,16 +11,21 @@ interface Props {
 const { image, imageAlt, heading, body } = Astro.props;
 ---
 
-<article class="sfc">
+<article class="sfc reveal">
   <div class="sfc__media">
     <Image src={image} alt={imageAlt} width={1280} height={1040} loading="lazy" />
-    <div class="sfc__arc" aria-hidden="true"></div>
   </div>
   <div class="sfc__panel">
     <h3 class="sfc__heading">{heading}</h3>
     <p class="sfc__body">{body}</p>
   </div>
 </article>
+
+<script>
+  import { initReveal } from '../scripts/reveal';
+  document.addEventListener('astro:page-load', initReveal);
+  initReveal();
+</script>
 
 <style>
   .sfc {
@@ -30,10 +35,12 @@ const { image, imageAlt, heading, body } = Astro.props;
     contain: paint;
     box-shadow: var(--shadow-card);
     background: #fff;
+    max-width: 1280px;
+    margin-inline: auto;
   }
   .sfc__media {
     position: relative;
-    aspect-ratio: 4 / 3.1;
+    aspect-ratio: 4 / 2.4;
     overflow: hidden;
   }
   .sfc__media :global(img) {
@@ -41,17 +48,6 @@ const { image, imageAlt, heading, body } = Astro.props;
     height: 100%;
     object-fit: cover;
     display: block;
-  }
-  .sfc__arc {
-    position: absolute;
-    z-index: 1;
-    width: 55%;
-    aspect-ratio: 1;
-    left: -12%;
-    bottom: -24%;
-    background: var(--color-teal);
-    opacity: 0.85;
-    border-radius: 50%;
   }
   .sfc__panel {
     position: relative;
@@ -61,12 +57,12 @@ const { image, imageAlt, heading, body } = Astro.props;
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
     border-radius: 20px 20px 0 0;
-    padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.5rem, 3vw, 2rem) clamp(1.75rem, 3vw, 2.25rem);
+    padding: clamp(1.25rem, 2.5vw, 1.75rem) clamp(1.25rem, 2.5vw, 1.75rem) clamp(1.5rem, 2.5vw, 1.75rem);
     display: grid;
-    gap: 0.65rem;
+    gap: 0.5rem;
   }
-  .sfc__heading { font-size: clamp(1.15rem, 1.8vw, 1.4rem); color: var(--color-ink); min-height: 2.2em; }
-  .sfc__body { color: var(--color-slate-muted); font-size: 0.98rem; line-height: 1.6; min-height: 9.6em; }
+  .sfc__heading { font-size: clamp(1.15rem, 1.8vw, 1.4rem); color: var(--color-ink); min-height: 2.6em; }
+  .sfc__body { color: var(--color-slate-muted); font-size: 0.98rem; line-height: 1.55; min-height: 6.8em; }
 
   @media (max-width: 480px) {
     .sfc__media { aspect-ratio: 16 / 11; }

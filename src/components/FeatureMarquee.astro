@@ -39,13 +39,15 @@ const speedSeconds = features.length * 5;
     width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
   }
   .fm-track {
     display: flex;
     gap: clamp(1.25rem, 2.5vw, 1.75rem);
     width: max-content;
     padding-inline: 5.5rem;
+    padding-block: 0.75rem;
     animation-name: fm-scroll;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
@@ -66,6 +68,11 @@ const speedSeconds = features.length * 5;
     display: grid;
     gap: 0.75rem;
     align-content: start;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .fm-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 20px 40px -12px rgb(0 0 0 / 0.22);
   }
   .fm-title {
     font-size: 1.3rem;

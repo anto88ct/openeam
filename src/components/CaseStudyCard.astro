@@ -34,6 +34,8 @@ const { title, body, href, image, imageAlt = '', ctaLabel } = Astro.props;
     overflow: hidden;
     box-shadow: var(--shadow-card);
     height: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
   }
   .csc__media { display: block; aspect-ratio: 16 / 10; overflow: hidden; }
   .csc__media :global(img) {

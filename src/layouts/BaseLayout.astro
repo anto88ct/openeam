@@ -4,6 +4,7 @@ import '../styles/global.css';
 
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import CookieBanner from '../components/CookieBanner.astro';
 import { company } from '../config/site';
 import { getLangFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
 
@@ -65,6 +66,7 @@ const alternateEn = new URL(getLocalizedPath('en', Astro.url.pathname), siteOrig
       <slot />
     </main>
     <Footer />
+    <CookieBanner />
 
     <script defer src="/js/dotfx-sections.js"></script>
 

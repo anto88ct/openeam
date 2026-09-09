@@ -1,35 +1,61 @@
 ---
 import LegalLayout from '../layouts/LegalLayout.astro';
+import { company } from '../config/site';
 ---
-<LegalLayout title="Privacy Policy" updated="16/07/2026">
+<LegalLayout title="Privacy Policy" updated="09/09/2026">
   <p>
     La presente informativa descrive le modalità di trattamento dei dati personali
-    degli utenti che consultano il sito <strong>openeam.it</strong>, di titolarità di
-    <strong>Seedma SRL</strong> — Via Barletta 9, 95125 Catania — P.IVA 05728230870.
+    degli utenti che consultano il sito <strong>openeam.it</strong>, ai sensi degli
+    artt. 13 e 14 del Regolamento (UE) 2016/679 ("GDPR").
   </p>
 
   <h2>Titolare del trattamento</h2>
-  <p>Seedma SRL, con sede in Via Barletta 9, 95125 Catania (CT).</p>
+  <p>
+    Il Titolare del trattamento è <strong>{company.legal}</strong>, con sede in Via
+    Barletta 9, 95125 Catania (CT) — P.IVA 05728230870. Per qualsiasi richiesta relativa
+    al trattamento dei tuoi dati personali o per esercitare i diritti previsti dagli
+    artt. 15-22 del GDPR (accesso, rettifica, cancellazione, limitazione, portabilità e
+    opposizione) puoi scrivere a <a href={`mailto:${company.contactEmail}`}>{company.contactEmail}</a>.
+  </p>
 
-  <h2>Dati raccolti</h2>
+  <h2>Dati raccolti tramite il form di richiesta demo</h2>
   <p>
     Attraverso il modulo di richiesta demo raccogliamo nome, cognome, azienda, ruolo ed
-    email aziendale, al solo fine di ricontattarti e organizzare la dimostrazione della
-    piattaforma.
+    email aziendale. Questi dati sono trattati esclusivamente per ricontattarti e
+    organizzare la dimostrazione della piattaforma openeam.it, e non sono utilizzati per
+    finalità di marketing o comunicati a terzi al di fuori dei responsabili esterni
+    indicati in questa informativa.
   </p>
 
   <h2>Finalità e base giuridica</h2>
   <ul>
-    <li>Gestione delle richieste di demo e di contatto (consenso dell'interessato).</li>
-    <li>Adempimenti di legge e obblighi contrattuali.</li>
+    <li>Gestione delle richieste di demo e di contatto (esecuzione di misure precontrattuali su richiesta dell'interessato, art. 6.1.b GDPR).</li>
+    <li>Adempimenti di legge e obblighi contrattuali (art. 6.1.c GDPR).</li>
   </ul>
+
+  <h2>Conservazione dei dati</h2>
+  <p>
+    I dati inviati tramite il modulo di richiesta demo sono conservati per il tempo
+    strettamente necessario a gestire la richiesta precontrattuale e comunque non oltre
+    12 mesi dall'ultimo contatto con l'interessato, decorsi i quali vengono cancellati o
+    anonimizzati, salvo diverso obbligo di legge.
+  </p>
+
+  <h2>Responsabili esterni del trattamento</h2>
+  <p>
+    L'invio delle email generate dal form di richiesta demo è gestito tramite la
+    piattaforma terza <strong>EmailJS</strong>, che agisce in qualità di responsabile
+    esterno del trattamento ai sensi dell'art. 28 del GDPR, nominato con apposito
+    accordo. I dati trasmessi a EmailJS sono limitati a quanto necessario per l'invio
+    della comunicazione.
+  </p>
 
   <h2>Diritti dell'interessato</h2>
   <p>
     Puoi esercitare in qualsiasi momento i diritti previsti dagli artt. 15-22 del GDPR
-    (accesso, rettifica, cancellazione, limitazione, portabilità e opposizione) scrivendo
-    al Titolare.
+    (accesso, rettifica, cancellazione, limitazione, portabilità e opposizione)
+    scrivendo al Titolare all'indirizzo <a href={`mailto:${company.contactEmail}`}>{company.contactEmail}</a>.
+    Hai inoltre diritto di proporre reclamo all'Autorità Garante per la protezione dei
+    dati personali.
   </p>
-
-  <p><em>Nota: testo segnaposto — sostituire con l'informativa privacy definitiva approvata.</em></p>
 </LegalLayout>

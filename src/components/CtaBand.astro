@@ -32,6 +32,7 @@ const {
 <article
   class:list={[
     "band",
+    "reveal",
     `band--${tone}`,
     {
       "band--reverse": reverse,
@@ -77,6 +78,12 @@ const {
   }
 </article>
 
+<script>
+  import { initReveal } from '../scripts/reveal';
+  document.addEventListener('astro:page-load', initReveal);
+  initReveal();
+</script>
+
 <style>
   .band {
     display: grid;
@@ -85,6 +92,8 @@ const {
     overflow: hidden;
     box-shadow: var(--shadow-card);
     min-height: 360px;
+    max-width: 1280px;
+    margin-inline: auto;
   }
   .band--solo {
     grid-template-columns: 1fr;

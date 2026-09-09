@@ -5,6 +5,7 @@ export const company = {
   legal: 'Seedma SRL',
   address: 'Seedma SRL - Via Barletta 9 - 95125 Catania - P.IVA 05728230870',
   url: 'https://www.openeam.it',
+  contactEmail: 'info@seedma.it',
 };
 
 export const platformLinks = [
