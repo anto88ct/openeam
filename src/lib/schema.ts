@@ -8,8 +8,10 @@ const stripTags = (s: string) => s.replace(/<[^>]+>/g, '');
 /** Absolute URL with trailing slash, matching the site's canonical/hreflang format (Astro `build.format: "directory"`). */
 const absUrl = (path: string) => `${SITE_URL}${path.endsWith('/') ? path : `${path}/`}`;
 
-/** Site-wide Organization schema. Rendered globally by BaseLayout. */
-export function organizationSchema() {
+/** Site-wide Organization schema. Rendered globally by BaseLayout.
+ * `extra` merges in page-specific additions (e.g. `employee` on the Azienda page)
+ * without producing a second, duplicate Organization node on that page. */
+export function organizationSchema(extra: Record<string, unknown> = {}) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -25,6 +27,16 @@ export function organizationSchema() {
       addressCountry: 'IT',
     },
     vatID: '05728230870',
+    sameAs: [
+      'https://www.instagram.com/openeam_seedma/',
+      'https://www.linkedin.com/search/results/all/?keywords=OpenEAM&origin=RICH_QUERY_SUGGESTION&heroEntityKey=urn%3Ali%3Aorganization%3A104333450&position=0',
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: company.contactEmail,
+      contactType: 'customer support',
+    },
+    ...extra,
   };
 }
 

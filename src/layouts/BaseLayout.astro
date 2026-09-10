@@ -17,6 +17,8 @@ interface Props {
   ogImage?: string;
   /** page-specific JSON-LD schema(s), rendered alongside the site-wide Organization schema */
   jsonLd?: object | object[];
+  /** merged into the site-wide Organization schema itself (e.g. `employee` on the Azienda page) */
+  organizationExtra?: Record<string, unknown>;
 }
 
 const lang = getLangFromUrl(Astro.url);
@@ -32,6 +34,7 @@ const {
   description = DEFAULT_DESCRIPTION[lang],
   ogImage = '/webclip.png',
   jsonLd,
+  organizationExtra,
 } = Astro.props;
 
 const pageSchemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
@@ -66,7 +69,7 @@ const alternateEn = new URL(getLocalizedPath('en', Astro.url.pathname), siteOrig
 
     <meta name="theme-color" content="#233038" />
 
-    <JsonLd schema={[organizationSchema(), ...pageSchemas]} />
+    <JsonLd schema={[organizationSchema(organizationExtra), ...pageSchemas]} />
   </head>
   <body>
     <a href="#main" class="skip-link">{t('skipLink')}</a>

@@ -136,9 +136,16 @@ const members = t.team.map((m, i) => ({
   scale: photoScales[i],
   linkedin: teamLinkedin[i],
 }));
+
+const employee = members.map((m) => ({
+  '@type': 'Person',
+  name: m.name,
+  jobTitle: m.role,
+  sameAs: m.linkedin,
+}));
 ---
 
-<BaseLayout title={t.title} description={t.description}>
+<BaseLayout title={t.title} description={t.description} organizationExtra={{ employee }}>
   <!-- Hero statement + intro + feature cards share one background bleed area,
        so the blob artwork isn't clipped until the statement section starts. -->
   <div class="azienda-hero-bleed">

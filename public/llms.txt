@@ -1,0 +1,34 @@
+# Open EAM
+
+> Open EAM — la piattaforma modulare di asset management e manutenzione che prende la forma dei tuoi processi. Un prodotto di Seedma SRL.
+
+## Platform
+
+- [Asset Management](https://openeam.it/platform/asset-management): Open EAM centralizza e organizza ogni asset in una struttura solida, scalabile e flessibile, modellandosi sui tuoi processi per contesti multi-sito e complessi.
+- [Maintenance & Operations](https://openeam.it/platform/maintenance-operations): Con Open EAM pianifichi, esegui e tracci ogni attività manutentiva e operativa in un'unica piattaforma che si plasma sui tuoi processi esistenti.
+- [Technical Documentation](https://openeam.it/platform/technical-documentation): Open EAM collega disegni, manuali, procedure e documenti tecnici agli asset di riferimento, rendendoli accessibili in modo sicuro, ordinato e immediato.
+- [Asset Analytics](https://openeam.it/platform/asset-analytics): Open EAM trasforma flussi di dati IoT, sensori e sistemi esterni in analisi chiare e centralizzate, con dashboard e KPI sempre aggiornati.
+
+## Industries
+
+- [Manufacturing](https://openeam.it/industries/manufacturing): Open EAM per il Manufacturing: ottimizza asset e processi produttivi, riduci i fermi macchina e integra i dati di ERP, MES e IoT.
+- [Oil & Gas](https://openeam.it/industries/oil-and-gas): Open EAM per l'Oil & Gas: manutenzione sicura, gestione documentale d'impianto e visione centralizzata di asset distribuiti su più siti.
+- [Large scale facilities](https://openeam.it/industries/large-scale-facilities): Open EAM per grandi infrastrutture: aeroporti, reti idriche, campus e poli commerciali. Interventi tracciati, documentazione a norma e supervisione multi-sito.
+- [Utilities](https://openeam.it/industries/utilities): Open EAM per le utilities: segnalazioni, sopralluoghi, ordini di lavoro e manutenzioni su reti distribuite in un unico ambiente digitale.
+- [Healthcare](https://openeam.it/industries/sanitario): Open EAM per il settore sanitario: gestione di impianti, apparecchiature, manutenzioni e documentazione tecnica in ospedali, cliniche e RSA.
+
+## Company
+
+- [Azienda](https://openeam.it/azienda)
+- [Case Studies](https://openeam.it/case-studies)
+- [Pricing](https://openeam.it/pricing): Un investimento calibrato e proporzionale: SaaS o on-premise. Open EAM è progettato per ripagarsi entro i primi 12 mesi.
+
+## English
+
+- [Home](https://openeam.it/en): Open EAM — the modular asset management and maintenance platform that takes the shape of your processes. A product of Seedma SRL.
+- [Pricing](https://openeam.it/en/pricing): A calibrated, proportional investment: SaaS or on-premise. Open EAM is designed to pay for itself within the first 12 months.
+
+## Optional
+
+- [Privacy Policy](https://openeam.it/privacy-policy)
+- [Cookies Policy](https://openeam.it/cookies-policy)
