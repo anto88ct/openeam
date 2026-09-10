@@ -9,6 +9,7 @@ import BlobCtaBand from '../BlobCtaBand.astro';
 import ListPhotoCarousel from '../ListPhotoCarousel.astro';
 import CtaBand from '../CtaBand.astro';
 import CaseStudyCard from '../CaseStudyCard.astro';
+import { breadcrumbSchema } from '../../lib/schema';
 import { getLocalizedPath } from '../../i18n/utils';
 
 interface Props {
@@ -30,10 +31,16 @@ const featured = (
     data.caseStudies.map((slug: string) => getEntry(caseStudiesCollection, slug)),
   )
 ).filter((c: any): c is NonNullable<typeof c> => !!c && !c.data.draft);
+
+const breadcrumb = breadcrumbSchema([
+  { name: 'Home', url: l('/') },
+  { name: data.title, url: l(`/industries/${entry.id}`) },
+]);
 ---
 <BaseLayout
-  title={`${data.title} — OpenEAM Industries`}
+  title={`${data.title} — Open EAM Industries`}
   description={data.seoDescription ?? data.intro.replace(/<[^>]+>/g, '').slice(0, 155)}
+  jsonLd={breadcrumb}
 >
   <SectorHero title={data.title} subtitle={data.subtitle} intro={data.intro}>
     <div class="sector-grid">

@@ -6,6 +6,7 @@ import SectionHeading from "../SectionHeading.astro";
 import LogoMarquee from "../LogoMarquee.astro";
 import Faq from "../Faq.astro";
 import Button from "../Button.astro";
+import { faqPageSchema } from "../../lib/schema";
 import { getLocalizedPath, useTranslations } from "../../i18n/utils";
 
 import imgStart from "../../assets/img/pricing/start.png";
@@ -24,7 +25,7 @@ const tUi = useTranslations(lang);
 const COPY = {
   it: {
     description:
-      "Un investimento calibrato e proporzionale: SaaS o on-premise. OpenEAM è progettato per ripagarsi entro i primi 12 mesi.",
+      "Un investimento calibrato e proporzionale: SaaS o on-premise. Open EAM è progettato per ripagarsi entro i primi 12 mesi.",
     heroLead: "L'investimento iniziale è calibrato per permettere di ",
     heroHl: "testare la tecnologia",
     heroTrail:
@@ -66,7 +67,7 @@ const COPY = {
     roiLead:
       "Non puoi gestire ciò che non misuri. Con Open EAM, ogni centesimo è tracciato.",
     roiParas: [
-      "OpenEAM è progettato per ripagarsi da solo entro i primi <strong>12 mesi</strong> grazie all'eliminazione dei fermi macchina e delle inefficienze nascoste.",
+      "Open EAM è progettato per ripagarsi da solo entro i primi <strong>12 mesi</strong> grazie all'eliminazione dei fermi macchina e delle inefficienze nascoste.",
       "<strong>Risparmio Strutturale:</strong> la manutenzione programmata abbatte i costi d'urgenza (i più cari) fino al 40%.",
       "<strong>Estensione vita degli Asset:</strong> tracciare tutto significa far durare gli impianti il 25% in più, posticipando investimenti milionari in nuovi impianti.",
       "<strong>Consolidamento Software:</strong> sostituisci i sistemi legacy (documentali, reporting, CMMS) con un'unica piattaforma.",
@@ -102,7 +103,7 @@ const COPY = {
     faqHeading: "Domande frequenti",
     faqs: [
       {
-        q: "L'evoluzione della piattaforma OpenEAM è inclusa nell'investimento?",
+        q: "L'evoluzione della piattaforma Open EAM è inclusa nell'investimento?",
         a: "Assolutamente sì. Crediamo in una partnership a lungo termine. Tutti gli aggiornamenti, le nuove funzionalità e i miglioramenti di sicurezza rilasciati per i moduli attivi sono inclusi nel vostro canone, garantendovi di avere sempre a disposizione la tecnologia più avanzata senza costi nascosti.",
       },
       {
@@ -111,33 +112,33 @@ const COPY = {
       },
       {
         q: "Sono previste agevolazioni per organizzazioni non profit o progetti speciali?",
-        a: "Sì, OpenEAM sostiene l'efficienza anche nel terzo settore. Valutiamo piani d'investimento specifici e agevolati per organizzazioni non profit e progetti a impatto sociale, previa verifica dei requisiti.",
+        a: "Sì, Open EAM sostiene l'efficienza anche nel terzo settore. Valutiamo piani d'investimento specifici e agevolati per organizzazioni non profit e progetti a impatto sociale, previa verifica dei requisiti.",
       },
       {
-        q: "Qual è la flessibilità dell'impegno contrattuale con OpenEAM?",
-        a: "La nostra filosofia si basa sul valore: vogliamo che restiate con noi perché OpenEAM vi fa risparmiare, non per un vincolo contrattuale. Per il modello Cloud (SaaS), offriamo la massima flessibilità di adeguare o interrompere il piano. Il vostro controllo sulla soluzione è totale e l'esportazione dei dati è sempre garantita.",
+        q: "Qual è la flessibilità dell'impegno contrattuale con Open EAM?",
+        a: "La nostra filosofia si basa sul valore: vogliamo che restiate con noi perché Open EAM vi fa risparmiare, non per un vincolo contrattuale. Per il modello Cloud (SaaS), offriamo la massima flessibilità di adeguare o interrompere il piano. Il vostro controllo sulla soluzione è totale e l'esportazione dei dati è sempre garantita.",
       },
       {
-        q: "Come si adatta OpenEAM se la mia azienda cresce o le esigenze cambiano?",
-        a: "OpenEAM è nativamente scalabile. Se la vostra squadra si amplia o avete bisogno di tracciare nuovi processi, potete aggiungere utenti o attivare nuovi moduli in qualsiasi momento. L'investimento si adeguerà proporzionalmente all'uso effettivo, garantendo che paghiate sempre e solo per il valore che ricevete.",
+        q: "Come si adatta Open EAM se la mia azienda cresce o le esigenze cambiano?",
+        a: "Open EAM è nativamente scalabile. Se la vostra squadra si amplia o avete bisogno di tracciare nuovi processi, potete aggiungere utenti o attivare nuovi moduli in qualsiasi momento. L'investimento si adeguerà proporzionalmente all'uso effettivo, garantendo che paghiate sempre e solo per il valore che ricevete.",
       },
       {
-        q: "Come posso essere sicuro che OpenEAM genererà un reale risparmio per la mia azienda?",
-        a: "Non ci basiamo su promesse, ma su dati. Nel percorso di setup, definiremo insieme i KPI da monitorare. OpenEAM traccia ogni costo e inefficienza, permettendovi di misurare l'abbattimento dei costi diretti (15-20% mediamente nei primi mesi) e il ROI in tempi rapidi, spesso tra i 6 e i 12 mesi.",
+        q: "Come posso essere sicuro che Open EAM genererà un reale risparmio per la mia azienda?",
+        a: "Non ci basiamo su promesse, ma su dati. Nel percorso di setup, definiremo insieme i KPI da monitorare. Open EAM traccia ogni costo e inefficienza, permettendovi di misurare l'abbattimento dei costi diretti (15-20% mediamente nei primi mesi) e il ROI in tempi rapidi, spesso tra i 6 e i 12 mesi.",
       },
       {
-        q: "La mia azienda ha processi molto specifici. OpenEAM riuscirà a tracciarli e controllarli?",
-        a: 'Sì. A differenza di software standard, la nostra forza è la personalizzazione. Grazie all\'Audit iniziale e alla modularità della piattaforma, OpenEAM "prende la forma" dei vostri processi specifici. Questo vi garantisce una tracciabilità totale e un controllo a prova di audit, riducendo drasticamente i rischi operativi.',
+        q: "La mia azienda ha processi molto specifici. Open EAM riuscirà a tracciarli e controllarli?",
+        a: 'Sì. A differenza di software standard, la nostra forza è la personalizzazione. Grazie all\'Audit iniziale e alla modularità della piattaforma, Open EAM "prende la forma" dei vostri processi specifici. Questo vi garantisce una tracciabilità totale e un controllo a prova di audit, riducendo drasticamente i rischi operativi.',
       },
       {
-        q: "Qual è la differenza principale tra OpenEAM e i sistemi Legacy più blasonati?",
-        a: "Agilità e focus sul valore. Mentre i sistemi Legacy richiedono investimenti enormi, lunghi tempi di implementazione e spesso sono rigidi, OpenEAM offre una soluzione Enterprise agile, un go-live rapido e un modello di investimento flessibile che mira a un ROI veloce e a un controllo granulare del processo, senza i costi di manutenzione IT dei vecchi sistemi.",
+        q: "Qual è la differenza principale tra Open EAM e i sistemi Legacy più blasonati?",
+        a: "Agilità e focus sul valore. Mentre i sistemi Legacy richiedono investimenti enormi, lunghi tempi di implementazione e spesso sono rigidi, Open EAM offre una soluzione Enterprise agile, un go-live rapido e un modello di investimento flessibile che mira a un ROI veloce e a un controllo granulare del processo, senza i costi di manutenzione IT dei vecchi sistemi.",
       },
     ],
   },
   en: {
     description:
-      "A calibrated, proportional investment: SaaS or on-premise. OpenEAM is designed to pay for itself within the first 12 months.",
+      "A calibrated, proportional investment: SaaS or on-premise. Open EAM is designed to pay for itself within the first 12 months.",
     heroLead: "The initial investment is calibrated to let you ",
     heroHl: "test the technology",
     heroTrail:
@@ -179,7 +180,7 @@ const COPY = {
     roiLead:
       "You can't manage what you don't measure. With Open EAM, every cent is tracked.",
     roiParas: [
-      "OpenEAM is designed to pay for itself within the first <strong>12 months</strong> by eliminating downtime and hidden inefficiencies.",
+      "Open EAM is designed to pay for itself within the first <strong>12 months</strong> by eliminating downtime and hidden inefficiencies.",
       "<strong>Structural savings:</strong> scheduled maintenance cuts emergency costs (the most expensive kind) by up to 40%.",
       "<strong>Extended asset life:</strong> tracking everything means plants last 25% longer, delaying multi-million investments in new equipment.",
       "<strong>Software consolidation:</strong> replace legacy systems (document management, reporting, CMMS) with a single platform.",
@@ -215,7 +216,7 @@ const COPY = {
     faqHeading: "Frequently asked questions",
     faqs: [
       {
-        q: "Is the evolution of the OpenEAM platform included in the investment?",
+        q: "Is the evolution of the Open EAM platform included in the investment?",
         a: "Absolutely. We believe in a long-term partnership. All updates, new features, and security improvements released for your active modules are included in your subscription, so you always have the most advanced technology available with no hidden costs.",
       },
       {
@@ -224,27 +225,27 @@ const COPY = {
       },
       {
         q: "Are there discounts for non-profit organizations or special projects?",
-        a: "Yes, OpenEAM supports efficiency in the non-profit sector too. We evaluate dedicated, discounted investment plans for non-profit organizations and social-impact projects, subject to eligibility checks.",
+        a: "Yes, Open EAM supports efficiency in the non-profit sector too. We evaluate dedicated, discounted investment plans for non-profit organizations and social-impact projects, subject to eligibility checks.",
       },
       {
-        q: "How flexible is the contractual commitment with OpenEAM?",
-        a: "Our philosophy is value-based: we want you to stay with us because OpenEAM saves you money, not because of a contractual lock-in. For the Cloud (SaaS) model, we offer maximum flexibility to adjust or cancel your plan. You keep full control of the solution, and data export is always guaranteed.",
+        q: "How flexible is the contractual commitment with Open EAM?",
+        a: "Our philosophy is value-based: we want you to stay with us because Open EAM saves you money, not because of a contractual lock-in. For the Cloud (SaaS) model, we offer maximum flexibility to adjust or cancel your plan. You keep full control of the solution, and data export is always guaranteed.",
       },
       {
-        q: "How does OpenEAM adapt if my company grows or needs change?",
-        a: "OpenEAM is natively scalable. If your team grows or you need to track new processes, you can add users or activate new modules at any time. The investment adjusts proportionally to actual usage, so you always pay only for the value you receive.",
+        q: "How does Open EAM adapt if my company grows or needs change?",
+        a: "Open EAM is natively scalable. If your team grows or you need to track new processes, you can add users or activate new modules at any time. The investment adjusts proportionally to actual usage, so you always pay only for the value you receive.",
       },
       {
-        q: "How can I be sure OpenEAM will generate real savings for my company?",
-        a: "We don't rely on promises, but on data. During setup, we'll define the KPIs to monitor together. OpenEAM tracks every cost and inefficiency, letting you measure the reduction in direct costs (15-20% on average in the first months) and a fast ROI, often within 6 to 12 months.",
+        q: "How can I be sure Open EAM will generate real savings for my company?",
+        a: "We don't rely on promises, but on data. During setup, we'll define the KPIs to monitor together. Open EAM tracks every cost and inefficiency, letting you measure the reduction in direct costs (15-20% on average in the first months) and a fast ROI, often within 6 to 12 months.",
       },
       {
-        q: "My company has very specific processes. Will OpenEAM be able to track and control them?",
-        a: 'Yes. Unlike standard software, our strength is customization. Thanks to the initial audit and the platform\'s modularity, OpenEAM "takes the shape" of your specific processes. This gives you full traceability and audit-proof control, drastically reducing operational risk.',
+        q: "My company has very specific processes. Will Open EAM be able to track and control them?",
+        a: 'Yes. Unlike standard software, our strength is customization. Thanks to the initial audit and the platform\'s modularity, Open EAM "takes the shape" of your specific processes. This gives you full traceability and audit-proof control, drastically reducing operational risk.',
       },
       {
-        q: "What's the main difference between OpenEAM and the big-name legacy systems?",
-        a: "Agility and a focus on value. While legacy systems require huge investments, long implementation times, and are often rigid, OpenEAM offers an agile Enterprise solution, a fast go-live, and a flexible investment model aimed at quick ROI and granular process control, without the IT maintenance costs of old systems.",
+        q: "What's the main difference between Open EAM and the big-name legacy systems?",
+        a: "Agility and a focus on value. While legacy systems require huge investments, long implementation times, and are often rigid, Open EAM offers an agile Enterprise solution, a fast go-live, and a flexible investment model aimed at quick ROI and granular process control, without the IT maintenance costs of old systems.",
       },
     ],
   },
@@ -252,7 +253,7 @@ const COPY = {
 const t = COPY[lang];
 ---
 
-<BaseLayout title="Pricing" description={t.description}>
+<BaseLayout title="Pricing" description={t.description} jsonLd={faqPageSchema(t.faqs)}>
   <!-- Hero + Tiers + Plans + ROI share one continuous background -->
   <div class="pricing-bg-group" style={`background-image: url("${blobBg}")`}>
     <!-- Hero statement -->

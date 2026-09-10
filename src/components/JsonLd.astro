@@ -1,0 +1,11 @@
+---
+/** Renders one or more JSON-LD <script> tags for schema.org structured data. */
+interface Props {
+  schema: object | object[];
+}
+const { schema } = Astro.props;
+const items = Array.isArray(schema) ? schema : [schema];
+---
+{items.map((item) => (
+  <script type="application/ld+json" set:html={JSON.stringify(item).replace(/</g, '\\u003c')} />
+))}

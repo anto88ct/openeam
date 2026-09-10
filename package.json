@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@astrojs/mdx": "4.0.8",
+    "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/funnel-display": "^5.2.8",
     "astro": "5.1.10",
     "lottie-web": "^5.12.2"

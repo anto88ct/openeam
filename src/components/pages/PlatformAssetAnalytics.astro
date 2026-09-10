@@ -6,10 +6,13 @@ import PlatformHero from '../PlatformHero.astro';
 import FeatureSplit from '../FeatureSplit.astro';
 import CtaBand from '../CtaBand.astro';
 import LottiePlayer from '../LottiePlayer.astro';
+import CapabilitiesList from '../CapabilitiesList.astro';
+import { breadcrumbSchema, softwareApplicationSchema } from '../../lib/schema';
 import { getLocalizedPath } from '../../i18n/utils';
 
 import heroPhoto from '../../assets/img/bar-chart-presentation.avif';
 import closingPhoto from '../../assets/img/worker-industry.avif';
+import capabilitiesPhoto from '../../assets/img/cap-asset-analytics.jpg';
 
 interface Props {
   lang: 'it' | 'en';
@@ -20,38 +23,72 @@ const l = (href: string) => getLocalizedPath(lang, href);
 const COPY = {
   it: {
     description: 'Open EAM trasforma flussi di dati IoT, sensori e sistemi esterni in analisi chiare e centralizzate, con dashboard e KPI sempre aggiornati.',
-    heroSub: 'Open EAM trasforma flussi di dati IoT, sensori e sistemi esterni in analisi chiare e centralizzate. Con dashboard e KPI sempre aggiornati, puoi monitorare asset, anticipare problemi e ottimizzare performance in tempo reale.',
+    heroSub: 'Open EAM trasforma flussi di dati IoT, sensori e sistemi esterni in analisi chiare e centralizzate. Dashboard, report e KPI sempre aggiornati ti aiutano a monitorare gli asset, anticipare criticità e ottimizzare performance, costi e strategie operative.',
     heroImgAlt: 'Analisi dati e dashboard su schermo',
     features: [
-      { heading: 'Dati in tempo reale connessi via IoT', body: 'Integra Open EAM con sensori, PLC e sistemi SCADA per avere una visione costante e aggiornata delle condizioni operative degli asset. I dati arrivano in tempo reale e vengono automaticamente associati a ciascun asset.', anim: 'dashboar_with_sensore_allarme' },
-      { heading: 'Business Intelligence integrata', body: 'Con gli strumenti di Business Intelligence nativi, Open EAM trasforma dati complessi in visualizzazioni intuitive e report personalizzati. Puoi analizzare prestazioni, costi, frequenza degli interventi e trend di utilizzo, identificando aree di inefficienza o di miglioramento.', anim: 'dashboard_insight_immediati' },
-      { heading: 'Analisi geospaziale e digital twin', body: 'La piattaforma integra funzionalità GIS e digital twin per dare un contesto visivo e operativo ai tuoi asset. Puoi visualizzare la distribuzione geografica, simulare scenari di utilizzo e pianificare interventi considerando vincoli e opportunità legati alla posizione fisica.', anim: 'house_with_dots' },
-      { heading: 'KPI sempre sotto controllo', body: "Definisci i KPI più rilevanti per il tuo business e monitora le performance con aggiornamenti automatici e costanti. Che si tratti di MTBF (Mean Time Between Failures), tempi di intervento o costi di fermo macchina, Open EAM ti fornisce un quadro chiaro e confrontabile nel tempo, così puoi misurare l'efficacia delle azioni intraprese e adattare rapidamente le strategie operative.", anim: 'dashboard_MTBF_tempi_intervento_costi_fermo' },
+      { heading: 'Dati in tempo reale connessi via IoT', body: 'Integra Open EAM con sensori, PLC e sistemi SCADA per avere una visione costante e aggiornata delle condizioni operative degli asset. I dati vengono raccolti in tempo reale e associati agli asset di riferimento, così puoi leggere più rapidamente stato, anomalie e variazioni rilevanti.', anim: 'dashboar_with_sensore_allarme' },
+      { heading: 'Business Intelligence integrata', body: 'Con gli strumenti di Business Intelligence integrati, Open EAM trasforma dati complessi in dashboard, visualizzazioni e report personalizzati. Puoi analizzare prestazioni, costi, frequenza degli interventi e trend di utilizzo, individuando aree di inefficienza, priorità operative e opportunità di miglioramento.', anim: 'dashboard_insight_immediati' },
+      { heading: 'Analisi geospaziale e digital twin', body: 'Le funzionalità GIS e digital twin offrono un contesto visivo e operativo agli asset. Puoi visualizzare distribuzione geografica, relazioni, localizzazioni e scenari di utilizzo, pianificando interventi con una lettura più chiara dei vincoli e delle opportunità legate alla posizione fisica.', anim: 'house_with_dots' },
+      { heading: 'KPI sempre sotto controllo', body: "Definisci e monitora i KPI più rilevanti per il tuo business, con aggiornamenti automatici e costanti. MTBF, tempi di intervento, costi di fermo macchina e altri indicatori diventano confrontabili nel tempo, aiutandoti a misurare l'efficacia delle azioni intraprese e adattare più rapidamente le strategie operative.", anim: 'dashboard_MTBF_tempi_intervento_costi_fermo' },
     ],
+    capabilitiesHeading: 'Cosa puoi gestire con Asset Analytics',
+    capabilitiesItems: [
+      'Flussi dati da IoT, sensori, PLC e SCADA',
+      'Dashboard e report personalizzati',
+      'Business Intelligence e visualizzazioni operative',
+      'Prestazioni, costi e trend di utilizzo',
+      'KPI tecnici, manutentivi ed economici',
+      'MTBF, tempi di intervento e costi di fermo macchina',
+      'Analisi geospaziale e localizzazione asset',
+      'Digital twin e scenari di utilizzo',
+      'Criticità, anomalie e aree di miglioramento',
+    ],
+    capabilitiesImgAlt: 'Dashboard di analisi dati',
     ctaHeading: 'Dai dati al valore, in tempo reale',
-    ctaBody: 'Con Open EAM, ogni informazione è connessa, analizzata e tradotta in insight operativi e strategici. Non solo vedi cosa sta accadendo: capisci perché e sai come agire.',
+    ctaBody: "Con Open EAM, ogni informazione è connessa e trasformata in insight operativi e strategici.",
     ctaImgAlt: 'Operatore in impianto',
     ctaLabel: 'Richiedi una demo',
   },
   en: {
     description: 'Open EAM turns IoT data streams, sensors, and external systems into clear, centralized analytics, with dashboards and KPIs that are always up to date.',
-    heroSub: 'Open EAM turns IoT data streams, sensors, and external systems into clear, centralized analytics. With dashboards and KPIs that are always up to date, you can monitor assets, anticipate problems, and optimize performance in real time.',
+    heroSub: 'Open EAM turns IoT data streams, sensors, and external systems into clear, centralized analytics. Dashboards, reports, and KPIs that are always up to date help you monitor your assets, anticipate issues, and optimize performance, costs, and operational strategies.',
     heroImgAlt: 'Data analysis and dashboard on screen',
     features: [
-      { heading: 'Real-time data connected via IoT', body: "Integrate Open EAM with sensors, PLCs, and SCADA systems for a constant, up-to-date view of your assets' operating conditions. Data arrives in real time and is automatically linked to each asset.", anim: 'dashboar_with_sensore_allarme' },
-      { heading: 'Built-in Business Intelligence', body: 'With native Business Intelligence tools, Open EAM turns complex data into intuitive visualizations and custom reports. You can analyze performance, costs, work-order frequency, and usage trends, identifying areas of inefficiency or improvement.', anim: 'dashboard_insight_immediati' },
-      { heading: 'Geospatial analysis and digital twin', body: 'The platform integrates GIS and digital twin capabilities to give your assets visual and operational context. You can view geographic distribution, simulate usage scenarios, and plan work orders while factoring in constraints and opportunities tied to physical location.', anim: 'house_with_dots' },
-      { heading: 'KPIs always under control', body: "Define the KPIs that matter most for your business and monitor performance with constant, automatic updates. Whether it's MTBF (Mean Time Between Failures), response times, or downtime costs, Open EAM gives you a clear picture you can compare over time, so you can measure the effectiveness of your actions and quickly adjust operational strategies.", anim: 'dashboard_MTBF_tempi_intervento_costi_fermo' },
+      { heading: 'Real-time data connected via IoT', body: "Integrate Open EAM with sensors, PLCs, and SCADA systems for a constant, up-to-date view of your assets' operating conditions. Data is collected in real time and linked to the relevant assets, so you can read status, anomalies, and relevant changes more quickly.", anim: 'dashboar_with_sensore_allarme' },
+      { heading: 'Built-in Business Intelligence', body: 'With built-in Business Intelligence tools, Open EAM turns complex data into dashboards, visualizations, and custom reports. You can analyze performance, costs, work-order frequency, and usage trends, identifying areas of inefficiency, operational priorities, and opportunities for improvement.', anim: 'dashboard_insight_immediati' },
+      { heading: 'Geospatial analysis and digital twin', body: 'GIS and digital twin capabilities give your assets visual and operational context. You can view geographic distribution, relationships, locations, and usage scenarios, planning work orders with a clearer read on the constraints and opportunities tied to physical location.', anim: 'house_with_dots' },
+      { heading: 'KPIs always under control', body: "Define and monitor the KPIs that matter most for your business, with constant, automatic updates. MTBF, response times, downtime costs, and other indicators become comparable over time, helping you measure the effectiveness of your actions and adjust operational strategies more quickly.", anim: 'dashboard_MTBF_tempi_intervento_costi_fermo' },
     ],
+    capabilitiesHeading: 'What you can manage with Asset Analytics',
+    capabilitiesItems: [
+      'Data streams from IoT, sensors, PLCs, and SCADA',
+      'Custom dashboards and reports',
+      'Business Intelligence and operational visualizations',
+      'Performance, costs, and usage trends',
+      'Technical, maintenance, and financial KPIs',
+      'MTBF, response times, and downtime costs',
+      'Geospatial analysis and asset location',
+      'Digital twin and usage scenarios',
+      'Issues, anomalies, and areas for improvement',
+    ],
+    capabilitiesImgAlt: 'Data analytics dashboard',
     ctaHeading: 'From data to value, in real time',
-    ctaBody: "With Open EAM, every piece of information is connected, analyzed, and turned into operational and strategic insight. You don't just see what's happening — you understand why and know how to act.",
+    ctaBody: 'With Open EAM, every piece of information is connected and turned into operational and strategic insight.',
     ctaImgAlt: 'Operator at a plant',
     ctaLabel: 'Request a demo',
   },
 } as const;
 const t = COPY[lang];
+const pageUrl = l('/platform/asset-analytics');
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', url: l('/') },
+    { name: 'Asset Analytics', url: pageUrl },
+  ]),
+  softwareApplicationSchema({ name: 'Asset Analytics', description: t.description, url: pageUrl }),
+];
 ---
-<BaseLayout title="Asset Analytics — OpenEAM Platform" description={t.description}>
+<BaseLayout title="Asset Analytics — Open EAM Platform" description={t.description} jsonLd={jsonLd}>
 
   <PlatformHero tone="light" accent="orange" icon="chart" headingLead="Asset" headingAccent="analytics" sub={t.heroSub} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
     <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />
@@ -67,6 +104,15 @@ const t = COPY[lang];
         </FeatureSplit>
       ))}
     </div>
+  </Section>
+
+  <Section bg="light">
+    <CapabilitiesList
+      heading={t.capabilitiesHeading}
+      items={t.capabilitiesItems}
+      image={capabilitiesPhoto}
+      imageAlt={t.capabilitiesImgAlt}
+    />
   </Section>
 
   <Section bg="white">

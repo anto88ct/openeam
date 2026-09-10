@@ -6,10 +6,13 @@ import PlatformHero from '../PlatformHero.astro';
 import FeatureSplit from '../FeatureSplit.astro';
 import CtaBand from '../CtaBand.astro';
 import LottiePlayer from '../LottiePlayer.astro';
+import CapabilitiesList from '../CapabilitiesList.astro';
+import { breadcrumbSchema, softwareApplicationSchema } from '../../lib/schema';
 import { getLocalizedPath } from '../../i18n/utils';
 
 import heroPhoto from '../../assets/img/control-panel.avif';
 import closingPhoto from '../../assets/img/worker-industry.avif';
+import capabilitiesPhoto from '../../assets/img/cap-asset-management.jpg';
 
 interface Props {
   lang: 'it' | 'en';
@@ -19,37 +22,69 @@ const l = (href: string) => getLocalizedPath(lang, href);
 
 const COPY = {
   it: {
-    description: 'OpenEAM centralizza e organizza ogni asset in una struttura solida, scalabile e flessibile, modellandosi sui tuoi processi per contesti multi-sito e complessi.',
-    heroSub: 'OpenEAM centralizza e organizza ogni asset in una struttura solida, scalabile e flessibile. A differenza degli EAM tradizionali, non sei tu ad adattarti al software: la piattaforma si modella sui tuoi processi, permettendoti di operare in contesti multi-sito, complessi e in continua evoluzione.',
+    description: 'Open EAM centralizza e organizza ogni asset in una struttura solida, scalabile e flessibile, modellandosi sui tuoi processi per contesti multi-sito e complessi.',
+    heroSub: 'Open EAM centralizza e organizza ogni asset in una struttura solida, scalabile e flessibile. A differenza degli EAM tradizionali, non sei tu ad adattarti al software: la piattaforma si modella sui tuoi processi, permettendoti di operare in contesti multi-sito, complessi e in continua evoluzione.',
     heroImgAlt: 'Quadro di controllo industriale',
     features: [
-      { heading: 'Struttura solida e scalabile dei tuoi asset', body: 'Organizza tutti gli asset, dagli impianti industriali alle attrezzature, in una struttura coerente e facilmente navigabile. La modularità della piattaforma ti consente di partire con la configurazione essenziale e ampliarla nel tempo, restando sempre allineata ai tuoi processi.', anim: 'Verniciatura_Essicazione_Movimentazione' },
+      { heading: "Parti dall'essenziale, amplia quando serve", body: 'Organizza tutti gli asset, dagli impianti industriali alle attrezzature, in una struttura coerente e facilmente navigabile. La modularità della piattaforma ti consente di partire con una configurazione essenziale e ampliarla nel tempo, restando sempre allineata ai tuoi processi, alle tue priorità e all\'evoluzione della tua organizzazione.', anim: 'Verniciatura_Essicazione_Movimentazione' },
       { heading: 'Gestione multisito e localizzazioni complesse', body: 'Gestire sedi e impianti in più località non significa rinunciare alla coerenza operativa. Open EAM ti permette di mappare, monitorare e intervenire su asset distribuiti mantenendo procedure e standard condivisi. I flussi di lavoro sono modellati sulle esigenze di ogni sito, ma coordinati in un unico sistema centrale.', anim: 'Verono_Roma_Catania' },
-      { heading: 'Integrazione intelligente dei dati (ETL)', body: 'Collega Open EAM alle tue fonti dati (ERP, SCADA, IoT o database esterni) e trasforma informazioni eterogenee in un patrimonio unico e coerente. Grazie ai processi ETL nativi, i dati vengono uniformati e integrati nei tuoi flussi, così non dovrai cambiare strumenti o procedure collaudate.', anim: 'etl' },
+      { heading: 'Integrazione intelligente dei dati (ETL)', body: 'Collega Open EAM alle tue fonti dati — ERP, SCADA, IoT o database esterni — e trasforma informazioni eterogenee in un patrimonio unico e coerente. Grazie ai processi ETL nativi, i dati vengono raccolti, uniformati e integrati nei tuoi flussi, così non dovrai cambiare strumenti o procedure collaudate.', anim: 'etl' },
     ],
+    capabilitiesHeading: 'Cosa puoi gestire con Asset Management',
+    capabilitiesItems: [
+      'Asset fisici, impianti e attrezzature',
+      'Strutture asset scalabili e navigabili',
+      'Configurazioni essenziali, ampliabili nel tempo',
+      'Asset distribuiti su più sedi e localizzazioni',
+      'Procedure e standard condivisi',
+      'Flussi di lavoro modellati sulle esigenze di ogni sito',
+      'Dati da ERP, SCADA, IoT e database esterni',
+      'Processi ETL per uniformare le informazioni',
+    ],
+    capabilitiesImgAlt: 'Gestione asset industriali',
     ctaHeading: "Un'architettura modulare, costruita attorno ai tuoi processi",
-    ctaBody: "Non piegare i tuoi processi alle regole di un software preconfezionato. Scopri l'EAM modulare costruito a misura della tua azienda.",
+    ctaBody: "Costruisci una struttura asset su misura con Open EAM.",
     ctaImgAlt: 'Operatore in impianto',
     ctaLabel: 'Richiedi una demo',
   },
   en: {
-    description: 'OpenEAM centralizes and organizes every asset in a solid, scalable, and flexible structure, molding itself to your processes for multi-site and complex environments.',
-    heroSub: "OpenEAM centralizes and organizes every asset in a solid, scalable, and flexible structure. Unlike traditional EAM systems, you don't adapt to the software — the platform molds itself to your processes, letting you operate in multi-site, complex, and constantly evolving environments.",
+    description: 'Open EAM centralizes and organizes every asset in a solid, scalable, and flexible structure, molding itself to your processes for multi-site and complex environments.',
+    heroSub: "Open EAM centralizes and organizes every asset in a solid, scalable, and flexible structure. Unlike traditional EAM systems, you don't adapt to the software — the platform molds itself to your processes, letting you operate in multi-site, complex, and constantly evolving environments.",
     heroImgAlt: 'Industrial control panel',
     features: [
-      { heading: 'A solid, scalable structure for your assets', body: "Organize every asset, from industrial plants to equipment, into a coherent, easy-to-navigate structure. The platform's modularity lets you start with the essential setup and expand it over time, always staying aligned with your processes.", anim: 'Verniciatura_Essicazione_Movimentazione' },
+      { heading: 'Start with the essentials, expand as you need', body: "Organize every asset, from industrial plants to equipment, into a coherent, easy-to-navigate structure. The platform's modularity lets you start with an essential setup and expand it over time, always staying aligned with your processes, your priorities, and your organization's evolution.", anim: 'Verniciatura_Essicazione_Movimentazione' },
       { heading: 'Multi-site management and complex locations', body: "Managing sites and plants across multiple locations doesn't mean giving up operational consistency. Open EAM lets you map, monitor, and act on distributed assets while keeping shared procedures and standards. Workflows are shaped around each site's needs, but coordinated in a single central system.", anim: 'Verono_Roma_Catania' },
-      { heading: 'Smart data integration (ETL)', body: "Connect Open EAM to your data sources (ERP, SCADA, IoT, or external databases) and turn heterogeneous information into a single, coherent asset. Thanks to native ETL processes, data is standardized and integrated into your workflows, so you won't have to change proven tools or procedures.", anim: 'etl' },
+      { heading: 'Smart data integration (ETL)', body: "Connect Open EAM to your data sources — ERP, SCADA, IoT, or external databases — and turn heterogeneous information into a single, coherent asset. Thanks to native ETL processes, data is collected, standardized, and integrated into your workflows, so you won't have to change proven tools or procedures.", anim: 'etl' },
     ],
+    capabilitiesHeading: 'What you can manage with Asset Management',
+    capabilitiesItems: [
+      'Physical assets, plants, and equipment',
+      'Scalable, easy-to-navigate asset structures',
+      'Essential setups, expandable over time',
+      'Assets distributed across sites and locations',
+      'Shared procedures and standards',
+      "Workflows shaped around each site's needs",
+      'Data from ERP, SCADA, IoT, and external databases',
+      'ETL processes to standardize information',
+    ],
+    capabilitiesImgAlt: 'Industrial asset management',
     ctaHeading: 'A modular architecture, built around your processes',
-    ctaBody: "Don't bend your processes to fit an off-the-shelf software's rules. Discover the modular EAM built to your company's exact measure.",
+    ctaBody: 'Build an asset structure tailored to your business with Open EAM.',
     ctaImgAlt: 'Operator at a plant',
     ctaLabel: 'Request a demo',
   },
 } as const;
 const t = COPY[lang];
+const pageUrl = l('/platform/asset-management');
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', url: l('/') },
+    { name: 'Asset Management', url: pageUrl },
+  ]),
+  softwareApplicationSchema({ name: 'Asset Management', description: t.description, url: pageUrl }),
+];
 ---
-<BaseLayout title="Asset Management — OpenEAM Platform" description={t.description}>
+<BaseLayout title="Asset Management — Open EAM Platform" description={t.description} jsonLd={jsonLd}>
 
   <PlatformHero tone="ink" accent="orange" icon="gear" headingLead="Asset" headingAccent="management" sub={t.heroSub} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
     <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />
@@ -65,6 +100,15 @@ const t = COPY[lang];
         </FeatureSplit>
       ))}
     </div>
+  </Section>
+
+  <Section bg="light">
+    <CapabilitiesList
+      heading={t.capabilitiesHeading}
+      items={t.capabilitiesItems}
+      image={capabilitiesPhoto}
+      imageAlt={t.capabilitiesImgAlt}
+    />
   </Section>
 
   <Section bg="white">

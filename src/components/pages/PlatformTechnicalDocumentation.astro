@@ -6,10 +6,13 @@ import PlatformHero from '../PlatformHero.astro';
 import FeatureSplit from '../FeatureSplit.astro';
 import CtaBand from '../CtaBand.astro';
 import LottiePlayer from '../LottiePlayer.astro';
+import CapabilitiesList from '../CapabilitiesList.astro';
+import { breadcrumbSchema, softwareApplicationSchema } from '../../lib/schema';
 import { getLocalizedPath } from '../../i18n/utils';
 
 import heroPhoto from '../../assets/img/engineers-laptop.avif';
 import closingPhoto from '../../assets/img/worker-industry.avif';
+import capabilitiesPhoto from '../../assets/img/cap-technical-documentation.jpg';
 
 interface Props {
   lang: 'it' | 'en';
@@ -19,35 +22,69 @@ const l = (href: string) => getLocalizedPath(lang, href);
 
 const COPY = {
   it: {
-    description: 'Open EAM collega disegni, manuali e procedure agli asset, rendendoli accessibili ovunque in modo sicuro e immediato, riducendo tempi e rischi.',
-    heroSub: 'Open EAM collega disegni, manuali e procedure agli asset, rendendoli accessibili ovunque in modo sicuro e immediato, riducendo tempi e rischi.',
+    description: "Open EAM collega disegni, manuali, procedure e documenti tecnici agli asset di riferimento, rendendoli accessibili in modo sicuro, ordinato e immediato.",
+    heroSub: "Open EAM collega disegni, manuali, procedure e documenti tecnici agli asset di riferimento, rendendoli accessibili in modo sicuro, ordinato e immediato. Ogni informazione resta tracciata, aggiornata e disponibile dove serve, riducendo tempi di ricerca, duplicazioni, errori operativi e rischi di non conformità.",
     heroImgAlt: 'Due colleghi consultano documentazione su laptop',
     features: [
-      { heading: 'Organizza e struttura tutta la documentazione tecnica', body: 'Classificazione, versioning, ricerca avanzata e controllo delle revisioni: Open EAM assicura che ogni documento sia aggiornato, tracciato e conforme alle normative, evitando errori e duplicazioni.', anim: 'three_manuale_Schema_certificazioni', reverse: false },
-      { heading: 'Integrazione con AutoCAD e BIM', body: 'Visualizza e gestisci file CAD e modelli BIM direttamente dalla piattaforma, mantenendo la coerenza tra progettazione, documentazione e operatività. I dati tecnici sono sempre sincronizzati con le modifiche di progetto.', anim: 'file_cad_open_EAM_modello_BIM', reverse: true },
+      { heading: 'Organizza e struttura tutta la documentazione tecnica', body: 'Classificazione, versioning, ricerca avanzata e controllo delle revisioni permettono di gestire la documentazione tecnica in modo più ordinato e affidabile. Con Open EAM ogni documento può essere archiviato, aggiornato e consultato secondo regole coerenti con i tuoi processi, evitando versioni disperse, file duplicati e informazioni non allineate.', anim: 'three_manuale_Schema_certificazioni', reverse: false },
+      { heading: 'Collega documenti e asset in un unico contesto operativo', body: 'La documentazione tecnica non deve restare separata dagli asset a cui si riferisce. Open EAM permette di associare disegni, manuali, procedure e allegati tecnici ad asset, impianti, aree o componenti specifici, così tecnici, operatori e responsabili possono trovare rapidamente il documento corretto nel contesto giusto.', anim: 'albero_P01_S08_A15_L30', reverse: true },
+      { heading: 'Integrazione con AutoCAD e BIM', body: 'Visualizza e gestisci file CAD e modelli BIM direttamente dalla piattaforma, mantenendo la coerenza tra progettazione, documentazione e operatività. I dati tecnici restano sincronizzati con le modifiche di progetto, rendendo più semplice lavorare su informazioni aggiornate e coerenti.', anim: 'file_cad_open_EAM_modello_BIM', reverse: false },
     ],
+    capabilitiesHeading: 'Cosa puoi gestire con Technical Documentation Management',
+    capabilitiesItems: [
+      'Disegni tecnici, manuali e procedure',
+      'Documenti collegati ad asset, impianti e componenti',
+      'Classificazione e organizzazione documentale',
+      'Versioning e controllo delle revisioni',
+      'Ricerca avanzata dei documenti',
+      'File CAD e modelli BIM',
+      'Allineamento tra progettazione e operatività',
+      'Documentazione aggiornata per interventi, verifiche e attività quotidiane',
+    ],
+    capabilitiesImgAlt: 'Archivio documentale tecnico',
     ctaHeading: 'Documentazione connessa, operatività continua',
-    ctaBody: 'Con Open EAM la documentazione tecnica diventa parte attiva dei tuoi processi, integrata con asset e operazioni per garantire precisione, rapidità e conformità.',
+    ctaBody: "Con Open EAM la documentazione tecnica è parte attiva dei processi operativi, non un archivio separato.",
     ctaImgAlt: 'Operatore in impianto',
     ctaLabel: 'Richiedi una demo',
   },
   en: {
-    description: 'Open EAM links drawings, manuals, and procedures to your assets, making them securely and instantly accessible anywhere, reducing time and risk.',
-    heroSub: 'Open EAM links drawings, manuals, and procedures to your assets, making them securely and instantly accessible anywhere, reducing time and risk.',
+    description: 'Open EAM links drawings, manuals, procedures, and technical documents to their reference assets, making them securely, neatly, and instantly accessible.',
+    heroSub: "Open EAM links drawings, manuals, procedures, and technical documents to their reference assets, making them securely, neatly, and instantly accessible. Every piece of information stays tracked, up to date, and available where it's needed, cutting search time, duplication, operational errors, and compliance risk.",
     heroImgAlt: 'Two colleagues reviewing documentation on a laptop',
     features: [
-      { heading: 'Organize and structure all your technical documentation', body: 'Classification, versioning, advanced search, and revision control: Open EAM ensures every document is up to date, tracked, and compliant with regulations, avoiding errors and duplication.', anim: 'three_manuale_Schema_certificazioni', reverse: false },
-      { heading: 'Integration with AutoCAD and BIM', body: 'View and manage CAD files and BIM models directly from the platform, keeping design, documentation, and operations consistent. Technical data always stays in sync with design changes.', anim: 'file_cad_open_EAM_modello_BIM', reverse: true },
+      { heading: 'Organize and structure all your technical documentation', body: 'Classification, versioning, advanced search, and revision control let you manage technical documentation in a more orderly, reliable way. With Open EAM every document can be archived, updated, and consulted under rules consistent with your processes, avoiding scattered versions, duplicate files, and misaligned information.', anim: 'three_manuale_Schema_certificazioni', reverse: false },
+      { heading: 'Link documents and assets in a single operational context', body: "Technical documentation shouldn't stay separate from the assets it refers to. Open EAM lets you associate drawings, manuals, procedures, and technical attachments with specific assets, plants, areas, or components, so technicians, operators, and managers can quickly find the right document in the right context.", anim: 'albero_P01_S08_A15_L30', reverse: true },
+      { heading: 'Integration with AutoCAD and BIM', body: 'View and manage CAD files and BIM models directly from the platform, keeping design, documentation, and operations consistent. Technical data stays in sync with design changes, making it easier to work with up-to-date, coherent information.', anim: 'file_cad_open_EAM_modello_BIM', reverse: false },
     ],
+    capabilitiesHeading: 'What you can manage with Technical Documentation Management',
+    capabilitiesItems: [
+      'Technical drawings, manuals, and procedures',
+      'Documents linked to assets, plants, and components',
+      'Document classification and organization',
+      'Versioning and revision control',
+      'Advanced document search',
+      'CAD files and BIM models',
+      'Alignment between design and operations',
+      'Up-to-date documentation for work orders, checks, and daily activities',
+    ],
+    capabilitiesImgAlt: 'Technical document archive',
     ctaHeading: 'Connected documentation, continuous operations',
-    ctaBody: 'With Open EAM, technical documentation becomes an active part of your processes, integrated with assets and operations to ensure precision, speed, and compliance.',
+    ctaBody: "With Open EAM, technical documentation becomes an active part of your operational processes, not a separate archive.",
     ctaImgAlt: 'Operator at a plant',
     ctaLabel: 'Request a demo',
   },
 } as const;
 const t = COPY[lang];
+const pageUrl = l('/platform/technical-documentation');
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', url: l('/') },
+    { name: 'Technical Documentation', url: pageUrl },
+  ]),
+  softwareApplicationSchema({ name: 'Technical Documentation', description: t.description, url: pageUrl }),
+];
 ---
-<BaseLayout title="Technical Documentation Management — OpenEAM Platform" description={t.description}>
+<BaseLayout title="Technical Documentation Management — Open EAM Platform" description={t.description} jsonLd={jsonLd}>
 
   <PlatformHero tone="orange" accent="dark" icon="document" headingLead="Technical documentation" headingAccent="management" sub={t.heroSub} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
     <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />
@@ -63,6 +100,15 @@ const t = COPY[lang];
         </FeatureSplit>
       ))}
     </div>
+  </Section>
+
+  <Section bg="light">
+    <CapabilitiesList
+      heading={t.capabilitiesHeading}
+      items={t.capabilitiesItems}
+      image={capabilitiesPhoto}
+      imageAlt={t.capabilitiesImgAlt}
+    />
   </Section>
 
   <Section bg="white">

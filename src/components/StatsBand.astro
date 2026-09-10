@@ -1,11 +1,13 @@
 ---
 /** Dark stat grid: big orange outline numbers that count up into view, plus-sign divider at the center. */
 interface Stat {
-  numbers: number[];
+  numbers?: number[];
   sep?: string;
   prefix?: string;
   suffix?: string;
   label: string;
+  /** Static text shown big instead of an animated number (e.g. "ROI"). */
+  text?: string;
 }
 interface Props {
   stats: Stat[];
@@ -17,18 +19,22 @@ const { stats } = Astro.props;
   {
     stats.map((s) => (
       <div class="stats__item">
-        <p
-          class="stats__number"
-          data-counter
-          data-numbers={s.numbers.join(",")}
-          data-sep={s.sep ?? ""}
-          data-prefix={s.prefix ?? ""}
-          data-suffix={s.suffix ?? ""}
-        >
-          {s.prefix}
-          {s.numbers.map((n) => "0").join(s.sep ?? "")}
-          {s.suffix}
-        </p>
+        {s.text ? (
+          <p class="stats__number">{s.text}</p>
+        ) : (
+          <p
+            class="stats__number"
+            data-counter
+            data-numbers={(s.numbers ?? []).join(",")}
+            data-sep={s.sep ?? ""}
+            data-prefix={s.prefix ?? ""}
+            data-suffix={s.suffix ?? ""}
+          >
+            {s.prefix}
+            {(s.numbers ?? []).join(s.sep ?? "")}
+            {s.suffix}
+          </p>
+        )}
         <p class="stats__label">{s.label}</p>
       </div>
     ))
@@ -84,7 +90,13 @@ const { stats } = Astro.props;
       { threshold: 0.4 },
     );
 
-    counters.forEach((el) => observer.observe(el));
+    counters.forEach((el) => {
+      if (!reduceMotion) {
+        const targets = (el.dataset.numbers || '').split(',').map(Number);
+        render(el, targets.map(() => 0));
+      }
+      observer.observe(el);
+    });
   }
 
   document.addEventListener('astro:page-load', initCounters);

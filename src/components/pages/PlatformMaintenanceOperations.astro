@@ -6,10 +6,13 @@ import PlatformHero from '../PlatformHero.astro';
 import FeatureSplit from '../FeatureSplit.astro';
 import CtaBand from '../CtaBand.astro';
 import LottiePlayer from '../LottiePlayer.astro';
+import CapabilitiesList from '../CapabilitiesList.astro';
+import { breadcrumbSchema, softwareApplicationSchema } from '../../lib/schema';
 import { getLocalizedPath } from '../../i18n/utils';
 
 import heroPhoto from '../../assets/img/maintenance-operations.png';
 import closingPhoto from '../../assets/img/engineer-robot.avif';
+import capabilitiesPhoto from '../../assets/img/cap-maintenance-operations.jpg';
 
 interface Props {
   lang: 'it' | 'en';
@@ -20,16 +23,29 @@ const l = (href: string) => getLocalizedPath(lang, href);
 const COPY = {
   it: {
     description: "Con Open EAM pianifichi, esegui e tracci ogni attività manutentiva e operativa in un'unica piattaforma che si plasma sui tuoi processi esistenti.",
-    heroSub: "Con Open EAM pianifichi, esegui e tracci ogni attività manutentiva e operativa in un'unica piattaforma. La differenza è che non devi adattare le tue procedure al software: la piattaforma si plasma sui tuoi processi esistenti, potenziandoli.",
+    heroSub: "Con Open EAM gestisci manutenzioni, ispezioni, interventi e attività operative in un'unica piattaforma. La differenza è che non devi adattare le tue procedure al software: è la piattaforma a modellarsi sui tuoi processi esistenti, rendendoli più ordinati, tracciabili e facili da coordinare.",
     heroImgAlt: 'Operatrice con tablet in officina',
     features: [
-      { heading: 'Gestione completa delle attività manutentive e ispettive', body: 'Dalla manutenzione preventiva, a quella predittiva, alle ispezioni: ogni attività è pianificata e monitorata in base alle logiche e priorità del tuo flusso di lavoro. Check-list, schede tecniche e autorizzazioni vengono integrate nel sistema senza snaturare le procedure che già funzionano in azienda.', anim: 'list_controllo_pressione_e_filtri' },
-      { heading: 'Visualizza e gestisci reti di asset', body: 'Mappe interattive e viste gerarchiche ti permettono di monitorare asset collegati fra loro, come impianti, linee di produzione o infrastrutture di servizio. Il sistema rispecchia le relazioni operative esistenti, così la gestione in rete avviene secondo la tua logica e non secondo uno schema rigido.', anim: 'albero_P01_S08_A15_L30' },
-      { heading: 'Ricambi e listini sempre sotto controllo', body: 'Monitora disponibilità, movimenti e costi di magazzino. Associa ricambi e materiali agli asset e agli interventi, garantendo approvvigionamenti puntuali e una gestione economica ottimizzata.', anim: 'list_with_pz_150pz_110_pz_80pz' },
-      { heading: 'Passaggi di consegna efficaci', body: 'OpenEAM gestisce il passaggio di informazioni tra turni e squadre secondo le procedure interne, garantendo tracciabilità completa e riducendo il rischio di errori. La trasmissione delle conoscenze operative avviene direttamente nella piattaforma, integrandosi nei tuoi flussi standard.', anim: 'Turno_Docs_arrows' },
+      { heading: 'Attività manutentive, ispezioni e ordini di lavoro', body: "Dalla manutenzione preventiva a quella predittiva, fino alle ispezioni periodiche e agli interventi su chiamata, Open EAM ti permette di pianificare, assegnare e monitorare ogni attività in base ai tuoi flussi operativi. Ordini di lavoro, responsabilità, stati di avanzamento, checklist e autorizzazioni restano tracciati dalla richiesta iniziale alla chiusura dell'intervento.", anim: 'list_controllo_pressione_e_filtri' },
+      { heading: 'Visualizza e gestisci reti di asset', body: 'Mappe interattive e viste gerarchiche ti permettono di monitorare asset collegati tra loro, come impianti, linee di produzione o infrastrutture di servizio. Il sistema rispecchia le relazioni operative esistenti, così la gestione in rete segue la tua logica e non uno schema rigido imposto dal software.', anim: 'albero_P01_S08_A15_L30' },
+      { heading: 'Ricambi e listini sempre sotto controllo', body: 'Monitora disponibilità, movimenti e costi di magazzino. Associa ricambi, materiali e voci di listino agli asset e agli interventi, rendendo più semplice pianificare approvvigionamenti, controllare i costi e mantenere allineate attività operative e gestione economica.', anim: 'list_with_pz_150pz_110_pz_80pz' },
+      { heading: 'Passaggi di consegna efficaci', body: 'Open EAM gestisce il passaggio di informazioni tra turni e squadre secondo le procedure interne, garantendo tracciabilità completa e riducendo il rischio di errori. Le conoscenze operative restano dentro la piattaforma, integrate nei flussi standard e consultabili quando servono.', anim: 'Turno_Docs_arrows' },
     ],
+    capabilitiesHeading: 'Cosa puoi gestire con Maintenance & Operations',
+    capabilitiesItems: [
+      'Manutenzioni preventive e predittive',
+      'Ispezioni periodiche e interventi su chiamata',
+      'Ordini di lavoro e stati di avanzamento',
+      'Checklist, schede tecniche e autorizzazioni',
+      'Tecnici, squadre interne e fornitori',
+      'Reti di asset, mappe e viste gerarchiche',
+      'Ricambi, materiali, magazzino e listini',
+      'Passaggi di consegna tra turni e squadre',
+      'Tracciabilità completa delle attività operative',
+    ],
+    capabilitiesImgAlt: 'Tecnico al lavoro su impianto',
     ctaHeading: 'Operazioni fluide, manutenzione intelligente',
-    ctaBody: 'Con Open EAM hai il pieno controllo di processi, asset e risorse, in un\'unica piattaforma che si adatta ai tuoi flussi di lavoro e migliora le performance operative.',
+    ctaBody: "Con Open EAM hai il pieno controllo di processi, asset e risorse in un'unica piattaforma.",
     ctaImgAlt: 'Operatore su macchinario industriale',
     ctaLabel: 'Richiedi una demo',
   },
@@ -38,20 +54,41 @@ const COPY = {
     heroSub: "With Open EAM you plan, execute, and track every maintenance and operational activity on a single platform. The difference is you don't adapt your procedures to the software — the platform shapes itself around your existing processes and strengthens them.",
     heroImgAlt: 'Operator with a tablet in the workshop',
     features: [
-      { heading: 'Complete management of maintenance and inspection activities', body: "From preventive to predictive maintenance to inspections: every activity is planned and monitored according to your workflow's own logic and priorities. Checklists, technical sheets, and authorizations are integrated into the system without disrupting the procedures that already work for your company.", anim: 'list_controllo_pressione_e_filtri' },
-      { heading: 'View and manage asset networks', body: 'Interactive maps and hierarchical views let you monitor assets that are connected to one another, such as plants, production lines, or service infrastructure. The system mirrors your existing operational relationships, so network management follows your own logic instead of a rigid schema.', anim: 'albero_P01_S08_A15_L30' },
-      { heading: 'Spare parts and price lists always under control', body: 'Monitor stock availability, movements, and warehouse costs. Link spare parts and materials to assets and work orders, ensuring timely procurement and optimized cost management.', anim: 'list_with_pz_150pz_110_pz_80pz' },
-      { heading: 'Effective shift handovers', body: 'OpenEAM manages the handover of information between shifts and teams according to your internal procedures, ensuring full traceability and reducing the risk of errors. Operational knowledge is passed on directly within the platform, integrating with your standard workflows.', anim: 'Turno_Docs_arrows' },
+      { heading: 'Maintenance activities, inspections, and work orders', body: "From preventive to predictive maintenance, through periodic inspections and on-call interventions, Open EAM lets you plan, assign, and monitor every activity around your own operational workflows. Work orders, responsibilities, progress status, checklists, and authorizations stay tracked from the initial request to the closing of the job.", anim: 'list_controllo_pressione_e_filtri' },
+      { heading: 'View and manage asset networks', body: 'Interactive maps and hierarchical views let you monitor assets that are connected to one another, such as plants, production lines, or service infrastructure. The system mirrors your existing operational relationships, so network management follows your own logic instead of a rigid schema imposed by the software.', anim: 'albero_P01_S08_A15_L30' },
+      { heading: 'Spare parts and price lists always under control', body: 'Monitor stock availability, movements, and warehouse costs. Link spare parts, materials, and price-list items to assets and work orders, making it easier to plan procurement, control costs, and keep operations and financial management aligned.', anim: 'list_with_pz_150pz_110_pz_80pz' },
+      { heading: 'Effective shift handovers', body: 'Open EAM manages the handover of information between shifts and teams according to your internal procedures, ensuring full traceability and reducing the risk of errors. Operational knowledge stays inside the platform, integrated into standard workflows and available whenever it is needed.', anim: 'Turno_Docs_arrows' },
     ],
+    capabilitiesHeading: 'What you can manage with Maintenance & Operations',
+    capabilitiesItems: [
+      'Preventive and predictive maintenance',
+      'Periodic inspections and on-call interventions',
+      'Work orders and progress status',
+      'Checklists, technical sheets, and authorizations',
+      'Technicians, in-house teams, and suppliers',
+      'Asset networks, maps, and hierarchical views',
+      'Spare parts, materials, stock, and price lists',
+      'Shift and team handovers',
+      'Full traceability of operational activities',
+    ],
+    capabilitiesImgAlt: 'Technician working on a plant',
     ctaHeading: 'Smooth operations, smart maintenance',
-    ctaBody: 'With Open EAM you have full control over processes, assets, and resources, on a single platform that adapts to your workflows and improves operational performance.',
+    ctaBody: 'With Open EAM you have full control over processes, assets, and resources in a single platform.',
     ctaImgAlt: 'Operator working on industrial machinery',
     ctaLabel: 'Request a demo',
   },
 } as const;
 const t = COPY[lang];
+const pageUrl = l('/platform/maintenance-operations');
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', url: l('/') },
+    { name: 'Maintenance & Operations', url: pageUrl },
+  ]),
+  softwareApplicationSchema({ name: 'Maintenance & Operations', description: t.description, url: pageUrl }),
+];
 ---
-<BaseLayout title="Maintenance & Operations — OpenEAM Platform" description={t.description}>
+<BaseLayout title="Maintenance & Operations — Open EAM Platform" description={t.description} jsonLd={jsonLd}>
 
   <PlatformHero tone="teal" accent="orange" icon="wrench" headingLead="Maintenance &" headingAccent="operations" sub={t.heroSub} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
     <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />
@@ -67,6 +104,15 @@ const t = COPY[lang];
         </FeatureSplit>
       ))}
     </div>
+  </Section>
+
+  <Section bg="light">
+    <CapabilitiesList
+      heading={t.capabilitiesHeading}
+      items={t.capabilitiesItems}
+      image={capabilitiesPhoto}
+      imageAlt={t.capabilitiesImgAlt}
+    />
   </Section>
 
   <Section bg="white">

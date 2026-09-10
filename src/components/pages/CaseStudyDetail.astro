@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../Section.astro';
 import PhotoHero from '../PhotoHero.astro';
 import Button from '../Button.astro';
+import { breadcrumbSchema, articleSchema } from '../../lib/schema';
 import { getLocalizedPath } from '../../i18n/utils';
 
 interface Props {
@@ -14,6 +15,21 @@ const { lang, entry } = Astro.props;
 const l = (href: string) => getLocalizedPath(lang, href);
 const data = entry.data;
 const { Content } = await render(entry);
+
+const pageUrl = l(`/case-studies/${entry.id}`);
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', url: l('/') },
+    { name: 'Case Studies', url: l('/case-studies') },
+    { name: data.title, url: pageUrl },
+  ]),
+  articleSchema({
+    headline: data.title,
+    description: data.seoDescription ?? data.excerpt,
+    url: pageUrl,
+    clientName: data.client,
+  }),
+];
 
 const COPY = {
   it: {
@@ -31,7 +47,7 @@ const COPY = {
 } as const;
 const t = COPY[lang];
 ---
-<BaseLayout title={`${data.title} — ${t.titleSuffix}`} description={data.seoDescription ?? data.excerpt}>
+<BaseLayout title={`${data.title} — ${t.titleSuffix}`} description={data.seoDescription ?? data.excerpt} jsonLd={jsonLd}>
   <PhotoHero image={data.heroImage} heading={data.title} sub={data.industry} ctaLabel="" ctaHref={l('/demo')} />
 
   {data.metrics.length > 0 && (
