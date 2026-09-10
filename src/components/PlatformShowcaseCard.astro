@@ -36,6 +36,9 @@ const { icon, iconName, image, imageAlt, heading, tagline, body, ctaLabel, ctaHr
 <style>
   .psc {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     border-radius: var(--radius-card);
     overflow: hidden;
     box-shadow: var(--shadow-card);
@@ -74,9 +77,11 @@ const { icon, iconName, image, imageAlt, heading, tagline, body, ctaLabel, ctaHr
     -webkit-backdrop-filter: blur(16px) saturate(140%);
     border-radius: 20px 20px 0 0;
     padding: clamp(1.15rem, 2.2vw, 1.5rem) clamp(1.15rem, 2.2vw, 1.4rem) clamp(1.25rem, 2.2vw, 1.5rem);
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
     gap: 0.4rem;
-    justify-items: start;
+    flex: 1;
   }
   .psc__head {
     display: flex;
@@ -129,7 +134,7 @@ const { icon, iconName, image, imageAlt, heading, tagline, body, ctaLabel, ctaHr
     line-height: 1.45;
     margin-top: 0.2rem;
   }
-  .psc__panel :global(.btn) { margin-top: 0.3rem; }
+  .psc__panel :global(.btn) { margin-top: auto; padding-top: 0.3rem; }
 
   @media (max-width: 480px) {
     .psc__media { aspect-ratio: 16 / 11; }
