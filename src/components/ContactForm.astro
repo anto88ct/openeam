@@ -90,6 +90,7 @@ const variantLabel = {
   novalidate
 >
   <input type="hidden" name="tipo_richiesta" value={variantLabel} />
+  <input type="hidden" name="is_video_tour" value={variant === 'videoTour' ? 'true' : ''} />
   <div class="demo-form__row">
     <div class="field">
       <label for="nome">{t.firstName}</label>
