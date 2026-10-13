@@ -1,6 +1,7 @@
 ---
 import Logo from './Logo.astro';
 import LangSwitch from './LangSwitch.astro';
+import smauBadge from '../assets/img/smau/badge-smau-stand.svg';
 import { platformLinks, industryLinks } from '../config/site';
 import { getLangFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
 
@@ -77,6 +78,14 @@ const groupActive = (links: { href: string }[]) => links.some((link) => isActive
 
       <div class="nav__lang-row">
         <LangSwitch lang={lang} />
+        <a
+          href={l('/') + '#smau'}
+          class="nav__smau"
+          aria-label={t('smauBadgeLabel')}
+          data-smau-nav
+        >
+          <img src={smauBadge.src} alt="" width="115" height="44" />
+        </a>
       </div>
     </nav>
   </div>
@@ -119,6 +128,22 @@ const groupActive = (links: { href: string }[]) => links.some((link) => isActive
   }
   .nav__eyebrow { display: none; }
   .nav__lang-row { display: contents; }
+  .nav__smau {
+    display: inline-flex;
+    margin-left: 0.5rem;
+    border-radius: 12px;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), filter 0.25s;
+  }
+  .nav__smau img { display: block; height: 44px; width: auto; }
+  @media (min-width: 1101px) {
+    /* On the home hero the same badge sits top-right of the hero; hand over once it scrolls under the nav */
+    .nav__smau { transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), filter 0.25s, opacity 0.3s ease, visibility 0.3s; }
+    .nav__smau.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  }
+  .nav__smau:hover {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 8px 12px rgb(237 28 36 / 0.3));
+  }
   .nav__link {
     display: inline-flex;
     align-items: center;
@@ -290,6 +315,8 @@ const groupActive = (links: { href: string }[]) => links.some((link) => isActive
       padding-top: 0.9rem;
       border-top: 1px solid rgb(35 48 56 / 0.08);
     }
+    .nav__smau { display: flex; margin: 0.9rem 0 0; }
+    .nav__smau img { height: 52px; }
     .nav__lang-row :global(.lang-switch) {
       width: 100%;
       justify-content: stretch;
@@ -347,6 +374,19 @@ const groupActive = (links: { href: string }[]) => links.some((link) => isActive
   mq.addEventListener('change', (e) => {
     if (!e.matches) setOpen(false);
   });
+
+  // Home only: hide the nav's SMAU badge while the hero's own badge is on screen.
+  const navBadge = document.querySelector('[data-smau-nav]');
+  const heroBadge = document.querySelector('[data-smau-hero]');
+  if (navBadge && heroBadge && 'IntersectionObserver' in window) {
+    const navH = header?.getBoundingClientRect().height ?? 70;
+    const sync = (visible: boolean) => navBadge.classList.toggle('is-hidden', visible);
+    const r = heroBadge.getBoundingClientRect();
+    sync(r.bottom > navH && r.top < window.innerHeight);
+    new IntersectionObserver((entries) => sync(entries[entries.length - 1].isIntersecting), {
+      rootMargin: `-${Math.round(navH)}px 0px 0px 0px`,
+    }).observe(heroBadge);
+  }
 
   // Mobile: tap a dropdown trigger to expand its panel in place.
   document.querySelectorAll('[data-dropdown]').forEach((item) => {

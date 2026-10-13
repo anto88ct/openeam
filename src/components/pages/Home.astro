@@ -6,6 +6,7 @@ import SectionHeading from "../SectionHeading.astro";
 import ModuleCarousel from "../ModuleCarousel.astro";
 import StatsBand from "../StatsBand.astro";
 import LogoMarquee from "../LogoMarquee.astro";
+import SmauBanner from "../SmauBanner.astro";
 import PlatformShowcaseCard from "../PlatformShowcaseCard.astro";
 import CaseStudyCarousel from "../CaseStudyCarousel.astro";
 import FeatureMarquee from "../FeatureMarquee.astro";
@@ -16,6 +17,7 @@ import VideoScrollSection from "../VideoScrollSection.astro";
 import FlagIcon from "../FlagIcon.astro";
 import { getLocalizedPath, useTranslations } from "../../i18n/utils";
 
+import smauBadge from "../../assets/img/smau/badge-smau-stand.svg";
 import platformBg from "../../assets/img/pricing/blob-bg.svg";
 import videoBg from "../../assets/img/intersect.svg";
 import featAsset from "../../assets/img/feat-asset-management.avif";
@@ -87,6 +89,16 @@ const COPY = {
       { text: "ROI", label: "entro 12 mesi" },
       { numbers: [25], prefix: "+", suffix: "%", label: "vita degli asset" },
     ],
+    smau: {
+      heading: "Ci trovi allo SMAU Milano il 3–4 Novembre",
+      sub: "Passa dallo stand e vedi Open EAM dal vivo.",
+      sub2: "Ti mostriamo come manutenzione, asset e documenti convivono in un'unica piattaforma.",
+      monthLabel: "Novembre 2026",
+      weekdays: ["L", "M", "M", "G", "V", "S", "D"],
+      dateAria: "3 e 4 novembre 2026: incontro con Seedma allo SMAU Milano",
+      cta: "Richiedi un incontro",
+      logoAlt: "SMAU x Seedma, Milano, 3–4 novembre 2026, stand B54",
+    },
     discoverCta: "Scopri di più",
     platformHeading: "Cosa puoi fare con Open EAM",
     platformGrid: [
@@ -259,6 +271,16 @@ const COPY = {
       { numbers: [25], prefix: "+", suffix: "%", label: "asset useful life" },
       { numbers: [12], label: "months to ROI" },
     ],
+    smau: {
+      heading: "Meet us at SMAU Milano on November 3–4",
+      sub: "Stop by the stand and see Open EAM live.",
+      sub2: "We'll show you how maintenance, assets and documents live in one platform.",
+      monthLabel: "November 2026",
+      weekdays: ["M", "T", "W", "T", "F", "S", "S"],
+      dateAria: "November 3 and 4, 2026: meet Seedma at SMAU Milano",
+      cta: "Request a meeting",
+      logoAlt: "SMAU x Seedma, Milano, November 3–4 2026, stand B54",
+    },
     discoverCta: "Learn more",
     platformHeading:
       "Maintenance, asset management, documents, and analytics in one platform that takes the shape of your processes",
@@ -451,12 +473,35 @@ const caseSlides = [
       </div>
     </div>
     <HeroRings />
+    <div class="container-page hero__badge-wrap">
+      <a
+        href="#smau"
+        class="hero__smau"
+        data-smau-hero
+        aria-label={tUi("smauBadgeLabel")}
+      >
+        <img src={smauBadge.src} alt="" width="282" height="108" />
+      </a>
+    </div>
   </section>
 
   <!-- Trust band -->
   <Section bg="light" class="trust-band">
     <LogoMarquee heading={tUi("trustHeading")} />
   </Section>
+
+  <!-- SMAU event banner -->
+  <SmauBanner
+    heading={t.smau.heading}
+    sub={t.smau.sub}
+    sub2={t.smau.sub2}
+    monthLabel={t.smau.monthLabel}
+    weekdays={t.smau.weekdays}
+    dateAria={t.smau.dateAria}
+    ctaLabel={t.smau.cta}
+    ctaHref="https://www.smau.it/milano/partners/seedma"
+    logoAlt={t.smau.logoAlt}
+  />
 
   <!-- Product video -->
   <Section bg="ink" class="video-section">
@@ -611,6 +656,32 @@ const caseSlides = [
       transform: translateY(0);
     }
   }
+  .hero__badge-wrap {
+    position: absolute;
+    top: clamp(1rem, 2vw, 1.75rem);
+    left: 0;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+    pointer-events: none;
+  }
+  .hero__smau {
+    display: inline-flex;
+    pointer-events: auto;
+    border-radius: 14px;
+    animation: hero-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), filter 0.25s;
+  }
+  .hero__smau img { display: block; height: 108px; width: auto; }
+  .hero__smau:hover {
+    transform: translateY(-3px);
+    filter: drop-shadow(0 10px 16px rgb(237 28 36 / 0.4));
+  }
+  @media (max-width: 640px) {
+    .hero__smau img { height: 56px; }
+  }
+
   .hero__title,
   .hero__sub,
   .hero__cta {

@@ -9,6 +9,7 @@ export const ui = {
     footerCopyright: 'Open EAM è un prodotto di Seedma SRL. Tutti i diritti sono riservati.',
     legalUpdatedLabel: 'Ultimo aggiornamento:',
     ogLocale: 'it_IT',
+    smauBadgeLabel: 'SMAU Milano, 3-4 novembre 2026, stand B54',
     trustHeading: 'Il software di manutenzione e asset management scelto da',
     cookieBannerText:
       'Questo sito utilizza unicamente cookie tecnici, necessari al corretto funzionamento della piattaforma. Non sono presenti cookie di profilazione o di tracciamento di terze parti.',
@@ -24,6 +25,7 @@ export const ui = {
     footerCopyright: 'Open EAM is a product of Seedma SRL. All rights reserved.',
     legalUpdatedLabel: 'Last updated:',
     ogLocale: 'en_US',
+    smauBadgeLabel: 'SMAU Milano, November 3-4 2026, stand B54',
     trustHeading: 'The maintenance and asset management software chosen by',
     cookieBannerText:
       'This site uses only technical cookies, strictly necessary for the platform to work correctly. No profiling or third-party tracking cookies are used.',
