@@ -45,8 +45,9 @@ const COPY = {
   it: {
     title:
       "Open EAM, la Piattaforma Modulare che Prende la Forma dei Tuoi Processi",
+    seoTitle: "Open EAM | Software EAM per manutenzione e asset management",
     description:
-      "Open EAM unisce manutenzione, asset management e controllo operativo in un'unica piattaforma flessibile che si adatta ai tuoi processi. E non viceversa.",
+      "Piattaforma EAM modulare con AI integrata: manutenzione, asset, documentazione tecnica e analytics in un unico sistema. Operativa in 2 mesi. Richiedi una demo.",
     heroTitleLead: "Un solo sistema ",
     heroTitleHl: "per gestire tutti i tuoi sistemi",
     heroSub:
@@ -456,7 +457,7 @@ const caseSlides = [
 ];
 ---
 
-<BaseLayout title={t.title} description={t.description}>
+<BaseLayout title={t.title} seoTitle={lang === "it" ? COPY.it.seoTitle : undefined} description={t.description}>
   <!-- Hero -->
   <section class="hero">
     <DottedGridFX />

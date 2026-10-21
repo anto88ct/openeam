@@ -15,7 +15,8 @@ const watchHref = getLocalizedPath(lang, '/video-tour/watch');
 const COPY = {
   it: {
     title: 'Video tour della piattaforma',
-    description: 'Inserisci il tuo indirizzo mail e accedi a un video tour registrato della piattaforma Open EAM.',
+    seoTitle: 'Video tour Open EAM: la piattaforma in 5 minuti',
+    description: 'Guarda il video tour registrato di Open EAM: funzioni, moduli e strumenti per manutenzione e asset management in meno di 5 minuti, quando vuoi.',
     heading: 'Scopri come funziona Open EAM',
     sub: 'Inserisci il tuo indirizzo mail e accedi a un video tour registrato della piattaforma. Scopri funzioni, strumenti e potenzialità in meno di 5 minuti e in piena autonomia.',
   },
@@ -28,7 +29,7 @@ const COPY = {
 } as const;
 const t = COPY[lang];
 ---
-<BaseLayout title={t.title} description={t.description}>
+<BaseLayout title={t.title} seoTitle={lang === 'it' ? COPY.it.seoTitle : undefined} description={t.description}>
   <section class="video-tour">
     <Image src={heroRings} alt="" class="video-tour__arcs" aria-hidden="true" />
     <div class="container-page video-tour__inner">

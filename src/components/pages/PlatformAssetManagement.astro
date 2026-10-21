@@ -22,7 +22,8 @@ const l = (href: string) => getLocalizedPath(lang, href);
 
 const COPY = {
   it: {
-    description: 'Open EAM centralizza e organizza ogni asset in una struttura solida, scalabile e flessibile, modellandosi sui tuoi processi per contesti multi-sito e complessi.',
+    seoTitle: 'Asset management industriale multisito | Open EAM',
+    description: 'Organizza asset, impianti e attrezzature in una struttura scalabile e multisito. Open EAM integra i dati di ERP, SCADA e IoT e si adatta ai tuoi processi.',
     heroSub: 'Open EAM centralizza e organizza ogni asset in una struttura solida, scalabile e flessibile. A differenza degli EAM tradizionali, non sei tu ad adattarti al software: la piattaforma si modella sui tuoi processi, permettendoti di operare in contesti multi-sito, complessi e in continua evoluzione.',
     heroImgAlt: 'Quadro di controllo industriale',
     features: [
@@ -84,7 +85,7 @@ const jsonLd = [
   softwareApplicationSchema({ name: 'Asset Management', description: t.description, url: pageUrl }),
 ];
 ---
-<BaseLayout title="Asset Management — Open EAM Platform" description={t.description} jsonLd={jsonLd}>
+<BaseLayout title="Asset Management — Open EAM Platform" seoTitle={lang === 'it' ? COPY.it.seoTitle : undefined} description={t.description} jsonLd={jsonLd}>
 
   <PlatformHero tone="ink" accent="orange" icon="gear" headingLead="Asset" headingAccent="management" sub={t.heroSub} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
     <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />

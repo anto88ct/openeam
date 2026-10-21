@@ -22,7 +22,8 @@ const l = (href: string) => getLocalizedPath(lang, href);
 
 const COPY = {
   it: {
-    description: "Open EAM collega disegni, manuali, procedure e documenti tecnici agli asset di riferimento, rendendoli accessibili in modo sicuro, ordinato e immediato.",
+    seoTitle: 'Software gestione documentazione tecnica | Open EAM',
+    description: 'Manuali, disegni CAD, modelli BIM e procedure collegati agli asset, con versioning, revisioni e ricerca avanzata: il documento giusto, sempre aggiornato.',
     heroSub: "Open EAM collega disegni, manuali, procedure e documenti tecnici agli asset di riferimento, rendendoli accessibili in modo sicuro, ordinato e immediato. Ogni informazione resta tracciata, aggiornata e disponibile dove serve, riducendo tempi di ricerca, duplicazioni, errori operativi e rischi di non conformità.",
     heroImgAlt: 'Due colleghi consultano documentazione su laptop',
     features: [
@@ -84,7 +85,7 @@ const jsonLd = [
   softwareApplicationSchema({ name: 'Technical Documentation', description: t.description, url: pageUrl }),
 ];
 ---
-<BaseLayout title="Technical Documentation Management — Open EAM Platform" description={t.description} jsonLd={jsonLd}>
+<BaseLayout title="Technical Documentation Management — Open EAM Platform" seoTitle={lang === 'it' ? COPY.it.seoTitle : undefined} description={t.description} jsonLd={jsonLd}>
 
   <PlatformHero tone="orange" accent="dark" icon="document" headingLead="Technical documentation" headingAccent="management" sub={t.heroSub} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
     <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />

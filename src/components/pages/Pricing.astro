@@ -24,8 +24,9 @@ const tUi = useTranslations(lang);
 
 const COPY = {
   it: {
+    seoTitle: "Prezzi Open EAM: software EAM in SaaS o on-premise",
     description:
-      "Un investimento calibrato e proporzionale: SaaS o on-premise. Open EAM è progettato per ripagarsi entro i primi 12 mesi.",
+      "Canone SaaS proporzionato a moduli, siti e utenti oppure installazione on-premise. ROI atteso entro 12 mesi: scopri come è strutturato l'investimento.",
     heroLead: "L'investimento iniziale è calibrato per permettere di ",
     heroHl: "testare la tecnologia",
     heroTrail:
@@ -253,7 +254,7 @@ const COPY = {
 const t = COPY[lang];
 ---
 
-<BaseLayout title="Pricing" description={t.description} jsonLd={faqPageSchema(t.faqs)}>
+<BaseLayout title="Pricing" seoTitle={lang === "it" ? COPY.it.seoTitle : undefined} description={t.description} jsonLd={faqPageSchema(t.faqs)}>
   <!-- Hero + Tiers + Plans + ROI share one continuous background -->
   <div class="pricing-bg-group" style={`background-image: url("${blobBg}")`}>
     <!-- Hero statement -->

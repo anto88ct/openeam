@@ -22,7 +22,8 @@ const l = (href: string) => getLocalizedPath(lang, href);
 
 const COPY = {
   it: {
-    description: "Con Open EAM pianifichi, esegui e tracci ogni attività manutentiva e operativa in un'unica piattaforma che si plasma sui tuoi processi esistenti.",
+    seoTitle: 'Software gestione manutenzione impianti (CMMS) | Open EAM',
+    description: 'Pianifica manutenzione preventiva, predittiva e ispezioni, gestisci ordini di lavoro, ricambi e passaggi di consegna in un CMMS che si adatta ai tuoi processi.',
     heroSub: "Con Open EAM gestisci manutenzioni, ispezioni, interventi e attività operative in un'unica piattaforma. La differenza è che non devi adattare le tue procedure al software: è la piattaforma a modellarsi sui tuoi processi esistenti, rendendoli più ordinati, tracciabili e facili da coordinare.",
     heroImgAlt: 'Operatrice con tablet in officina',
     features: [
@@ -88,7 +89,7 @@ const jsonLd = [
   softwareApplicationSchema({ name: 'Maintenance & Operations', description: t.description, url: pageUrl }),
 ];
 ---
-<BaseLayout title="Maintenance & Operations — Open EAM Platform" description={t.description} jsonLd={jsonLd}>
+<BaseLayout title="Maintenance & Operations — Open EAM Platform" seoTitle={lang === 'it' ? COPY.it.seoTitle : undefined} description={t.description} jsonLd={jsonLd}>
 
   <PlatformHero tone="teal" accent="orange" icon="wrench" headingLead="Maintenance &" headingAccent="operations" sub={t.heroSub} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
     <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />

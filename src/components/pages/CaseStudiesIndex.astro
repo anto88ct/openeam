@@ -19,7 +19,8 @@ const items = (await getCollection(collection))
 
 const COPY = {
   it: {
-    description: 'Scopri come le aziende industriali usano Open EAM per migliorare efficienza e performance della manutenzione.',
+    seoTitle: 'Case study Open EAM: manutenzione e asset sul campo',
+    description: "Come STMicroelectronics, Sasol, Sonatrach, SARAS, SIAM e l'Aeroporto di Catania gestiscono manutenzione, ispezioni e documenti tecnici con Open EAM.",
     heading: 'Casi studio',
     sub: "Scopri come altre aziende utilizzano Open EAM per migliorare l'efficienza e le performance della manutenzione nei loro impianti produttivi.",
     caseCtaLabel: 'Scopri di più',
@@ -33,7 +34,7 @@ const COPY = {
 } as const;
 const t = COPY[lang];
 ---
-<BaseLayout title="Case Studies" description={t.description}>
+<BaseLayout title="Case Studies" seoTitle={lang === 'it' ? COPY.it.seoTitle : undefined} description={t.description}>
   <Section bg="ink" dotted>
     <SectionHeading heading={t.heading} sub={t.sub} />
   </Section>

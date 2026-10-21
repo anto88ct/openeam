@@ -25,6 +25,7 @@ const industrySchema = ({ image }: { image: () => z.ZodType }) =>
     closingHeading: z.string(),
     closingBody: z.string(),
     caseStudies: z.array(z.string()).default([]),
+    seoTitle: z.string().optional(),
     seoDescription: z.string().optional(),
   });
 
@@ -54,6 +55,7 @@ const caseStudiesIt = defineCollection({
       metrics: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
       modules: z.array(z.string()).default([]),
       draft: z.boolean().default(false),
+      seoTitle: z.string().optional(),
       seoDescription: z.string().optional(),
     }),
 });
@@ -74,6 +76,7 @@ const caseStudiesEn = defineCollection({
       metrics: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
       modules: z.array(z.string()).default([]),
       draft: z.boolean().default(false),
+      seoTitle: z.string().optional(),
       seoDescription: z.string().optional(),
     }),
 });

@@ -39,6 +39,7 @@ const breadcrumb = breadcrumbSchema([
 ---
 <BaseLayout
   title={`${data.title} — Open EAM Industries`}
+  seoTitle={data.seoTitle}
   description={data.seoDescription ?? data.intro.replace(/<[^>]+>/g, '').slice(0, 155)}
   jsonLd={breadcrumb}
 >

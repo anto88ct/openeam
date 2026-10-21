@@ -30,8 +30,9 @@ const tUi = useTranslations(lang);
 const COPY = {
   it: {
     title: 'Seedma — Chi siamo',
+    seoTitle: "Seedma, l'azienda dietro Open EAM | Chi siamo",
     description:
-      "Seedma: vent'anni di know-how, in un software. Scopri la storia, la missione e il team dietro Open EAM.",
+      "Seedma, spin-off di Teseo nata nel 2020, porta in Open EAM oltre vent'anni di esperienza in Operations & Maintenance nell'Oil & Gas. Scopri storia e missione.",
     heroLead: 'Seedma',
     heroTrail: ": vent'anni di know-how,<br />in un software",
     introParas: [
@@ -145,7 +146,7 @@ const employee = members.map((m) => ({
 }));
 ---
 
-<BaseLayout title={t.title} description={t.description} organizationExtra={{ employee }}>
+<BaseLayout title={t.title} seoTitle={lang === 'it' ? COPY.it.seoTitle : undefined} description={t.description} organizationExtra={{ employee }}>
   <!-- Hero statement + intro + feature cards share one background bleed area,
        so the blob artwork isn't clipped until the statement section starts. -->
   <div class="azienda-hero-bleed">

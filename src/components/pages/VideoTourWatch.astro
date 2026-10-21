@@ -13,6 +13,7 @@ const formHref = l('/video-tour');
 const COPY = {
   it: {
     title: 'Il tuo video tour',
+    seoTitle: 'Il tuo video tour | Open EAM',
     description: 'Guarda il video tour della piattaforma Open EAM.',
     heading: 'Ecco il tuo video tour di Open EAM',
     sub: 'Scopri funzioni, strumenti e potenzialità della piattaforma in meno di 5 minuti.',
@@ -28,7 +29,7 @@ const COPY = {
 } as const;
 const t = COPY[lang];
 ---
-<BaseLayout title={t.title} description={t.description}>
+<BaseLayout title={t.title} seoTitle={lang === 'it' ? COPY.it.seoTitle : undefined} noindex description={t.description}>
   <script is:inline define:vars={{ grantKey: VIDEO_TOUR_GRANT_KEY, formHref }}>
     (function () {
       try {

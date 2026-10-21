@@ -17,7 +17,7 @@ export default defineConfig({
         defaultLocale: 'it',
         locales: { it: 'it', en: 'en' },
       },
-      filter: (page) => !/\/404\/?$/.test(page),
+      filter: (page) => !/\/(404|video-tour\/watch)\/?$/.test(page),
     }),
   ],
   i18n: {

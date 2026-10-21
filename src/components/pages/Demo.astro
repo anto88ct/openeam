@@ -12,7 +12,8 @@ const { lang } = Astro.props;
 const COPY = {
   it: {
     title: 'Prenota una Demo',
-    description: 'Prenota un tour gratuito e senza impegno della piattaforma Open EAM con un consulente specializzato.',
+    seoTitle: 'Richiedi una demo di Open EAM, software EAM e CMMS',
+    description: 'Prenota un tour gratuito e senza impegno di Open EAM con un consulente: vedi come gestire manutenzione, asset e documenti tecnici sui tuoi processi.',
     heading: 'Scopri Open EAM',
     sub: 'Prenota un tour della piattaforma gratuito e senza impegno con un consulente specializzato. Scopri gli strumenti, le funzioni e come potrebbe funzionare per la tua azienda.',
   },
@@ -25,7 +26,7 @@ const COPY = {
 } as const;
 const t = COPY[lang];
 ---
-<BaseLayout title={t.title} description={t.description}>
+<BaseLayout title={t.title} seoTitle={lang === 'it' ? COPY.it.seoTitle : undefined} description={t.description}>
   <section class="demo">
     <Image src={heroRings} alt="" class="demo__arcs" aria-hidden="true" />
     <div class="container-page demo__inner">

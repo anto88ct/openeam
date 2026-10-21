@@ -12,7 +12,11 @@ import { getLangFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils
 
 interface Props {
   title: string;
+  /** full <title> used verbatim (no brand suffix appended) — set from the SEO brief */
+  seoTitle?: string;
   description?: string;
+  /** keep the page out of search indexes (e.g. gated content) */
+  noindex?: boolean;
   /** relative or absolute OG image path */
   ogImage?: string;
   /** page-specific JSON-LD schema(s), rendered alongside the site-wide Organization schema */
@@ -31,7 +35,9 @@ const DEFAULT_DESCRIPTION = {
 
 const {
   title,
+  seoTitle,
   description = DEFAULT_DESCRIPTION[lang],
+  noindex = false,
   ogImage = '/webclip.png',
   jsonLd,
   organizationExtra,
@@ -39,7 +45,7 @@ const {
 
 const pageSchemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
-const fullTitle = title === company.name ? title : `${title} — ${company.name}`;
+const fullTitle = seoTitle ?? (title === company.name ? title : `${title} — ${company.name}`);
 const siteOrigin = Astro.site ?? new URL(company.url);
 const canonical = new URL(Astro.url.pathname, siteOrigin).href;
 const alternateIt = new URL(getLocalizedPath('it', Astro.url.pathname), siteOrigin).href;
@@ -52,6 +58,7 @@ const alternateEn = new URL(getLocalizedPath('en', Astro.url.pathname), siteOrig
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="it" href={alternateIt} />
     <link rel="alternate" hreflang="en" href={alternateEn} />

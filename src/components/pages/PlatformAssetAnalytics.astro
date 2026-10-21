@@ -22,7 +22,8 @@ const l = (href: string) => getLocalizedPath(lang, href);
 
 const COPY = {
   it: {
-    description: 'Open EAM trasforma flussi di dati IoT, sensori e sistemi esterni in analisi chiare e centralizzate, con dashboard e KPI sempre aggiornati.',
+    seoTitle: 'Asset analytics: KPI di manutenzione, IoT e BI | Open EAM',
+    description: 'Dati da sensori, PLC e SCADA trasformati in dashboard e KPI come MTBF e MTTR. Analisi geospaziale e digital twin per anticipare i guasti e decidere prima.',
     heroSub: 'Open EAM trasforma flussi di dati IoT, sensori e sistemi esterni in analisi chiare e centralizzate. Dashboard, report e KPI sempre aggiornati ti aiutano a monitorare gli asset, anticipare criticità e ottimizzare performance, costi e strategie operative.',
     heroImgAlt: 'Analisi dati e dashboard su schermo',
     features: [
@@ -88,7 +89,7 @@ const jsonLd = [
   softwareApplicationSchema({ name: 'Asset Analytics', description: t.description, url: pageUrl }),
 ];
 ---
-<BaseLayout title="Asset Analytics — Open EAM Platform" description={t.description} jsonLd={jsonLd}>
+<BaseLayout title="Asset Analytics — Open EAM Platform" seoTitle={lang === 'it' ? COPY.it.seoTitle : undefined} description={t.description} jsonLd={jsonLd}>
 
   <PlatformHero tone="light" accent="orange" icon="chart" headingLead="Asset" headingAccent="analytics" sub={t.heroSub} ctaLabel={t.ctaLabel} ctaHref={l('/demo')}>
     <Image src={heroPhoto} alt={t.heroImgAlt} width={720} height={540} />
