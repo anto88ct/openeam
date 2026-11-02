@@ -9,8 +9,10 @@
  * control (play/pause, skip ±10 s, seek bar, mute, full screen) on top of the
  * automatic behaviour.
  * If sound is blocked by the browser's autoplay policy it falls back to
- * muted playback; the volume button doubles as the user gesture that
- * unlocks audio for the rest of the session. `prefers-reduced-motion` gets
+ * muted playback, and the first click/tap/key anywhere on the page then turns
+ * sound on (that gesture is what unlocks audio); the volume button does the
+ * same on demand. Full screen uses the standard API, the WebKit-prefixed one
+ * for older Safari, and the native video player on iPhone. `prefers-reduced-motion` gets
  * native controls instead of the scroll-triggered behaviour.
  */
 interface Props {
@@ -185,6 +187,9 @@ const {
       // (see attemptAutoplay) can't override a pause that happened while it
       // was still pending.
       let wantPlaying = false;
+      // True only when sound was dropped by the browser's autoplay policy (not
+      // when the visitor muted it), so the first user gesture may restore it.
+      let mutedByPolicy = false;
 
       const setSoundUI = () => {
         frame.dataset.muted = video.muted ? "true" : "false";
@@ -272,6 +277,7 @@ const {
         Promise.resolve(video.play()).catch(() => {
           if (!wantPlaying) return;
           video.muted = true;
+          mutedByPolicy = true;
           setSoundUI();
           Promise.resolve(video.play()).catch(() => {
             /* autoplay unavailable here — it stays paused; controls still work */
@@ -309,22 +315,56 @@ const {
       playBtn?.addEventListener("click", manualToggle);
 
       soundBtn?.addEventListener("click", () => {
+        mutedByPolicy = false;
         video.muted = !video.muted;
         setSoundUI();
       });
 
+      // First real gesture after a policy-forced muted start: bring sound back.
+      const unlockSound = (e: Event) => {
+        if (!mutedByPolicy) return;
+        // The sound button toggles by itself; don't fight its own click.
+        if (soundBtn && e.target instanceof Node && soundBtn.contains(e.target)) return;
+        mutedByPolicy = false;
+        video.muted = false;
+        setSoundUI();
+      };
+      ["pointerdown", "keydown", "touchend"].forEach((type) =>
+        document.addEventListener(type, unlockSound, { passive: true }),
+      );
+
+      type FsDoc = Document & {
+        webkitFullscreenElement?: Element | null;
+        webkitExitFullscreen?: () => void;
+      };
+      type FsEl = HTMLElement & { webkitRequestFullscreen?: () => void };
+      type FsVideo = HTMLVideoElement & { webkitEnterFullscreen?: () => void };
+
+      const fsElement = () =>
+        document.fullscreenElement ?? (document as FsDoc).webkitFullscreenElement ?? null;
+
       zoomBtn?.addEventListener("click", () => {
-        if (document.fullscreenElement === frame) {
-          document.exitFullscreen();
+        if (fsElement() === frame) {
+          const exit = document.exitFullscreen
+            ? document.exitFullscreen()
+            : (document as FsDoc).webkitExitFullscreen?.();
+          Promise.resolve(exit).catch(() => {});
+        } else if (frame.requestFullscreen) {
+          frame.requestFullscreen().catch(() => {});
+        } else if ((frame as FsEl).webkitRequestFullscreen) {
+          (frame as FsEl).webkitRequestFullscreen!();
         } else {
-          frame.requestFullscreen?.().catch(() => {});
+          // iPhone Safari only fullscreens the <video> itself, in its native player.
+          (video as FsVideo).webkitEnterFullscreen?.();
         }
       });
-      document.addEventListener("fullscreenchange", () => {
-        const isFull = document.fullscreenElement === frame;
+      const onFullscreenChange = () => {
+        const isFull = fsElement() === frame;
         frame.dataset.fullscreen = isFull ? "true" : "false";
         if (zoomLabelEl) zoomLabelEl.textContent = isFull ? zoomOutLabel : zoomInLabel;
-      });
+      };
+      document.addEventListener("fullscreenchange", onFullscreenChange);
+      document.addEventListener("webkitfullscreenchange", onFullscreenChange);
 
       setSoundUI();
       setPlayingUI(false);
@@ -387,12 +427,24 @@ const {
     outline: 1px solid rgb(255 255 255 / 0.08);
     outline-offset: -1px;
   }
-  .vshow__frame:fullscreen,
+  /* Separate rules: a browser that drops one selector would drop a whole list. */
+  .vshow__frame:fullscreen {
+    aspect-ratio: unset;
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+  }
   .vshow__frame:-webkit-full-screen {
     aspect-ratio: unset;
     border-radius: 0;
     width: 100%;
     height: 100%;
+  }
+  .vshow__frame:fullscreen .vshow__video {
+    object-fit: contain;
+  }
+  .vshow__frame:-webkit-full-screen .vshow__video {
+    object-fit: contain;
   }
   .vshow__video {
     position: absolute;
