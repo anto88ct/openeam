@@ -6,7 +6,6 @@ import SectionHeading from "../SectionHeading.astro";
 import ModuleCarousel from "../ModuleCarousel.astro";
 import StatsBand from "../StatsBand.astro";
 import LogoMarquee from "../LogoMarquee.astro";
-import SmauBanner from "../SmauBanner.astro";
 import PlatformShowcaseCard from "../PlatformShowcaseCard.astro";
 import CaseStudyCarousel from "../CaseStudyCarousel.astro";
 import FeatureMarquee from "../FeatureMarquee.astro";
@@ -496,19 +495,6 @@ const caseSlides = [
   <Section bg="light" class="trust-band">
     <LogoMarquee heading={tUi("trustHeading")} />
   </Section>
-
-  <!-- SMAU event banner -->
-  <SmauBanner
-    heading={t.smau.heading}
-    sub={t.smau.sub}
-    sub2={t.smau.sub2}
-    monthLabel={t.smau.monthLabel}
-    weekdays={t.smau.weekdays}
-    dateAria={t.smau.dateAria}
-    ctaLabel={t.smau.cta}
-    ctaHref="https://www.smau.it/milano/partners/seedma"
-    logoAlt={t.smau.logoAlt}
-  />
 
   <!-- Product video -->
   <Section bg="ink" class="video-section">
